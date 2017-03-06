@@ -41,6 +41,9 @@ protected:
 	UFUNCTION()
 		void OnStopJump();
 
+	UFUNCTION(Exec, Category = ExecFunctions)
+	void KillPlayer(int mode) const;
+
 private:
 	void Use();
 
