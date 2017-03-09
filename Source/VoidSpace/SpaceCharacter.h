@@ -44,11 +44,31 @@ protected:
 	UFUNCTION()
 		void OnStopJump();
 
+	UFUNCTION()
+		void OnStartSprint();
+	
+	UFUNCTION()
+		void OnStopSprint();
+
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
 private:
 	void Use();
+
+	void _sprintControl();
+
+	bool isSprinting = false;
+	bool isRecovering = false;
+
+	float walkSpeed = 600;
+	float runSpeed = 1000;
+	float staminaDuration = 100;
+	float staminaRecovery = 0.3f;
+	float staminaConsumition = 0.6f;
+
+	float maxStamina = 100;
+
 
 	bool bGravityEnabled = true;
 	bool bWearsSpaceSuit = false;

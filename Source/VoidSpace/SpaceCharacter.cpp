@@ -37,6 +37,8 @@ void ASpaceCharacter::Tick(float DeltaTime)
 		pickedObject->SetActorLocationAndRotation(End + offset,
 			pawn->GetControlRotation());
 	}
+
+	_sprintControl();
 }
 
 // Enables and disables player's gravity
@@ -73,6 +75,8 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ASpaceCharacter::OnStartJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ASpaceCharacter::OnStopJump);
 	InputComponent->BindAction("Use", IE_Pressed, this, &ASpaceCharacter::Use);
+	InputComponent->BindAction("Sprint", IE_Pressed, this, &ASpaceCharacter::OnStartSprint);
+	InputComponent->BindAction("Sprint", IE_Released, this, &ASpaceCharacter::OnStopSprint);
 }
 
 void ASpaceCharacter::MoveForward(float Val)
@@ -90,6 +94,7 @@ void ASpaceCharacter::MoveForward(float Val)
 		// add movement in that direction
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
 		AddMovementInput(Direction, Val);
+
 	}
 }
 
@@ -161,4 +166,61 @@ void ASpaceCharacter::Use()
 
 		}
 	}
+}
+
+void ASpaceCharacter::_sprintControl()
+{
+	//TODO: Control by time not by ticks.
+	if (isSprinting)
+	{
+		if (staminaDuration > 0)
+		{
+			staminaDuration -= staminaConsumition;
+		}
+		else if (staminaDuration <= 0)
+		{
+			OnStopSprint();
+			staminaDuration = 0;
+			isRecovering = true;
+		}
+	}
+
+	if (isRecovering)
+	{
+		staminaDuration += staminaRecovery;
+
+		if (staminaDuration >= maxStamina)
+		{
+			staminaDuration = maxStamina;
+			isRecovering = false;
+		}
+	}
+
+	if ((!isSprinting && !isRecovering) && staminaDuration<maxStamina)
+	{
+		staminaDuration += staminaRecovery;
+
+		if (staminaDuration >= maxStamina)
+		{
+			staminaDuration = maxStamina;
+		}
+	}
+
+
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), staminaDuration));
+}
+
+void ASpaceCharacter::OnStartSprint()
+{
+	if(!isRecovering)
+	{
+		isSprinting = true;
+		GetCharacterMovement()->MaxWalkSpeed = runSpeed;
+	}
+}
+
+void ASpaceCharacter::OnStopSprint()
+{
+	isSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 }
