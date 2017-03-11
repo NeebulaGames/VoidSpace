@@ -36,6 +36,16 @@ void ASpaceCharacter::Tick(float DeltaTime)
 	}
 }
 
+// Enables and disables player's gravity
+void ASpaceCharacter::ToggleGravity()
+{
+	bGravityEnabled = !bGravityEnabled;
+
+	UCharacterMovementComponent* characterMovement = GetCharacterMovement();
+
+	characterMovement->MovementMode = characterMovement->DefaultLandMovementMode = bGravityEnabled ? MOVE_Walking : MOVE_Flying;
+}
+
 // Called to bind functionality to input
 void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -57,7 +67,8 @@ void ASpaceCharacter::MoveForward(float Val)
 		// find out which way is forward
 		FRotator Rotation = Controller->GetControlRotation();
 		// Limit pitch when walking or falling
-		if (GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+		if (!GetCharacterMovement()->IsFlying() &&
+			GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
 		{
 			Rotation.Pitch = 0.0f;
 		}

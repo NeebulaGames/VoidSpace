@@ -3,9 +3,11 @@
 #include "VoidSpace.h"
 #include "VoidSpaceGameModeBase.h"
 #include "SpaceCharacter.h"
+#include "SpaceGameStateBase.h"
 
 
 AVoidSpaceGameModeBase::AVoidSpaceGameModeBase(const FObjectInitializer& ObjectInitializer): AGameModeBase(ObjectInitializer)
 {
 	DefaultPawnClass = ASpaceCharacter::StaticClass();
+	GameStateClass = ASpaceGameStateBase::StaticClass();
 }
