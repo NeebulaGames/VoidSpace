@@ -12,7 +12,7 @@ ASpaceCharacter::ASpaceCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
 }
 
@@ -174,40 +174,40 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 	//TODO: Control by time not by ticks.
 	if (bIsSprinting)
 	{
-		if (staminaDuration > 0)
+		if (StaminaDuration > 0)
 		{
-			staminaDuration -= staminaConsumition;
+			StaminaDuration -= StaminaConsumition;
 		}
-		else if (staminaDuration <= 0)
+		else if (StaminaDuration <= 0)
 		{
 			OnStopSprint();
-			staminaDuration = 0;
+			StaminaDuration = 0;
 			bIsRecovering = true;
 		}
 	}
 
 	if (bIsRecovering)
 	{
-		staminaDuration += staminaRecovery;
+		StaminaDuration += StaminaRecovery;
 
-		if (staminaDuration >= maxStamina)
+		if (StaminaDuration >= MaxStamina)
 		{
-			staminaDuration = maxStamina;
+			StaminaDuration = MaxStamina;
 			bIsRecovering = false;
 		}
 	}
 
-	if ((!bIsSprinting && !bIsRecovering) && staminaDuration<maxStamina)
+	if ((!bIsSprinting && !bIsRecovering) && StaminaDuration<MaxStamina)
 	{
-		staminaDuration += staminaRecovery;
+		StaminaDuration += StaminaRecovery;
 
-		if (staminaDuration >= maxStamina)
+		if (StaminaDuration >= MaxStamina)
 		{
-			staminaDuration = maxStamina;
+			StaminaDuration = MaxStamina;
 		}
 	}
 	
-	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), staminaDuration));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), StaminaDuration));
 }
 
 void ASpaceCharacter::OnStartSprint()
@@ -215,12 +215,12 @@ void ASpaceCharacter::OnStartSprint()
 	if(!bIsRecovering)
 	{
 		bIsSprinting = true;
-		GetCharacterMovement()->MaxWalkSpeed = runSpeed;
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
 	}
 }
 
 void ASpaceCharacter::OnStopSprint()
 {
 	bIsSprinting = false;
-	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }

@@ -62,22 +62,22 @@ private:
 	bool bIsRecovering = false;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float walkSpeed = 600;
+	float WalkSpeed = 600;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float runSpeed = 1000;
+	float RunSpeed = 1000;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float staminaDuration = 100;
+	float StaminaDuration = 100;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float staminaRecovery = 0.3f;
+	float StaminaRecovery = 0.3f;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float staminaConsumition = 0.6f;
+	float StaminaConsumition = 0.6f;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float maxStamina = 100;
+	float MaxStamina = 100;
 
 
 	bool bGravityEnabled = true;
