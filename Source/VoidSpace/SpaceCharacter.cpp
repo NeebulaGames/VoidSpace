@@ -4,6 +4,7 @@
 #include "SpaceCharacter.h"
 #include "InteractableComponent.h"
 #include "SpaceStatics.h"
+#include "SpaceGameStateBase.h"
 
 
 // Sets default values
@@ -41,11 +42,23 @@ void ASpaceCharacter::Tick(float DeltaTime)
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
-	bGravityEnabled = !bGravityEnabled;
+	if (!bWearsSpaceSuit)
+	{
+		// TODO: Die here
+	}
+	else
+	{
+		bGravityEnabled = !bGravityEnabled;
 
-	UCharacterMovementComponent* characterMovement = GetCharacterMovement();
+		UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
-	characterMovement->MovementMode = characterMovement->DefaultLandMovementMode = bGravityEnabled ? MOVE_Walking : MOVE_Flying;
+		characterMovement->MovementMode = characterMovement->DefaultLandMovementMode = bGravityEnabled ? MOVE_Walking : MOVE_Flying;
+	}
+}
+
+void ASpaceCharacter::ToggleSpaceSuit(bool activate)
+{
+	bWearsSpaceSuit = activate;
 }
 
 // Called to bind functionality to input
@@ -64,7 +77,7 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
-	if ((Controller != nullptr) && (Val != 0.0f))
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
 	{
 		// find out which way is forward
 		FRotator Rotation = Controller->GetControlRotation();
@@ -82,7 +95,7 @@ void ASpaceCharacter::MoveForward(float Val)
 
 void ASpaceCharacter::MoveHorizontal(float Val)
 {
-	if ((Controller != nullptr) && (Val != 0.0f))
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -94,7 +107,7 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 
 void ASpaceCharacter::OnStartJump()
 {
-	bPressedJump = true;
+	bPressedJump = ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed;
 }
 
 void ASpaceCharacter::OnStopJump()
@@ -104,38 +117,41 @@ void ASpaceCharacter::OnStopJump()
 
 void ASpaceCharacter::Use()
 {
-	const FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
-	const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
-	const FVector End = Start + dir_camera * 250;
-
-	FHitResult hitData(ForceInit);
-
-	if (pickedObject != nullptr)
+	if (ASpaceGameStateBase::Instance(GetWorld())->bInteractionAllowed)
 	{
-		LastHitted.GetComponent()->SetSimulatePhysics(true);
-		pickedObject = nullptr;
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
-	}
-	else
-	{
-		if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+		const FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
+		const FVector End = Start + dir_camera * 250;
+
+		FHitResult hitData(ForceInit);
+
+		if (pickedObject != nullptr)
 		{
-			UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
-
-			if (interactable != nullptr)
-				interactable->Trigger();
-
-			else if (hitData.GetComponent()->IsSimulatingPhysics() && pickedObject == nullptr)
-			{
-				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
-				hitData.GetComponent()->SetSimulatePhysics(false);
-				LastHitted = hitData;
-				pickedObject = hitData.GetActor();
-				if (GEngine)
-					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object pickedUp"));
-			}
+			LastHitted.GetComponent()->SetSimulatePhysics(true);
+			pickedObject = nullptr;
+			if (GEngine)
+				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
 		}
+		else
+		{
+			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+			{
+				UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
 
+				if (interactable != nullptr)
+					interactable->Trigger();
+
+				else if (hitData.GetComponent()->IsSimulatingPhysics() && pickedObject == nullptr)
+				{
+					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
+					hitData.GetComponent()->SetSimulatePhysics(false);
+					LastHitted = hitData;
+					pickedObject = hitData.GetActor();
+					if (GEngine)
+						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object pickedUp"));
+				}
+			}
+
+		}
 	}
 }

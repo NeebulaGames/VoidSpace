@@ -20,6 +20,7 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	void ToggleGravity();
+	void ToggleSpaceSuit(bool activate);
 
 protected:
 
@@ -47,4 +48,5 @@ private:
 	void Use();
 
 	bool bGravityEnabled = true;
+	bool bWearsSpaceSuit = false;
 };
