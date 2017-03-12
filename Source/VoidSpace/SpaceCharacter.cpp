@@ -39,7 +39,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 			pawn->GetControlRotation());
 	}
 
-	_sprintControl(DeltaTime);
+	SprintControl(DeltaTime);
 }
 
 // Enables and disables player's gravity
@@ -169,10 +169,10 @@ void ASpaceCharacter::Use()
 	}
 }
 
-void ASpaceCharacter::_sprintControl(float DeltaTime)
+void ASpaceCharacter::SprintControl(float DeltaTime)
 {
 	//TODO: Control by time not by ticks.
-	if (isSprinting)
+	if (bIsSprinting)
 	{
 		if (staminaDuration > 0)
 		{
@@ -182,22 +182,22 @@ void ASpaceCharacter::_sprintControl(float DeltaTime)
 		{
 			OnStopSprint();
 			staminaDuration = 0;
-			isRecovering = true;
+			bIsRecovering = true;
 		}
 	}
 
-	if (isRecovering)
+	if (bIsRecovering)
 	{
 		staminaDuration += staminaRecovery;
 
 		if (staminaDuration >= maxStamina)
 		{
 			staminaDuration = maxStamina;
-			isRecovering = false;
+			bIsRecovering = false;
 		}
 	}
 
-	if ((!isSprinting && !isRecovering) && staminaDuration<maxStamina)
+	if ((!bIsSprinting && !bIsRecovering) && staminaDuration<maxStamina)
 	{
 		staminaDuration += staminaRecovery;
 
@@ -212,15 +212,15 @@ void ASpaceCharacter::_sprintControl(float DeltaTime)
 
 void ASpaceCharacter::OnStartSprint()
 {
-	if(!isRecovering)
+	if(!bIsRecovering)
 	{
-		isSprinting = true;
+		bIsSprinting = true;
 		GetCharacterMovement()->MaxWalkSpeed = runSpeed;
 	}
 }
 
 void ASpaceCharacter::OnStopSprint()
 {
-	isSprinting = false;
+	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 }

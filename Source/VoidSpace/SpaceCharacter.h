@@ -56,10 +56,10 @@ protected:
 private:
 	void Use();
 
-	void _sprintControl(float DeltaTime);
+	void SprintControl(float DeltaTime);
 
-	bool isSprinting = false;
-	bool isRecovering = false;
+	bool bIsSprinting = false;
+	bool bIsRecovering = false;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float walkSpeed = 600;
