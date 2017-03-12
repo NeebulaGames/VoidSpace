@@ -56,17 +56,27 @@ protected:
 private:
 	void Use();
 
-	void _sprintControl();
+	void _sprintControl(float DeltaTime);
 
 	bool isSprinting = false;
 	bool isRecovering = false;
 
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float walkSpeed = 600;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float runSpeed = 1000;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float staminaDuration = 100;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float staminaRecovery = 0.3f;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float staminaConsumition = 0.6f;
 
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float maxStamina = 100;
 
 

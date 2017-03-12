@@ -12,6 +12,7 @@ ASpaceCharacter::ASpaceCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	GetCharacterMovement()->MaxWalkSpeed = walkSpeed;
 
 }
 
@@ -38,7 +39,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 			pawn->GetControlRotation());
 	}
 
-	_sprintControl();
+	_sprintControl(DeltaTime);
 }
 
 // Enables and disables player's gravity
@@ -168,7 +169,7 @@ void ASpaceCharacter::Use()
 	}
 }
 
-void ASpaceCharacter::_sprintControl()
+void ASpaceCharacter::_sprintControl(float DeltaTime)
 {
 	//TODO: Control by time not by ticks.
 	if (isSprinting)
@@ -205,9 +206,8 @@ void ASpaceCharacter::_sprintControl()
 			staminaDuration = maxStamina;
 		}
 	}
-
-
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), staminaDuration));
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), staminaDuration));
 }
 
 void ASpaceCharacter::OnStartSprint()
