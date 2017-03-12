@@ -16,11 +16,11 @@ ASpaceSuitActor::ASpaceSuitActor(const FObjectInitializer& ObjectInitializer) : 
 	RootComponent = root;
 
 	InteractableComponent = ObjectInitializer.CreateDefaultSubobject<UInteractableComponent>(this, TEXT("Interactable"));
-	InteractableComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	InteractableComponent->SetupAttachment(RootComponent);
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> spaceSuit(TEXT("StaticMesh'/Game/Meshes/SpaceSuit.SpaceSuit'"));
 	SpaceSuitComponent = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("SpaceSuit"));
-	SpaceSuitComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	SpaceSuitComponent->SetupAttachment(RootComponent);
 	SpaceSuitComponent->SetStaticMesh(spaceSuit.Object);
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> zipperSound(TEXT("SoundWave'/Game/Sounds/zipper.zipper'"));

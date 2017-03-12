@@ -11,7 +11,7 @@ UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectI
 	PrimaryComponentTick.bCanEverTick = false;
 
 	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, "TriggerBox");
-	BoxComponent->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	BoxComponent->SetupAttachment(this);
 	BoxComponent->InitBoxExtent(FVector(50));
 	BoxComponent->bSelectable = false;
 }
