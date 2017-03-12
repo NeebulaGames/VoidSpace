@@ -6,18 +6,21 @@
 
 
 // Sets default values
-ASpaceSuitActor::ASpaceSuitActor()
+ASpaceSuitActor::ASpaceSuitActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> spaceSuit(TEXT("StaticMesh'/Game/Meshes/SpaceSuit.SpaceSuit'"));
-	SpaceSuitComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SpaceSuit"));
-	SpaceSuitComponent->SetupAttachment(RootComponent);
-	SpaceSuitComponent->SetStaticMesh(spaceSuit.Object);
+	USceneComponent* root = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("Root"));
+	RootComponent = root;
 
-	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
-	AddInstanceComponent(InteractableComponent);
+	InteractableComponent = ObjectInitializer.CreateDefaultSubobject<UInteractableComponent>(this, TEXT("Interactable"));
+	InteractableComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> spaceSuit(TEXT("StaticMesh'/Game/Meshes/SpaceSuit.SpaceSuit'"));
+	SpaceSuitComponent = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("SpaceSuit"));
+	SpaceSuitComponent->AttachToComponent(RootComponent, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	SpaceSuitComponent->SetStaticMesh(spaceSuit.Object);
 }
 
 // Called when the game starts or when spawned

@@ -4,13 +4,16 @@
 #include "InteractableComponent.h"
 
 // Sets default values for this component's properties
-UInteractableComponent::UInteractableComponent() : bPlayerIsNear(false), TriggerDistance(200)
+UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), bRequireUseButton(true), bPlayerIsNear(false)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, "TriggerBox");
+	BoxComponent->AttachToComponent(this, FAttachmentTransformRules::SnapToTargetIncludingScale);
+	BoxComponent->InitBoxExtent(FVector(50));
+	BoxComponent->bSelectable = false;
 }
 
 
@@ -18,22 +21,9 @@ UInteractableComponent::UInteractableComponent() : bPlayerIsNear(false), Trigger
 void UInteractableComponent::BeginPlay()
 {
 	Super::BeginPlay();
-}
 
-
-// Called every frame
-void UInteractableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (GetOwner()->GetDistanceTo(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0)) < TriggerDistance)
-	{
-		bPlayerIsNear = true;
-	}
-	else
-	{
-		bPlayerIsNear = false;
-	}
+	GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UInteractableComponent::OnBeginOverlap);
+	GetOwner()->OnActorEndOverlap.AddDynamic(this, &UInteractableComponent::OnEndOverlap);
 }
 
 void UInteractableComponent::Trigger() const
@@ -43,4 +33,17 @@ void UInteractableComponent::Trigger() const
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Triggered!"));
 		OnTriggerAction.Broadcast();
 	}
+}
+
+void UInteractableComponent::OnBeginOverlap(AActor* actor1, AActor* actor2)
+{
+	bPlayerIsNear = true;
+
+	if (!bRequireUseButton)
+		Trigger();
+}
+
+void UInteractableComponent::OnEndOverlap(AActor* actor1, AActor* actor2)
+{
+	bPlayerIsNear = false;
 }

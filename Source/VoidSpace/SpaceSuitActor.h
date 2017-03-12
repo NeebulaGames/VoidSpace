@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "InteractableComponent.h"
 #include "SpaceSuitActor.generated.h"
 
 UCLASS()
@@ -12,14 +13,17 @@ class VOIDSPACE_API ASpaceSuitActor : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	ASpaceSuitActor();
+	ASpaceSuitActor(const FObjectInitializer& ObjectInitializer);
 
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
+
+private:
 	
-	UPROPERTY(VisibleAnywhere, Category = "Space Suit")
+	UPROPERTY(VisibleAnywhere, Category = SpaceSuit, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SpaceSuitComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
 	class UInteractableComponent* InteractableComponent;
 };
