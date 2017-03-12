@@ -2,6 +2,8 @@
 
 #include "VoidSpace.h"
 #include "SpaceCharacter.h"
+#include "InteractableComponent.h"
+#include "SpaceStatics.h"
 
 
 // Sets default values
@@ -102,5 +104,38 @@ void ASpaceCharacter::OnStopJump()
 
 void ASpaceCharacter::Use()
 {
-	// TODO: Port from Space Playground project
+	const FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
+	const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
+	const FVector End = Start + dir_camera * 250;
+
+	FHitResult hitData(ForceInit);
+
+	if (pickedObject != nullptr)
+	{
+		LastHitted.GetComponent()->SetSimulatePhysics(true);
+		pickedObject = nullptr;
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
+	}
+	else
+	{
+		if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+		{
+			UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
+
+			if (interactable != nullptr)
+				interactable->Trigger();
+
+			else if (hitData.GetComponent()->IsSimulatingPhysics() && pickedObject == nullptr)
+			{
+				DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
+				hitData.GetComponent()->SetSimulatePhysics(false);
+				LastHitted = hitData;
+				pickedObject = hitData.GetActor();
+				if (GEngine)
+					GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object pickedUp"));
+			}
+		}
+
+	}
 }
