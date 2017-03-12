@@ -12,6 +12,7 @@ ASpaceCharacter::ASpaceCharacter()
 {
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
 }
 
@@ -37,6 +38,8 @@ void ASpaceCharacter::Tick(float DeltaTime)
 		pickedObject->SetActorLocationAndRotation(End + offset,
 			pawn->GetControlRotation());
 	}
+
+	SprintControl(DeltaTime);
 }
 
 // Enables and disables player's gravity
@@ -73,6 +76,8 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ASpaceCharacter::OnStartJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ASpaceCharacter::OnStopJump);
 	InputComponent->BindAction("Use", IE_Pressed, this, &ASpaceCharacter::Use);
+	InputComponent->BindAction("Sprint", IE_Pressed, this, &ASpaceCharacter::OnStartSprint);
+	InputComponent->BindAction("Sprint", IE_Released, this, &ASpaceCharacter::OnStopSprint);
 }
 
 void ASpaceCharacter::MoveForward(float Val)
@@ -90,6 +95,7 @@ void ASpaceCharacter::MoveForward(float Val)
 		// add movement in that direction
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
 		AddMovementInput(Direction, Val);
+
 	}
 }
 
@@ -161,4 +167,60 @@ void ASpaceCharacter::Use()
 
 		}
 	}
+}
+
+void ASpaceCharacter::SprintControl(float DeltaTime)
+{
+	//TODO: Control by time not by ticks.
+	if (bIsSprinting)
+	{
+		if (StaminaDuration > 0)
+		{
+			StaminaDuration -= StaminaConsumition;
+		}
+		else if (StaminaDuration <= 0)
+		{
+			OnStopSprint();
+			StaminaDuration = 0;
+			bIsRecovering = true;
+		}
+	}
+
+	if (bIsRecovering)
+	{
+		StaminaDuration += StaminaRecovery;
+
+		if (StaminaDuration >= MaxStamina)
+		{
+			StaminaDuration = MaxStamina;
+			bIsRecovering = false;
+		}
+	}
+
+	if ((!bIsSprinting && !bIsRecovering) && StaminaDuration<MaxStamina)
+	{
+		StaminaDuration += StaminaRecovery;
+
+		if (StaminaDuration >= MaxStamina)
+		{
+			StaminaDuration = MaxStamina;
+		}
+	}
+	
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), StaminaDuration));
+}
+
+void ASpaceCharacter::OnStartSprint()
+{
+	if(!bIsRecovering)
+	{
+		bIsSprinting = true;
+		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+	}
+}
+
+void ASpaceCharacter::OnStopSprint()
+{
+	bIsSprinting = false;
+	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 }

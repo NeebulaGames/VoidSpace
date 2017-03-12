@@ -44,11 +44,41 @@ protected:
 	UFUNCTION()
 		void OnStopJump();
 
+	UFUNCTION()
+		void OnStartSprint();
+	
+	UFUNCTION()
+		void OnStopSprint();
+
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
 private:
 	void Use();
+
+	void SprintControl(float DeltaTime);
+
+	bool bIsSprinting = false;
+	bool bIsRecovering = false;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float WalkSpeed = 600;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float RunSpeed = 1000;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float StaminaDuration = 100;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float StaminaRecovery = 0.3f;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float StaminaConsumition = 0.6f;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float MaxStamina = 100;
+
 
 	bool bGravityEnabled = true;
 	bool bWearsSpaceSuit = false;
