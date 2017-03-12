@@ -19,6 +19,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	void ToggleGravity();
+	void ToggleSpaceSuit(bool activate);
+
 protected:
 
 	AActor* pickedObject = nullptr;
@@ -47,4 +50,6 @@ protected:
 private:
 	void Use();
 
+	bool bGravityEnabled = true;
+	bool bWearsSpaceSuit = false;
 };
