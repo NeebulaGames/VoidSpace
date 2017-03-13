@@ -15,13 +15,13 @@ AProximityDoor::AProximityDoor()
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
 
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> doorBlueprint(TEXT("AnimBlueprint'/Game/Animations/DoorBlueprint.DoorBlueprint'"));
+	static ConstructorHelpers::FObjectFinder<UClass> doorBlueprint(TEXT("Class'/Game/Animations/DoorBlueprint.DoorBlueprint_C'"));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Door.Door'"));
 	DoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Door"));
 	DoorMeshComponent->SetupAttachment(RootComponent);
 	DoorMeshComponent->SetSkeletalMesh(door.Object);
-	DoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object->GetAnimBlueprintGeneratedClass());
+	DoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object);
 
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
