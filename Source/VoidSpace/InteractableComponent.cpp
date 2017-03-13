@@ -28,7 +28,7 @@ void UInteractableComponent::BeginPlay()
 
 void UInteractableComponent::Trigger() const
 {
-	if (bPlayerIsNear)
+	if (bPlayerIsNear && bRequireUseButton)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Triggered!"));
 		OnTriggerAction.Broadcast();
@@ -39,11 +39,12 @@ void UInteractableComponent::OnBeginOverlap(AActor* actor1, AActor* actor2)
 {
 	bPlayerIsNear = true;
 
-	if (!bRequireUseButton)
-		Trigger();
+	OnTriggerEnter.Broadcast();
 }
 
 void UInteractableComponent::OnEndOverlap(AActor* actor1, AActor* actor2)
 {
 	bPlayerIsNear = false;
+
+	OnTriggerExit.Broadcast();
 }

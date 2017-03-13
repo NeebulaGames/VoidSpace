@@ -22,15 +22,25 @@ public:
 	void Trigger() const;
 
 public:
+	// Triggers when the action button is pressed
 	UPROPERTY(BlueprintAssignable, Category = TriggerConfig)
 	FOnTriggerAction OnTriggerAction;
 
-private:
-	UPROPERTY(EditAnywhere, Category = TriggerConfig)
-	bool bRequireUseButton;
+	// Triggers when a character enters in the trigger cube
+	UPROPERTY(BlueprintAssignable, Category = TriggerConfig)
+	FOnTriggerAction OnTriggerEnter;
+
+	// Triggers when a character exits the trigger cube
+	UPROPERTY(BlueprintAssignable, Category = TriggerConfig)
+		FOnTriggerAction OnTriggerExit;
 
 	UPROPERTY(VisibleAnywhere)
 	class UBoxComponent* BoxComponent;
+
+	UPROPERTY(EditAnywhere, Category = TriggerConfig)
+	bool bRequireUseButton;
+
+private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Trigger debug")
 	bool bPlayerIsNear;
