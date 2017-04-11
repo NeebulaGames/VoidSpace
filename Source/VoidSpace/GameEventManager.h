@@ -1,0 +1,58 @@
+// All rights Neebula Games
+
+#pragma once
+
+#include "GameEventManager.generated.h"
+
+/**
+ * 
+ */
+UCLASS()
+class VOIDSPACE_API UGameEventManager : public UObject, public FTickableGameObject
+{
+	GENERATED_BODY()
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEventFinished);
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEventStarted);
+
+	struct FEvent 
+	{
+		FString Name;
+		FString LevelName = "";
+		float Time = 0.f;
+		bool bCountDown = false;
+		FEvent* NextEvent = nullptr;
+	};
+
+public:
+
+	void Tick(float DeltaTime) override;
+	bool IsTickable() const override;
+	bool IsTickableWhenPaused() const override;
+	bool IsTickableInEditor() const override;
+	TStatId GetStatId() const override;
+	UWorld* GetWorld() const override;
+
+	void LoadEventsFromFile(FString& fileName);
+	void StartEvents();
+	void FinishCurrentEvent();
+	void SetTime(float time, bool runCountdown = true);
+
+	FEvent* GetCurrentEvent() const { return CurrentEvent; }
+
+	UPROPERTY(BlueprintAssignable, Category = EventLifecycle)
+	FOnEventFinished OnEventFinished;
+
+	UPROPERTY(BlueprintAssignable, Category = EventLifecycle)
+	FOnEventStarted OnEventStarted;
+	
+private:
+
+	void LoadNextEvent();
+
+	int Time = 0;
+	bool bCountDown = false;
+
+	FEvent* FirstEvent = nullptr;
+	FEvent* CurrentEvent = nullptr;
+};

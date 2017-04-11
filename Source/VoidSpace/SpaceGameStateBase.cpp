@@ -3,6 +3,19 @@
 #include "VoidSpace.h"
 #include "SpaceGameStateBase.h"
 #include "SpaceCharacter.h"
+#include "GameEventManager.h"
+
+ASpaceGameStateBase::ASpaceGameStateBase()
+{
+	GameEventManager = CreateDefaultSubobject<UGameEventManager>("GameEventManager");
+}
+
+void ASpaceGameStateBase::BeginPlay()
+{
+	FString eventsFile(TEXT("events.json"));
+	GameEventManager->LoadEventsFromFile(eventsFile);
+	GameEventManager->StartEvents();
+}
 
 void ASpaceGameStateBase::TogglePlayerGravity() const
 {
@@ -22,6 +35,11 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 	{
 		character->ToggleSpaceSuit(activate);
 	}
+}
+
+void ASpaceGameStateBase::FinishEvent()
+{
+	GameEventManager->FinishCurrentEvent();
 }
 
 ASpaceGameStateBase* ASpaceGameStateBase::Instance(UObject* world)
