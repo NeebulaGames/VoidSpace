@@ -37,11 +37,9 @@ void ASpaceCharacter::Tick(float DeltaTime)
 		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
 		const FVector End = Start + dir_camera * 250;
 
-		/*APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
-		pickedObject->SetActorLocationAndRotation(End + offset,
-			pawn->GetControlRotation());*/
+		APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 
-		physics_handle->SetTargetLocation(End);
+		physics_handle->SetTargetLocationAndRotation(End, pawn->GetControlRotation());
 	}
 
 	SprintControl(DeltaTime);
@@ -145,7 +143,6 @@ void ASpaceCharacter::Use()
 		// RELEASE OBJECT
 		if (pickedObject != nullptr)
 		{
-			//LastHitted.GetComponent()->SetSimulatePhysics(true);
 			pickedObject = nullptr;
 
 			physics_handle->ReleaseComponent();
@@ -166,9 +163,11 @@ void ASpaceCharacter::Use()
 				else if (pickable != nullptr && pickedObject == nullptr)
 				{
 					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
-
-					//hitData.GetComponent()->SetSimulatePhysics(false);
-					physics_handle->GrabComponentAtLocation(hitData.GetComponent(), "None", hitData.Location);
+					physics_handle->GrabComponentAtLocationWithRotation(
+						hitData.GetComponent(), 
+						"None", 
+						hitData.GetComponent()->GetComponentLocation(), 
+						hitData.GetComponent()->GetComponentRotation());
 
 					LastHitted = hitData;
 					pickedObject = hitData.GetActor();
