@@ -3,6 +3,7 @@
 #include "VoidSpace.h"
 #include "SpaceCharacter.h"
 #include "InteractableComponent.h"
+#include "PickableComponent.h"
 #include "SpaceStatics.h"
 #include "SpaceGameStateBase.h"
 
@@ -13,6 +14,8 @@ ASpaceCharacter::ASpaceCharacter()
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+
+	physics_handle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("physicsHandle"));
 
 }
 
@@ -34,9 +37,11 @@ void ASpaceCharacter::Tick(float DeltaTime)
 		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
 		const FVector End = Start + dir_camera * 250;
 
-		APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
+		/*APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 		pickedObject->SetActorLocationAndRotation(End + offset,
-			pawn->GetControlRotation());
+			pawn->GetControlRotation());*/
+
+		physics_handle->SetTargetLocation(End);
 	}
 
 	SprintControl(DeltaTime);
@@ -137,10 +142,14 @@ void ASpaceCharacter::Use()
 
 		FHitResult hitData(ForceInit);
 
+		// RELEASE OBJECT
 		if (pickedObject != nullptr)
 		{
-			LastHitted.GetComponent()->SetSimulatePhysics(true);
+			//LastHitted.GetComponent()->SetSimulatePhysics(true);
 			pickedObject = nullptr;
+
+			physics_handle->ReleaseComponent();
+
 			if (GEngine)
 				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
 		}
@@ -149,14 +158,18 @@ void ASpaceCharacter::Use()
 			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
 			{
 				UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
+				UPickableComponent* pickable = hitData.Actor->FindComponentByClass<UPickableComponent>();
 
 				if (interactable != nullptr)
 					interactable->Trigger();
 
-				else if (hitData.GetComponent()->IsSimulatingPhysics() && pickedObject == nullptr)
+				else if (pickable != nullptr && pickedObject == nullptr)
 				{
 					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
-					hitData.GetComponent()->SetSimulatePhysics(false);
+
+					//hitData.GetComponent()->SetSimulatePhysics(false);
+					physics_handle->GrabComponentAtLocation(hitData.GetComponent(), "None", hitData.Location);
+
 					LastHitted = hitData;
 					pickedObject = hitData.GetActor();
 					if (GEngine)

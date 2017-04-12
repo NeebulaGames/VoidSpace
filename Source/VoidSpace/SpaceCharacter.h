@@ -22,6 +22,8 @@ public:
 	void ToggleGravity();
 	void ToggleSpaceSuit(bool activate);
 
+	UPhysicsHandleComponent* physics_handle;
+
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
