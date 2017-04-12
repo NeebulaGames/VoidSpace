@@ -15,9 +15,12 @@ void ASpaceGameStateBase::BeginPlay()
 {
 	FString eventsFile(TEXT("events.json"));
 	GameEventManager->LoadEventsFromFile(eventsFile);
-	GameEventManager->StartEvents();
 
-	UE_LOG(LogGameState, Log, TEXT("Last death reason %d"), static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason);
+	int lastDeathReason = static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason;
+
+	GameEventManager->StartEvents(lastDeathReason != -1);
+
+	UE_LOG(LogGameState, Log, TEXT("Last death reason %d"), lastDeathReason);
 }
 
 void ASpaceGameStateBase::TogglePlayerGravity() const

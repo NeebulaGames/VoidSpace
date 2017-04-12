@@ -3,6 +3,7 @@
 #include "VoidSpace.h"
 #include "GameEventManager.h"
 #include "SpaceGameStateBase.h"
+#include "SpaceGameInstance.h"
 
 
 void UGameEventManager::Tick(float DeltaTime)
@@ -52,6 +53,7 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 	FirstEvent->Time = 10;
 	FirstEvent->bCountDown = true;
 	FirstEvent->DeathReason = 2;
+	FirstEvent->bSkipAfterDeath = true;
 	FEvent* next = new FEvent;
 	next->Name = "End";
 	next->LevelName = "End";
@@ -59,9 +61,11 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 	UE_LOG(EventSM, Log, TEXT("Loaded %d events"), 2);
 }
 
-void UGameEventManager::StartEvents()
+void UGameEventManager::StartEvents(bool skipDeath)
 {
 	UE_LOG(EventSM, Log, TEXT("Starting event SM"));
+	if (skipDeath)
+		SkipDeathEvents();
 	if (FirstEvent)
 	{
 		CurrentEvent = FirstEvent;
@@ -106,4 +110,10 @@ void UGameEventManager::LoadNextEvent()
 	Time = CurrentEvent->Time;
 	bCountDown = CurrentEvent->bCountDown;
 	OnEventStarted.Broadcast();
+}
+
+void UGameEventManager::SkipDeathEvents()
+{
+	while (FirstEvent && FirstEvent->bSkipAfterDeath)
+		FirstEvent = FirstEvent->NextEvent;
 }

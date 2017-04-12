@@ -18,6 +18,7 @@ class VOIDSPACE_API UGameEventManager : public UObject, public FTickableGameObje
 	struct FEvent 
 	{
 		bool bCountDown = false;
+		bool bSkipAfterDeath = false;
 		float Time = 0.f;
 		int DeathReason = 0;
 		FEvent* NextEvent = nullptr;
@@ -35,7 +36,7 @@ public:
 	UWorld* GetWorld() const override;
 
 	void LoadEventsFromFile(FString& fileName);
-	void StartEvents();
+	void StartEvents(bool skipAfterDeath);
 	void FinishCurrentEvent();
 	void SetTime(float time, bool runCountdown = true);
 
@@ -50,6 +51,7 @@ public:
 private:
 
 	void LoadNextEvent();
+	void SkipDeathEvents();
 
 	float Time = 0;
 	bool bCountDown = false;
