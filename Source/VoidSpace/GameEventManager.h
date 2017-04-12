@@ -17,11 +17,12 @@ class VOIDSPACE_API UGameEventManager : public UObject, public FTickableGameObje
 
 	struct FEvent 
 	{
+		bool bCountDown = false;
+		float Time = 0.f;
+		int DeathReason = 0;
+		FEvent* NextEvent = nullptr;
 		FString Name;
 		FString LevelName = "";
-		float Time = 0.f;
-		bool bCountDown = false;
-		FEvent* NextEvent = nullptr;
 	};
 
 public:
@@ -50,7 +51,7 @@ private:
 
 	void LoadNextEvent();
 
-	int Time = 0;
+	float Time = 0;
 	bool bCountDown = false;
 
 	FEvent* FirstEvent = nullptr;

@@ -27,6 +27,8 @@ public:
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void ToggleSpaceSuit(bool activate) const;
 
+	void Die(int reason);
+
 	// TODO: Remove me! Only for testing purposes
 	UFUNCTION(Exec)
 	void FinishEvent();

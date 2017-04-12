@@ -4,6 +4,7 @@
 #include "SpaceGameStateBase.h"
 #include "SpaceCharacter.h"
 #include "GameEventManager.h"
+#include "SpaceGameInstance.h"
 
 ASpaceGameStateBase::ASpaceGameStateBase()
 {
@@ -15,6 +16,8 @@ void ASpaceGameStateBase::BeginPlay()
 	FString eventsFile(TEXT("events.json"));
 	GameEventManager->LoadEventsFromFile(eventsFile);
 	GameEventManager->StartEvents();
+
+	UE_LOG(LogGameState, Log, TEXT("Last death reason %d"), static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason);
 }
 
 void ASpaceGameStateBase::TogglePlayerGravity() const
@@ -35,6 +38,21 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 	{
 		character->ToggleSpaceSuit(activate);
 	}
+}
+
+void ASpaceGameStateBase::Die(int reason)
+{
+	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	if (character)
+	{
+		character->KillPlayer(reason);
+	}
+
+	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
+
+	// TODO: Wait for player animation trigger if necessary
+	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
 void ASpaceGameStateBase::FinishEvent()

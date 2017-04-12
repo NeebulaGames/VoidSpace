@@ -2,13 +2,14 @@
 
 #include "VoidSpace.h"
 #include "GameEventManager.h"
+#include "SpaceGameStateBase.h"
 
 
 void UGameEventManager::Tick(float DeltaTime)
 {
 	if (bCountDown && Time < 0.f)
 	{
-		// TODO: Die
+		ASpaceGameStateBase::Instance(GetWorld())->Die(CurrentEvent->DeathReason);
 	}
 	else
 	{
@@ -48,6 +49,9 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 	FirstEvent = new FEvent;
 	FirstEvent->Name = "Beginning";
 	FirstEvent->LevelName = "Beginning";
+	FirstEvent->Time = 10;
+	FirstEvent->bCountDown = true;
+	FirstEvent->DeathReason = 2;
 	FEvent* next = new FEvent;
 	next->Name = "End";
 	next->LevelName = "End";
