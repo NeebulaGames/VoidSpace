@@ -59,6 +59,13 @@ void ASpaceGameStateBase::Die(int reason)
 	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
+void ASpaceGameStateBase::EndGame()
+{
+	// TODO: Transition to credits?
+	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = -1;
+	UGameplayStatics::OpenLevel(this, TEXT("MainMenu"), false);
+}
+
 void ASpaceGameStateBase::FinishEvent()
 {
 	GameEventManager->FinishCurrentEvent();

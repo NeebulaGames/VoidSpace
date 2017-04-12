@@ -92,7 +92,7 @@ void UGameEventManager::FinishCurrentEvent()
 	else
 	{
 		UE_LOG(EventSM, Log, TEXT("Reached last event"));
-		// TODO: Call end game
+		ASpaceGameStateBase::Instance(GetWorld())->EndGame();
 	}
 }
 

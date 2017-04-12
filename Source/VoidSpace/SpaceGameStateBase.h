@@ -30,6 +30,8 @@ public:
 
 	void Die(int reason);
 
+	void EndGame();
+
 	// TODO: Remove me! Only for testing purposes
 	UFUNCTION(Exec)
 	void FinishEvent();
