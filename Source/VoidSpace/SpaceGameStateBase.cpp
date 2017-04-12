@@ -11,14 +11,15 @@ ASpaceGameStateBase::ASpaceGameStateBase()
 	GameEventManager = CreateDefaultSubobject<UGameEventManager>("GameEventManager");
 }
 
-void ASpaceGameStateBase::BeginPlay()
+void ASpaceGameStateBase::StartEventSM()
 {
 	FString eventsFile(TEXT("events.json"));
 	GameEventManager->LoadEventsFromFile(eventsFile);
 
 	int lastDeathReason = static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason;
 
-	GameEventManager->StartEvents(lastDeathReason != -1);
+	if (bLoadEventSM)
+		GameEventManager->StartEvents(lastDeathReason != -1);
 
 	UE_LOG(LogGameState, Log, TEXT("Last death reason %d"), lastDeathReason);
 }

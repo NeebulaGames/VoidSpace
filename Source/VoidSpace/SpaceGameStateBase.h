@@ -15,11 +15,12 @@ class VOIDSPACE_API ASpaceGameStateBase : public AGameStateBase
 
 protected:
 
-	void BeginPlay() override;
-
 public:
 
 	ASpaceGameStateBase();
+
+	UFUNCTION(BlueprintCallable, Category = GameEventManager)
+	void StartEventSM();
 
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void TogglePlayerGravity() const;	
@@ -40,6 +41,9 @@ public:
 	
 	UPROPERTY(VisibleAnywhere)
 	bool bInteractionAllowed = true;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameEventManager)
+	bool bLoadEventSM = true;
 
 	UPROPERTY(VisibleAnywhere, Category = GameEventManager)
 	class UGameEventManager* GameEventManager;
