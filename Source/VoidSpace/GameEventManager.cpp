@@ -85,20 +85,6 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 
 		FirstEvent = eventMap[jsonObject->GetStringField("FirstEvent")];
 	}
-
-	//// TODO: Implement JSON load
-	//FirstEvent = new FEvent;
-	//FirstEvent->Name = "Beginning";
-	//FirstEvent->LevelName = "Beginning";
-	//FirstEvent->Time = 10;
-	//FirstEvent->bCountDown = true;
-	//FirstEvent->DeathReason = 2;
-	//FirstEvent->bSkipAfterDeath = true;
-	//FEvent* next = new FEvent;
-	//next->Name = "End";
-	//next->LevelName = "End";
-	//FirstEvent->NextEvent = next;
-	//UE_LOG(EventSM, Log, TEXT("Loaded %d events"), 2);
 }
 
 void UGameEventManager::StartEvents(bool skipDeath)
