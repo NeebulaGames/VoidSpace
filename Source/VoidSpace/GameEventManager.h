@@ -22,6 +22,7 @@ class VOIDSPACE_API UGameEventManager : public UObject, public FTickableGameObje
 		float Time = 0.f;
 		int DeathReason = 0;
 		FEvent* NextEvent = nullptr;
+		FString NextEventName = "";
 		FString Name;
 		FString LevelName = "";
 	};

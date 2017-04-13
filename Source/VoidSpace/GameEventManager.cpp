@@ -4,6 +4,7 @@
 #include "GameEventManager.h"
 #include "SpaceGameStateBase.h"
 #include "SpaceGameInstance.h"
+#include <map>
 
 
 void UGameEventManager::Tick(float DeltaTime)
@@ -46,19 +47,58 @@ UWorld* UGameEventManager::GetWorld() const
 void UGameEventManager::LoadEventsFromFile(FString& fileName)
 {
 	UE_LOG(EventSM, Log, TEXT("Loading events from file %s"), *fileName);
-	// TODO: Implement JSON load
-	FirstEvent = new FEvent;
-	FirstEvent->Name = "Beginning";
-	FirstEvent->LevelName = "Beginning";
-	FirstEvent->Time = 10;
-	FirstEvent->bCountDown = true;
-	FirstEvent->DeathReason = 2;
-	FirstEvent->bSkipAfterDeath = true;
-	FEvent* next = new FEvent;
-	next->Name = "End";
-	next->LevelName = "End";
-	FirstEvent->NextEvent = next;
-	UE_LOG(EventSM, Log, TEXT("Loaded %d events"), 2);
+
+	const FString path = FPaths::Combine(FPaths::Combine(*FPaths::GameContentDir(), *FString("Data")), *fileName);
+	FString jsonContent;
+
+	FFileHelper::LoadFileToString(jsonContent, *path);
+	TSharedPtr<FJsonObject> jsonObject;
+	TSharedRef<TJsonReader<>> reader = TJsonReaderFactory<>::Create(jsonContent);
+
+	if (FJsonSerializer::Deserialize(reader, jsonObject))
+	{
+		std::map<FString, FEvent*> eventMap;
+
+		TArray<TSharedPtr<FJsonValue>> eventList = jsonObject->GetArrayField(TEXT("EventList"));
+
+		for (TSharedPtr<FJsonValue> val : eventList)
+		{
+			TSharedPtr<FJsonObject> obj = val->AsObject();
+			FEvent* ev = new FEvent;
+			ev->Name = obj->GetStringField("Name");
+			ev->LevelName = obj->GetStringField("LevelName");
+			ev->bCountDown = obj->GetBoolField("CountDown");
+			ev->bSkipAfterDeath = obj->GetBoolField("SkipAfterDeath");
+			ev->Time = obj->GetNumberField("Time");
+			ev->DeathReason = obj->GetIntegerField("DeathReason");
+			ev->NextEventName = obj->GetStringField("NextEvent");
+
+			eventMap[ev->Name] = ev;
+		}
+
+		for (auto ev : eventMap)
+		{
+			FString nextEvent = ev.second->NextEventName;
+			if (!nextEvent.IsEmpty())
+				ev.second->NextEvent = eventMap[nextEvent];
+		}
+
+		FirstEvent = eventMap[jsonObject->GetStringField("FirstEvent")];
+	}
+
+	//// TODO: Implement JSON load
+	//FirstEvent = new FEvent;
+	//FirstEvent->Name = "Beginning";
+	//FirstEvent->LevelName = "Beginning";
+	//FirstEvent->Time = 10;
+	//FirstEvent->bCountDown = true;
+	//FirstEvent->DeathReason = 2;
+	//FirstEvent->bSkipAfterDeath = true;
+	//FEvent* next = new FEvent;
+	//next->Name = "End";
+	//next->LevelName = "End";
+	//FirstEvent->NextEvent = next;
+	//UE_LOG(EventSM, Log, TEXT("Loaded %d events"), 2);
 }
 
 void UGameEventManager::StartEvents(bool skipDeath)
