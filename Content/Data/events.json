@@ -1,0 +1,23 @@
+{
+  "FirstEvent": "Beginning",
+  "EventList": [
+    {
+      "Name": "Beginning",
+      "LevelName": "Beginning",
+      "CountDown": false,
+      "SkipAfterDeath": true,
+      "Time": 0.0,
+      "DeathReason": 0,
+      "NextEvent": "End"
+    },
+    {
+      "Name": "End",
+      "LevelName": "End",
+      "CountDown": false,
+      "SkipAfterDeath": false,
+      "Time": 0.0,
+      "DeathReason": 0,
+      "NextEvent": ""
+    }
+  ]
+}

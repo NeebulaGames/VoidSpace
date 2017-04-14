@@ -123,8 +123,7 @@ void ASpaceCharacter::OnStopJump()
 
 void ASpaceCharacter::KillPlayer(int mode) const
 {
-	if(GetWorld() != nullptr)
-		UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+	// TODO: Run death animation and trigger event when finished
 	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Killed in mode %d"), mode));
 }
 

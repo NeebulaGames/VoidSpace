@@ -22,6 +22,9 @@ public:
 	void ToggleGravity();
 	void ToggleSpaceSuit(bool activate);
 
+	UFUNCTION(Exec, Category = ExecFunctions)
+	void KillPlayer(int mode) const;
+
 protected:
 
 	AActor* pickedObject = nullptr;
@@ -49,9 +52,6 @@ protected:
 	
 	UFUNCTION()
 		void OnStopSprint();
-
-	UFUNCTION(Exec, Category = ExecFunctions)
-	void KillPlayer(int mode) const;
 
 private:
 	void Use();
