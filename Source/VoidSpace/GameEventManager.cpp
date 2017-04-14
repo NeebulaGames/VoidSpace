@@ -9,11 +9,11 @@
 
 void UGameEventManager::Tick(float DeltaTime)
 {
-	if (bCountDown && Time < 0.f)
+	if (bCountDown && Time <= 0.f)
 	{
 		ASpaceGameStateBase::Instance(GetWorld())->Die(CurrentEvent->DeathReason);
 	}
-	else
+	else if (bCountDown)
 	{
 		Time -= DeltaTime;
 	}
