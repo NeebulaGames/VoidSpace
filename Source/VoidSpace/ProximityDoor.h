@@ -14,6 +14,15 @@ public:
 	// Sets default values for this actor's properties
 	AProximityDoor();
 
+	void Lock();
+	void UnLock();
+
+	UFUNCTION()
+	void OpenDoor() const;
+
+	UFUNCTION()
+	void CloseDoor() const;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -30,4 +39,6 @@ private:
 
 	UFUNCTION()
 	void OnDoorExit();
+
+	bool locked = false;
 };
