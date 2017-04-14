@@ -169,7 +169,6 @@ void ASpaceCharacter::Use()
 						hitData.GetComponent()->GetComponentLocation(), 
 						hitData.GetComponent()->GetComponentRotation());
 
-					LastHitted = hitData;
 					pickedObject = hitData.GetActor();
 					if (GEngine)
 						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object pickedUp"));
