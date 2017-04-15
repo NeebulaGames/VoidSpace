@@ -14,6 +14,9 @@ public:
 	// Sets default values for this actor's properties
 	ASimonButtonActor();
 
+	UPROPERTY(VisibleAnywhere, Category = Interactable)
+	class UInteractableComponent* InteractableComponent;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -21,8 +24,7 @@ protected:
 private:
 
 	UPROPERTY(VisibleAnywhere, Category = SimonButton, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* SimonButtonMesh;
-	
+	class UStaticMeshComponent* SimonButtonMesh;	
 
 	UMaterialInstanceDynamic* ButtonMaterial = nullptr;
 };

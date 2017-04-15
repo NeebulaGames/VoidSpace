@@ -2,6 +2,7 @@
 
 #include "VoidSpace.h"
 #include "SimonButtonActor.h"
+#include "InteractableComponent.h"
 
 
 // Sets default values
@@ -14,6 +15,11 @@ ASimonButtonActor::ASimonButtonActor()
 	SimonButtonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SimonButton"));
 	SimonButtonMesh->SetupAttachment(RootComponent);
 	SimonButtonMesh->SetStaticMesh(simonButton.Object);
+
+	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableComponent"));
+	InteractableComponent->SetupAttachment(RootComponent);
+	InteractableComponent->SetActive(false);
+	InteractableComponent->BoxComponent->SetBoxExtent(FVector(10.f, 7.f, 5.f));
 }
 
 // Called when the game starts or when spawned
