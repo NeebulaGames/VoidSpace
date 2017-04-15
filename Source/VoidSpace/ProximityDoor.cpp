@@ -40,26 +40,24 @@ void AProximityDoor::BeginPlay()
 
 void AProximityDoor::OnDoorEnter()
 {
-	if (!locked)
+	if (!bLocked)
 		OpenDoor();
 }
 
 void AProximityDoor::OnDoorExit()
 {
-	if (!locked)
+	if (!bLocked)
 		CloseDoor();
 }
 
 void AProximityDoor::Lock()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Door locked"));
-	locked = true;
+	bLocked = true;
 }
 
 void AProximityDoor::UnLock()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Door unlocked"));
-	locked = false;
+	bLocked = false;
 }
 
 void AProximityDoor::OpenDoor() const

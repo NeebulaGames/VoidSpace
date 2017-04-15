@@ -40,5 +40,5 @@ private:
 	UFUNCTION()
 	void OnDoorExit();
 
-	bool locked = false;
+	bool bLocked = false;
 };
