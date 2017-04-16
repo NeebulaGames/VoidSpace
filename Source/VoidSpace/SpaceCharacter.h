@@ -24,13 +24,13 @@ public:
 	void ToggleSpaceSuit(bool activate);
 
 	UPhysicsHandleComponent* physics_handle;
+	AActor* pickedObject = nullptr;
 
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
 protected:
 
-	AActor* pickedObject = nullptr;
 	FVector offset = FVector(0.f, 0.f, 50.f);
 
 	// Called to bind functionality to input

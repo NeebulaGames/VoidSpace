@@ -4,6 +4,7 @@
 #include "PcActor.h"
 #include "InteractableComponent.h"
 #include "CdAnimInstance.h"
+#include "SpaceCharacter.h"
 
 
 // Sets default values
@@ -17,6 +18,8 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 
 	InteractableComponent = ObjectInitializer.CreateDefaultSubobject<UInteractableComponent>(this, TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
+	InteractableComponent->SetRelativeLocation(FVector(25.f, 20.f, 0.f));
+	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 15.f, 50.f));
 
 	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> pcBlueprint(TEXT("AnimBlueprint'/Game/Animations/PC/PcBlueprint3.PcBlueprint3'"));
 
@@ -36,8 +39,12 @@ void APcActor::BeginPlay()
 
 void APcActor::OnEnterCd()
 {
-	UE_LOG(LogTemp, Warning, TEXT("ENTER!!!!"));
-	bool hola = Cast<UCdAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
-	UE_LOG(LogTemp, Warning, TEXT("isInserting %s"), (hola ? TEXT("True") : TEXT("False")));
+	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (character->pickedObject != nullptr && character->pickedObject->GetName().Contains("CD"))
+	{
+		Cast<UCdAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
+		character->pickedObject->Destroy();
+		character->pickedObject = nullptr;
+	}
 }
 
