@@ -21,7 +21,7 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	InteractableComponent->SetRelativeLocation(FVector(25.f, 20.f, 0.f));
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 15.f, 50.f));
 
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> pcBlueprint(TEXT("AnimBlueprint'/Game/Animations/PC/PcBlueprint3.PcBlueprint3'"));
+	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> pcBlueprint(TEXT("AnimBlueprint'/Game/Animations/PC/PcBlueprint.PcBlueprint'"));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC/PC.PC'"));
 	PcMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PC"));
