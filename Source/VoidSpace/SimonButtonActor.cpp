@@ -13,12 +13,13 @@ ASimonButtonActor::ASimonButtonActor()
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> simonButton(TEXT("StaticMesh'/Game/Meshes/Simon/Simon_Piece.Simon_Piece'"));
 	SimonButtonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SimonButton"));
-	SimonButtonMesh->SetupAttachment(RootComponent);
+	RootComponent = SimonButtonMesh;
 	SimonButtonMesh->SetStaticMesh(simonButton.Object);
 
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableComponent"));
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->SetActive(false);
+	InteractableComponent->Deactivate();
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(10.f, 7.f, 5.f));
 }
 

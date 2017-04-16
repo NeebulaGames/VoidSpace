@@ -157,7 +157,7 @@ void ASpaceCharacter::Use()
 				UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
 				UPickableComponent* pickable = hitData.Actor->FindComponentByClass<UPickableComponent>();
 
-				if (interactable != nullptr)
+				if (interactable != nullptr && interactable->IsActive())
 					interactable->Trigger();
 
 				else if (pickable != nullptr && pickedObject == nullptr)

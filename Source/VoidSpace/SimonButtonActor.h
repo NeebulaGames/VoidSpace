@@ -17,14 +17,14 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = Interactable)
 	class UInteractableComponent* InteractableComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = SimonButton, meta = (AllowPrivateAccess = "true"))
+	class UStaticMeshComponent* SimonButtonMesh;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
-private:
-
-	UPROPERTY(VisibleAnywhere, Category = SimonButton, meta = (AllowPrivateAccess = "true"))
-	class UStaticMeshComponent* SimonButtonMesh;	
+private:	
 
 	UMaterialInstanceDynamic* ButtonMaterial = nullptr;
 };
