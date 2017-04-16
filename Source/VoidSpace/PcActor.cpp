@@ -3,8 +3,8 @@
 #include "VoidSpace.h"
 #include "PcActor.h"
 #include "InteractableComponent.h"
-#include "CdAnimInstance.h"
 #include "SpaceCharacter.h"
+#include "PcAnimInstance.h"
 
 
 // Sets default values
@@ -42,7 +42,7 @@ void APcActor::OnEnterCd()
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (character->pickedObject != nullptr && character->pickedObject->GetName().Contains("CD"))
 	{
-		Cast<UCdAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
+		Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
 		character->pickedObject->Destroy();
 		character->pickedObject = nullptr;
 	}

@@ -2,22 +2,21 @@
 
 #pragma once
 
-#include "CdAnimInstance.generated.h"
+#include "PcAnimInstance.generated.h"
 
 /**
  * 
  */
 UCLASS(transient, Blueprintable, hideCategories = AnimInstance, BlueprintType)
-class VOIDSPACE_API UCdAnimInstance : public UAnimInstance
+class VOIDSPACE_API UPcAnimInstance : public UAnimInstance
 {
 	GENERATED_UCLASS_BODY()
-	
+
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CdStates)
-	bool bIsInserting;
+		bool bIsInserting;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CdStates)
-	bool bIsInserted;
-	
+		bool bIsInserted;
 	
 };
