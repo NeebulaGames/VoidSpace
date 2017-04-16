@@ -8,7 +8,7 @@
  * 
  */
 UCLASS(transient, Blueprintable, hideCategories = AnimInstance, BlueprintType)
-class VOIDSPACE_API UPcAnimInstance : public UAnimInstance
+class VOIDSPACE_API UCdAnimInstance : public UAnimInstance
 {
 	GENERATED_UCLASS_BODY()
 	

@@ -18,25 +18,26 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	InteractableComponent = ObjectInitializer.CreateDefaultSubobject<UInteractableComponent>(this, TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
 
-	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
+	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> pcBlueprint(TEXT("AnimBlueprint'/Game/Animations/PC/PcBlueprint3.PcBlueprint3'"));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC/PC.PC'"));
 	PcMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PC"));
 	PcMeshComponent->SetupAttachment(RootComponent);
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
-	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object);
-
+	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object->GeneratedClass);
 }
 
 // Called when the game starts or when spawned
 void APcActor::BeginPlay()
 {
 	Super::BeginPlay();
-	InteractableComponent->OnTriggerAction.AddDynamic(this, &APcActor::OnInsertTrigger);
+	InteractableComponent->OnTriggerEnter.AddDynamic(this, &APcActor::OnEnterCd);
 }
 
-void APcActor::OnInsertTrigger()
+void APcActor::OnEnterCd()
 {
-	Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserted = true;
+	UE_LOG(LogTemp, Warning, TEXT("ENTER!!!!"));
+	bool hola = Cast<UCdAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
+	UE_LOG(LogTemp, Warning, TEXT("isInserting %s"), (hola ? TEXT("True") : TEXT("False")));
 }
 

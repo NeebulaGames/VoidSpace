@@ -26,7 +26,5 @@ private:
 	class UInteractableComponent* InteractableComponent;
 
 	UFUNCTION()
-	void OnInsertTrigger();
-	
-	
+	void OnEnterCd();
 };

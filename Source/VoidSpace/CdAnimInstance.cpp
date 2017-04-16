@@ -3,7 +3,7 @@
 #include "VoidSpace.h"
 #include "CdAnimInstance.h"
 
-UPcAnimInstance::UPcAnimInstance(const FObjectInitializer& ObjectInitializer)
+UCdAnimInstance::UCdAnimInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
 }
