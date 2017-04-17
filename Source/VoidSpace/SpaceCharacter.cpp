@@ -45,6 +45,16 @@ void ASpaceCharacter::Tick(float DeltaTime)
 	SprintControl(DeltaTime);
 }
 
+void ASpaceCharacter::ReleaseObject()
+{
+	pickedObject = nullptr;
+
+	physics_handle->ReleaseComponent();
+
+	if (GEngine)
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
+}
+
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
@@ -143,12 +153,7 @@ void ASpaceCharacter::Use()
 		// RELEASE OBJECT
 		if (pickedObject != nullptr)
 		{
-			pickedObject = nullptr;
-
-			physics_handle->ReleaseComponent();
-
-			if (GEngine)
-				GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
+			ReleaseObject();
 		}
 		else
 		{

@@ -197,10 +197,7 @@ void ASimonStandActor::NotifyActorBeginOverlap(AActor* OtherActor)
 
 		if (character)
 		{
-			UPrimitiveComponent* component = character->physics_handle->GetGrabbedComponent();
-
-			if (component && component->GetOwner() == OtherActor)
-				character->physics_handle->ReleaseComponent(); // TODO: Add release function in character
+			character->ReleaseObject();
 		}
 
 		ASimonButtonActor* button = Cast<ASimonButtonActor>(OtherActor);
