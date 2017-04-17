@@ -40,10 +40,32 @@ void AProximityDoor::BeginPlay()
 
 void AProximityDoor::OnDoorEnter()
 {
-	Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsOpening = true;
+	if (!bLocked)
+		OpenDoor();
 }
 
 void AProximityDoor::OnDoorExit()
+{
+	if (!bLocked)
+		CloseDoor();
+}
+
+void AProximityDoor::Lock()
+{
+	bLocked = true;
+}
+
+void AProximityDoor::UnLock()
+{
+	bLocked = false;
+}
+
+void AProximityDoor::OpenDoor() const
+{
+	Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsOpening = true;
+}
+
+void AProximityDoor::CloseDoor() const
 {
 	Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsClosing = true;
 }
