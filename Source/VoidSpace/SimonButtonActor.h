@@ -17,6 +17,8 @@ public:
 	ASimonButtonActor();
 
 	void SetColor(const FLinearColor& color, float blink = 1.0f) const;
+	void TurnOn();
+	void TurnOff();
 
 	UPROPERTY(VisibleAnywhere, Category = SimonButton)
 	class UStaticMeshComponent* SimonButtonMesh;
@@ -37,6 +39,8 @@ private:
 
 	UFUNCTION()
 	void ButtonClicked();
+
+	FTimerHandle PressHandle;
 
 	UMaterialInstanceDynamic* ButtonMaterial = nullptr;
 };

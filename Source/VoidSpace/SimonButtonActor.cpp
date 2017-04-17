@@ -30,6 +30,17 @@ void ASimonButtonActor::SetColor(const FLinearColor& color, float blink) const
 	ButtonMaterial->SetVectorParameterValue("Color", color);
 }
 
+void ASimonButtonActor::TurnOn()
+{
+	GetWorldTimerManager().ClearTimer(PressHandle); // Bug
+	ButtonMaterial->SetScalarParameterValue("On", 1.f);
+}
+
+void ASimonButtonActor::TurnOff()
+{
+	ButtonMaterial->SetScalarParameterValue("On", 0.f);
+}
+
 // Called when the game starts or when spawned
 void ASimonButtonActor::BeginPlay()
 {
@@ -39,9 +50,14 @@ void ASimonButtonActor::BeginPlay()
 	ButtonMaterial->SetScalarParameterValue("Blink", 1.f);
 
 	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASimonButtonActor::ButtonClicked);
+
+	GetWorldTimerManager().SetTimer(PressHandle, -1.f, false);
 }
 
 void ASimonButtonActor::ButtonClicked()
 {
 	OnButtonClicked.Broadcast(ButtonNumber);
+
+	ButtonMaterial->SetScalarParameterValue("On", 1.f);
+	GetWorldTimerManager().SetTimer(PressHandle, this, &ASimonButtonActor::TurnOff, 1.f, false);
 }

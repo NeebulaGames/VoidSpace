@@ -29,6 +29,16 @@ void ASimonStandActor::BeginPlay()
 	Super::BeginPlay();
 }
 
+void ASimonStandActor::RestoreButtons()
+{
+	for (int i = 0; i < 3; ++i)
+	{
+		Buttons[i]->SetColor(Colors[i], 0.f);
+	}
+
+	ShutAllButtons();
+}
+
 // Called every frame
 void ASimonStandActor::Tick(float DeltaTime)
 {
@@ -57,8 +67,8 @@ void ASimonStandActor::ContinueSequence()
 	int lightenButton = Sequence[CurrentSequencePosition++];
 	for (int i = 0; i < 3; ++i)
 	{
-		FLinearColor color = i == lightenButton ? Colors[i] : FLinearColor::Black;
-		Buttons[i]->SetColor(color, 0.f);
+		ASimonButtonActor* button = Buttons[i];
+		i == lightenButton ? button->TurnOn() : button->TurnOff();
 	}
 
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
@@ -70,7 +80,8 @@ void ASimonStandActor::ShutAllButtons()
 	for (int i = 0; i < 3; ++i)
 	{
 		ASimonButtonActor* button = Buttons[i];
-		button->SetColor(FLinearColor::Black, 0.f);
+		//button->SetColor(FLinearColor::Black, 0.f);
+		button->TurnOff();
 		button->InteractableComponent->SetActive(sequenceCompleted);
 	}
 
@@ -108,7 +119,7 @@ void ASimonStandActor::SequenceSuccess()
 	else
 	{
 		GenerateSequence(CurrentButtonSequence + 1);
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::RestoreButtons, 1.f);
 	}
 
 	for (int i = 0; i < 3; ++i)
@@ -116,23 +127,26 @@ void ASimonStandActor::SequenceSuccess()
 		ASimonButtonActor* button = Buttons[i];
 		button->SetColor(FLinearColor::Green, sequencesCompleted ? 1.f : 0.f);
 		button->InteractableComponent->SetActive(false);
+		button->TurnOn();
 	}
 }
 
 void ASimonStandActor::SequenceWrong()
 {
 	GetWorldTimerManager().ClearTimer(TimerHandle);
+
 	for (int i = 0; i < 3; ++i)
 	{
 		ASimonButtonActor* button = Buttons[i];
 		button->SetColor(FLinearColor::Red, 0.f);
+		button->TurnOn();
 		button->InteractableComponent->SetActive(false);
 	}
 
 	CurrentButtonSequence = 0;
 	CurrentSequencePosition = 0;
 
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::RestoreButtons, 1.f);
 }
 
 void ASimonStandActor::ButtonPressed(int button)

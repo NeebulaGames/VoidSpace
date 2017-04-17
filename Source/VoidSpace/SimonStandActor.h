@@ -30,6 +30,7 @@ protected:
 
 private:
 
+	void RestoreButtons();
 	void ContinueSequence();
 	void ShutAllButtons();
 	void GenerateSequence(int elements);
