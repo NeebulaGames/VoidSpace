@@ -28,6 +28,7 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	PcMeshComponent->SetupAttachment(RootComponent);
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
 	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object->GeneratedClass);
+	PcMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 }
 
 // Called when the game starts or when spawned
