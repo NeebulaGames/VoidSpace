@@ -21,6 +21,13 @@ ASimonButtonActor::ASimonButtonActor()
 	InteractableComponent->SetActive(false);
 	InteractableComponent->Deactivate();
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(10.f, 7.f, 5.f));
+	InteractableComponent->bRequireUseButton = true;
+}
+
+void ASimonButtonActor::SetColor(const FLinearColor& color, float blink) const
+{
+	ButtonMaterial->SetScalarParameterValue("Blink", blink);
+	ButtonMaterial->SetVectorParameterValue("Color", color);
 }
 
 // Called when the game starts or when spawned
@@ -30,4 +37,11 @@ void ASimonButtonActor::BeginPlay()
 	ButtonMaterial = SimonButtonMesh->CreateAndSetMaterialInstanceDynamic(0);
 
 	ButtonMaterial->SetScalarParameterValue("Blink", 1.f);
+
+	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASimonButtonActor::ButtonClicked);
+}
+
+void ASimonButtonActor::ButtonClicked()
+{
+	OnButtonClicked.Broadcast(ButtonNumber);
 }

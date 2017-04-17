@@ -5,7 +5,10 @@
 #include "SpaceStatics.h"
 #include "SpaceCharacter.h"
 #include "PickableComponent.h"
+#include "InteractableComponent.h"
 
+
+const FLinearColor ASimonStandActor::Colors[3] = { FLinearColor::Red, FLinearColor::Green, FLinearColor::Blue };
 
 // Sets default values
 ASimonStandActor::ASimonStandActor()
@@ -31,6 +34,121 @@ void ASimonStandActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bActivateSimon)
+	{
+		for (int i = 0; i < 3 ; ++i)
+		{
+			FLinearColor color = Colors[i];
+			ASimonButtonActor* button = Buttons[i];
+			button->ButtonNumber = i;
+			button->SetColor(color, 0.f);
+			button->OnButtonClicked.AddUObject(this, &ASimonStandActor::ButtonPressed);
+		}
+
+		GenerateSequence(3);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ContinueSequence, 2.f);
+
+		bActivateSimon = false;
+	}
+}
+
+void ASimonStandActor::ContinueSequence()
+{
+	int lightenButton = Sequence[CurrentSequencePosition++];
+	for (int i = 0; i < 3; ++i)
+	{
+		FLinearColor color = i == lightenButton ? Colors[i] : FLinearColor::Black;
+		Buttons[i]->SetColor(color, 0.f);
+	}
+
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
+}
+
+void ASimonStandActor::ShutAllButtons()
+{
+	bool sequenceCompleted = CurrentSequencePosition >= Sequence.Num();
+	for (int i = 0; i < 3; ++i)
+	{
+		ASimonButtonActor* button = Buttons[i];
+		button->SetColor(FLinearColor::Black, 0.f);
+		button->InteractableComponent->SetActive(sequenceCompleted);
+	}
+
+	if (sequenceCompleted)
+	{
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ContinueSequence, 60.f);
+		CurrentSequencePosition = 0;
+	}
+	else
+	{
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ContinueSequence, 1.f);
+	}
+}
+
+void ASimonStandActor::GenerateSequence(int elements)
+{
+	CurrentButtonSequence = 0;
+	CurrentSequencePosition = 0;
+	Sequence.Empty(elements);
+	while (elements--)
+	{
+		Sequence.Add(FMath::Rand() % 3);
+	}
+}
+
+void ASimonStandActor::SequenceSuccess()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle);
+
+	bool sequencesCompleted = ++SequencesSuccess > 2;
+	if (sequencesCompleted)
+	{
+		OnSimonCompleted.Broadcast();
+	}
+	else
+	{
+		GenerateSequence(CurrentButtonSequence + 1);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
+	}
+
+	for (int i = 0; i < 3; ++i)
+	{
+		ASimonButtonActor* button = Buttons[i];
+		button->SetColor(FLinearColor::Green, sequencesCompleted ? 1.f : 0.f);
+		button->InteractableComponent->SetActive(false);
+	}
+}
+
+void ASimonStandActor::SequenceWrong()
+{
+	GetWorldTimerManager().ClearTimer(TimerHandle);
+	for (int i = 0; i < 3; ++i)
+	{
+		ASimonButtonActor* button = Buttons[i];
+		button->SetColor(FLinearColor::Red, 0.f);
+		button->InteractableComponent->SetActive(false);
+	}
+
+	CurrentButtonSequence = 0;
+	CurrentSequencePosition = 0;
+
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
+}
+
+void ASimonStandActor::ButtonPressed(int button)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Button %d pressed"), button);
+	if (Sequence[CurrentButtonSequence] == button)
+	{
+		if (++CurrentButtonSequence == Sequence.Num())
+		{
+			SequenceSuccess();
+		}
+	}
+	else
+	{
+		SequenceWrong();
+	}
 }
 
 void ASimonStandActor::PostInitializeComponents()
@@ -81,5 +199,9 @@ void ASimonStandActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		button->SetActorRelativeRotation(FRotator::ZeroRotator);
 
 		SimonStandMesh->bGenerateOverlapEvents = false;
+
+		bActivateSimon = true;
+
+		Buttons.Add(button);
 	}
 }

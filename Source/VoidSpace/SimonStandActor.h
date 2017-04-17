@@ -10,8 +10,10 @@ UCLASS()
 class VOIDSPACE_API ASimonStandActor : public AActor
 {
 	GENERATED_BODY()
-	
-public:	
+
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FSimonCompleted);
+
+public:
 	// Sets default values for this actor's properties
 	ASimonStandActor();
 
@@ -27,7 +29,26 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+
+	void ContinueSequence();
+	void ShutAllButtons();
+	void GenerateSequence(int elements);
+	void SequenceSuccess();
+	void SequenceWrong();
+
+	UFUNCTION()
+	void ButtonPressed(int button);
+
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
 
+	FSimonCompleted OnSimonCompleted;
+
+	int SequencesSuccess = 0;
+	int CurrentButtonSequence = 0;
+	int CurrentSequencePosition = 0;
+	static const FLinearColor Colors[3];
+	bool bActivateSimon = false;
+	TArray<int> Sequence;
+	FTimerHandle TimerHandle;
 };
