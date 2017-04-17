@@ -151,7 +151,6 @@ void ASimonStandActor::SequenceWrong()
 
 void ASimonStandActor::ButtonPressed(int button)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Button %d pressed"), button);
 	if (Sequence[CurrentButtonSequence] == button)
 	{
 		if (++CurrentButtonSequence == Sequence.Num())
@@ -191,7 +190,7 @@ void ASimonStandActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	Super::NotifyActorBeginOverlap(OtherActor);
 	if (OtherActor->IsA(ASimonButtonActor::StaticClass()) && !OtherActor->IsAttachedTo(this))
 	{
-		UE_LOG(LogTemp, Log, TEXT("Simon button added"));
+		UE_LOG(LogGameState, Verbose, TEXT("Simon button added, starting simon"));
 		
 		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
