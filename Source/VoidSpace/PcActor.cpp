@@ -5,6 +5,7 @@
 #include "InteractableComponent.h"
 #include "SpaceCharacter.h"
 #include "PcAnimInstance.h"
+#include "SpaceGameStateBase.h"
 
 
 // Sets default values
@@ -46,6 +47,7 @@ void APcActor::OnEnterCd()
 		Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
 		character->pickedObject->Destroy();
 		character->pickedObject = nullptr;
+		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
 	}
 }
 
