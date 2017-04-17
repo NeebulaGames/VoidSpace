@@ -15,6 +15,7 @@ ACdActor::ACdActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	StaticMeshComponent = ObjectInitializer.CreateDefaultSubobject<UStaticMeshComponent>(this, TEXT("Cd"));
 	StaticMeshComponent->SetStaticMesh(cd.Object);
 	StaticMeshComponent->SetSimulatePhysics(true);
+	StaticMeshComponent->bGenerateOverlapEvents = false;
 
 	PickableComponent = ObjectInitializer.CreateDefaultSubobject<UPickableComponent>(this, TEXT("Pickable"));
 	PickableComponent->SetupAttachment(StaticMeshComponent);
