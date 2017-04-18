@@ -9,7 +9,7 @@
 ASimonButtonActor::ASimonButtonActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> simonButton(TEXT("StaticMesh'/Game/Meshes/Simon/Simon_Piece.Simon_Piece'"));
 	SimonButtonMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SimonButton"));
@@ -24,6 +24,18 @@ ASimonButtonActor::ASimonButtonActor()
 	InteractableComponent->bRequireUseButton = true;
 }
 
+void ASimonButtonActor::Tick(float DeltaTime)
+{
+	if (CountDown > 0)
+	{
+		CountDown -= DeltaTime;
+		if (CountDown <= 0)
+		{
+			TurnOff();
+		}
+	}
+}
+
 void ASimonButtonActor::SetColor(const FLinearColor& color, float blink) const
 {
 	ButtonMaterial->SetScalarParameterValue("Blink", blink);
@@ -32,7 +44,7 @@ void ASimonButtonActor::SetColor(const FLinearColor& color, float blink) const
 
 void ASimonButtonActor::TurnOn()
 {
-	GetWorldTimerManager().ClearTimer(PressHandle); // Bug
+	CountDown = -1.f;
 	ButtonMaterial->SetScalarParameterValue("On", 1.f);
 }
 
@@ -50,8 +62,6 @@ void ASimonButtonActor::BeginPlay()
 	ButtonMaterial->SetScalarParameterValue("Blink", 1.f);
 
 	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASimonButtonActor::ButtonClicked);
-
-	GetWorldTimerManager().SetTimer(PressHandle, -1.f, false);
 }
 
 void ASimonButtonActor::ButtonClicked()
@@ -59,5 +69,5 @@ void ASimonButtonActor::ButtonClicked()
 	OnButtonClicked.Broadcast(ButtonNumber);
 
 	ButtonMaterial->SetScalarParameterValue("On", 1.f);
-	GetWorldTimerManager().SetTimer(PressHandle, this, &ASimonButtonActor::TurnOff, 1.f, false);
+	CountDown = 1.f;
 }

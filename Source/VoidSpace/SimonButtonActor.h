@@ -16,6 +16,8 @@ public:
 	// Sets default values for this actor's properties
 	ASimonButtonActor();
 
+	virtual void Tick(float DeltaTime) override;
+
 	void SetColor(const FLinearColor& color, float blink = 1.0f) const;
 	void TurnOn();
 	void TurnOff();
@@ -40,7 +42,7 @@ private:
 	UFUNCTION()
 	void ButtonClicked();
 
-	FTimerHandle PressHandle;
+	float CountDown = -1.f;
 
 	UMaterialInstanceDynamic* ButtonMaterial = nullptr;
 };
