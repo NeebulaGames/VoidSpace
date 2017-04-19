@@ -22,6 +22,7 @@ AProximityDoor::AProximityDoor()
 	DoorMeshComponent->SetupAttachment(RootComponent);
 	DoorMeshComponent->SetSkeletalMesh(door.Object);
 	DoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object);
+	DoorMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
