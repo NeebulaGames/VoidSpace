@@ -20,15 +20,15 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	InteractableComponent = ObjectInitializer.CreateDefaultSubobject<UInteractableComponent>(this, TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
-	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 120.f));
+	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 9.f));
 
-	static ConstructorHelpers::FObjectFinder<UAnimBlueprint> pcBlueprint(TEXT("AnimBlueprint'/Game/Animations/PC/PcBlueprint.PcBlueprint'"));
+	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC/PC.PC'"));
 	PcMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PC"));
 	PcMeshComponent->SetupAttachment(RootComponent);
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
-	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object->GeneratedClass);
+	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object);
 	PcMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 }
 
@@ -46,7 +46,7 @@ void APcActor::OnEnterCd()
 	{
 		Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
 		character->pickedObject->Destroy();
-		character->pickedObject = nullptr;
+		character->ReleaseObject();
 		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
 	}
 }
