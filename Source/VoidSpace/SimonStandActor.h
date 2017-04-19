@@ -24,6 +24,9 @@ public:
 
 	TArray<ASimonButtonActor*> Buttons;
 
+	UPROPERTY(BlueprintAssignable)
+	FSimonCompleted OnSimonCompleted;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -42,8 +45,6 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
-
-	FSimonCompleted OnSimonCompleted;
 
 	int SequencesSuccess = 0;
 	int CurrentButtonSequence = 0;
