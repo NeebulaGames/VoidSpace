@@ -19,6 +19,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaSeconds) override;
 
+	void ReleaseObject();
 	void ToggleGravity();
 	void ToggleSpaceSuit(bool activate);
 
