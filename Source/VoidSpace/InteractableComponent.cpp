@@ -4,7 +4,8 @@
 #include "InteractableComponent.h"
 
 // Sets default values for this component's properties
-UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer), bRequireUseButton(true), bPlayerIsNear(false)
+UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectInitializer) 
+	: Super(ObjectInitializer), bRequirePlayerNear(true), bRequireUseButton(true), bPlayerIsNear(false)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -28,7 +29,7 @@ void UInteractableComponent::BeginPlay()
 
 void UInteractableComponent::Trigger() const
 {
-	if (bPlayerIsNear && bRequireUseButton)
+	if ((!bRequirePlayerNear || bPlayerIsNear) && bRequireUseButton)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Triggered!"));
 		OnTriggerAction.Broadcast();
