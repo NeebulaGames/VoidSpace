@@ -38,6 +38,9 @@ public:
 	class UBoxComponent* BoxComponent;
 
 	UPROPERTY(EditAnywhere, Category = TriggerConfig)
+	bool bRequirePlayerNear;
+
+	UPROPERTY(EditAnywhere, Category = TriggerConfig)
 	bool bRequireUseButton;
 
 private:
