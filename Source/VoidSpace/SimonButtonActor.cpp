@@ -67,8 +67,8 @@ void ASimonButtonActor::BeginPlay()
 
 void ASimonButtonActor::ButtonClicked()
 {
-	OnButtonClicked.Broadcast(ButtonNumber);
-
 	ButtonMaterial->SetScalarParameterValue("On", 1.f);
 	CountDown = 1.f;
+
+	OnButtonClicked.Broadcast(ButtonNumber);
 }
