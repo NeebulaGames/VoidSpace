@@ -22,6 +22,7 @@ ASimonButtonActor::ASimonButtonActor()
 	InteractableComponent->Deactivate();
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(10.f, 7.f, 5.f));
 	InteractableComponent->bRequireUseButton = true;
+	InteractableComponent->bRequirePlayerNear = false;
 }
 
 void ASimonButtonActor::Tick(float DeltaTime)
@@ -66,8 +67,8 @@ void ASimonButtonActor::BeginPlay()
 
 void ASimonButtonActor::ButtonClicked()
 {
-	OnButtonClicked.Broadcast(ButtonNumber);
-
 	ButtonMaterial->SetScalarParameterValue("On", 1.f);
 	CountDown = 1.f;
+
+	OnButtonClicked.Broadcast(ButtonNumber);
 }
