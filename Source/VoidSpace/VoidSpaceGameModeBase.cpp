@@ -9,8 +9,11 @@
 
 AVoidSpaceGameModeBase::AVoidSpaceGameModeBase(const FObjectInitializer& ObjectInitializer): AGameModeBase(ObjectInitializer)
 {
+	static ConstructorHelpers::FObjectFinder<UClass> hudBlueprint(TEXT("Class'/Game/Blueprints/CrosshairHUD.CrosshairHUD_C'"));
+
 	DefaultPawnClass = ASpaceCharacter::StaticClass();
 	GameStateClass = ASpaceGameStateBase::StaticClass();
+	HUDClass = hudBlueprint.Object;
 }
 
 void AVoidSpaceGameModeBase::BeginPlay()
