@@ -56,7 +56,7 @@ void ASimonStandActor::Tick(float DeltaTime)
 		}
 
 		GenerateSequence(3);
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ContinueSequence, 2.f);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 0.9f);
 
 		bActivateSimon = false;
 	}
@@ -71,7 +71,7 @@ void ASimonStandActor::ContinueSequence()
 		i == lightenButton ? button->TurnOn() : button->TurnOff();
 	}
 
-	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 2.f);
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ShutAllButtons, 0.9f);
 }
 
 void ASimonStandActor::ShutAllButtons()
@@ -92,7 +92,7 @@ void ASimonStandActor::ShutAllButtons()
 	}
 	else
 	{
-		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ContinueSequence, 1.f);
+		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::ContinueSequence, 0.9f);
 	}
 }
 
