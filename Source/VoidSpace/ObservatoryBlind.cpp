@@ -29,5 +29,6 @@ void AObservatoryBlind::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
+	if(Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance()) != nullptr)
+		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
 }
