@@ -21,7 +21,6 @@ AObservatoryBlind::AObservatoryBlind()
 	BlindMeshComponent->SetupAttachment(RootComponent);
 	BlindMeshComponent->SetSkeletalMesh(blinds.Object);
 	BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
-
 }
 
 // Called when the game starts or when spawned
