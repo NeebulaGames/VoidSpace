@@ -2,6 +2,7 @@
 
 #include "VoidSpace.h"
 #include "ObservatoryBlind.h"
+#include "BlindAnimInstance.h"
 
 
 // Sets default values
@@ -28,4 +29,5 @@ void AObservatoryBlind::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
 }

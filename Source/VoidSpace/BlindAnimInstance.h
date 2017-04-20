@@ -4,6 +4,8 @@
 
 #include "BlindAnimInstance.generated.h"
 
+class ASimonStandActor;
+
 /**
  * 
  */
@@ -13,6 +15,7 @@ class VOIDSPACE_API UBlindAnimInstance : public UAnimInstance
 	GENERATED_UCLASS_BODY()
 	
 public:
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	bool bIsOpening;
 
@@ -23,7 +26,11 @@ public:
 	bool bIsOpened;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
-	bool bIsClosed;
+	bool bIsClosed;	
 	
-	
+	UFUNCTION()
+	void OnSimonCompleted();
+
+	UFUNCTION()
+	void SetSimonStandToInstance(ASimonStandActor* SimonStand);
 };

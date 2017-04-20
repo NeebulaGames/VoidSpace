@@ -22,5 +22,8 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = BlindMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* BlindMeshComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
+	class ASimonStandActor* SimonStandActor;
 	
 };
