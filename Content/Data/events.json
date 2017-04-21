@@ -8,6 +8,15 @@
       "SkipAfterDeath": true,
       "Time": 0.0,
       "DeathReason": 0,
+      "NextEvent": "The Meteor"
+    },
+    {
+      "Name": "The Meteor",
+      "LevelName": "Meteor",
+      "CountDown": true,
+      "SkipAfterDeath": false,
+      "Time": 120.0,
+      "DeathReason": 0,
       "NextEvent": "End"
     },
     {
