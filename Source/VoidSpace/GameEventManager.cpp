@@ -104,7 +104,8 @@ void UGameEventManager::FinishCurrentEvent()
 	OnEventFinished.Broadcast();
 
 	FLatentActionInfo info;
-	UGameplayStatics::UnloadStreamLevel(GetWorld(), FName(*CurrentEvent->LevelName), info);
+	info.UUID = 1;
+	UGameplayStatics::UnloadStreamLevel(this, FName(*CurrentEvent->LevelName), info);
 
 	UE_LOG(EventSM, Log, TEXT("Finish event %s"), *CurrentEvent->Name);
 
@@ -132,7 +133,8 @@ void UGameEventManager::LoadNextEvent()
 {
 	UE_LOG(EventSM, Log, TEXT("Loading event %s"), *CurrentEvent->Name);
 	FLatentActionInfo info;
-	UGameplayStatics::LoadStreamLevel(GetWorld(), FName(*CurrentEvent->LevelName), true, true, info);
+	info.UUID = 0;
+	UGameplayStatics::LoadStreamLevel(this, FName(*CurrentEvent->LevelName), true, true, info);
 	Time = CurrentEvent->Time;
 	bCountDown = CurrentEvent->bCountDown;
 	OnEventStarted.Broadcast();
