@@ -29,5 +29,9 @@ void AObservatoryBlind::BeginPlay()
 	Super::BeginPlay();
 	
 	if(Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance()) != nullptr)
+	{
 		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
+		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->MeteorStorm = MeteorStorm;
+	}
+		
 }

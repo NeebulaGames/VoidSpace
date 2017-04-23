@@ -19,3 +19,4 @@ void UBlindAnimInstance::SetSimonStandToInstance(ASimonStandActor* SimonStand)
 {
 	SimonStand->OnSimonCompleted.AddDynamic(this, &UBlindAnimInstance::OnSimonCompleted);
 }
+

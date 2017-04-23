@@ -33,4 +33,7 @@ public:
 
 	UFUNCTION()
 	void SetSimonStandToInstance(ASimonStandActor* SimonStand);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
+	AMatineeActor* MeteorStorm;
 };
