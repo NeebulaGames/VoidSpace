@@ -27,4 +27,5 @@ private:
 
 	UFUNCTION()
 	void OnEnterCd();
+	void OnActivePc();
 };
