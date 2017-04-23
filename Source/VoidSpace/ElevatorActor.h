@@ -20,8 +20,26 @@ protected:
 
 public:
 
+	void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, Category=ElevatorInteractable)
+	AActor* TeleportPosition;
+
+	UPROPERTY(VisibleAnywhere, Category=ElevatorMesh)
 	class USkeletalMeshComponent* ElevatorMesh;
 
+	UPROPERTY(VisibleAnywhere, Category=ElevatorInteractable)
 	class UInteractableComponent* InteractableComponent;
-	
+
+private:
+
+	UFUNCTION()
+	void OnElevatorEnter();
+
+	UFUNCTION()
+	void OnFadeOutFinish();
+
+	bool bWasClosing = false;
+
+	class UElevatorAnimInstance* AnimInstance;
 };
