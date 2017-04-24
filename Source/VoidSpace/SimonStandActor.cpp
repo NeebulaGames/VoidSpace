@@ -6,6 +6,8 @@
 #include "SpaceCharacter.h"
 #include "PickableComponent.h"
 #include "InteractableComponent.h"
+#include "SpaceGameStateBase.h"
+#include "GameEventManager.h"
 
 
 const FLinearColor ASimonStandActor::Colors[3] = { FLinearColor::Red, FLinearColor::Green, FLinearColor::Blue };
@@ -19,14 +21,21 @@ ASimonStandActor::ASimonStandActor()
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> simonStand(TEXT("StaticMesh'/Game/Meshes/Simon/Simon_Stand.Simon_Stand'"));
 	SimonStandMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SimonStand"));
 	SimonStandMesh->SetStaticMesh(simonStand.Object);
-
 	RootComponent = SimonStandMesh;
+
+	SimonBoxCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("Box"));
+	SimonBoxCollider->SetupAttachment(RootComponent);
+	SimonBoxCollider->SetBoxExtent(FVector(32.f, 32.f, 20.f));
 }
 
 // Called when the game starts or when spawned
 void ASimonStandActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	UGameEventManager* manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
+	manager->OnEventStarted.AddDynamic(this, &ASimonStandActor::EventStarted);
+	manager->OnEventFinished.AddDynamic(this, &ASimonStandActor::EventFinished);
 }
 
 void ASimonStandActor::RestoreButtons()
@@ -114,6 +123,7 @@ void ASimonStandActor::SequenceSuccess()
 	bool sequencesCompleted = ++SequencesSuccess > 2;
 	if (sequencesCompleted)
 	{
+		bSimonCompleted = true;
 		OnSimonCompleted.Broadcast();
 	}
 	else
@@ -122,7 +132,7 @@ void ASimonStandActor::SequenceSuccess()
 		GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::RestoreButtons, 1.f);
 	}
 
-	for (int i = 0; i < 3; ++i)
+	for (int i = 0; i < Buttons.Num(); ++i)
 	{
 		ASimonButtonActor* button = Buttons[i];
 		button->SetColor(FLinearColor::Green, sequencesCompleted ? 1.f : 0.f);
@@ -147,6 +157,23 @@ void ASimonStandActor::SequenceWrong()
 	CurrentSequencePosition = 0;
 
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASimonStandActor::RestoreButtons, 1.f);
+}
+
+void ASimonStandActor::EventStarted()
+{
+	SimonStandMesh->bGenerateOverlapEvents = ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning";
+	SimonBoxCollider->bGenerateOverlapEvents = SimonStandMesh->bGenerateOverlapEvents;
+}
+
+void ASimonStandActor::EventFinished()
+{
+	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning" && !bSimonCompleted)
+	{
+		SequencesSuccess = 3;
+		SimonStandMesh->bGenerateOverlapEvents = false;
+		SimonBoxCollider->bGenerateOverlapEvents = false;
+		SequenceSuccess();
+	}
 }
 
 void ASimonStandActor::ButtonPressed(int button)
@@ -188,7 +215,7 @@ void ASimonStandActor::PostInitializeComponents()
 void ASimonStandActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	Super::NotifyActorBeginOverlap(OtherActor);
-	if (OtherActor->IsA(ASimonButtonActor::StaticClass()) && !OtherActor->IsAttachedTo(this))
+	if (OtherActor->IsA(ASimonButtonActor::StaticClass()) && !OtherActor->IsAttachedTo(this) && !bSimonCompleted)
 	{
 		UE_LOG(LogGameState, Verbose, TEXT("Simon button added, starting simon"));
 		
@@ -209,6 +236,7 @@ void ASimonStandActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		button->SetActorRelativeRotation(FRotator::ZeroRotator);
 
 		SimonStandMesh->bGenerateOverlapEvents = false;
+		SimonBoxCollider->bGenerateOverlapEvents = false;
 
 		bActivateSimon = true;
 

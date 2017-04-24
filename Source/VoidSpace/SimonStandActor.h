@@ -41,11 +41,21 @@ private:
 	void SequenceWrong();
 
 	UFUNCTION()
+	void EventStarted();
+
+	UFUNCTION()
+	void EventFinished();
+
+	UFUNCTION()
 	void ButtonPressed(int button);
 
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
 
+	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* SimonBoxCollider;
+
+	bool bSimonCompleted = false;
 	int SequencesSuccess = 0;
 	int CurrentButtonSequence = 0;
 	int CurrentSequencePosition = 0;
