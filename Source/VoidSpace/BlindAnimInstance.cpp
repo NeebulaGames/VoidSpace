@@ -27,7 +27,9 @@ bool UBlindAnimInstance::HasExecuted() const
 
 void UBlindAnimInstance::FinishCurrentEvent()
 {
-	ASpaceGameStateBase::Instance(this)->GameEventManager->FinishCurrentEvent();
+	UGameEventManager* manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
+	if (manager->GetCurrentEvent()->Name == "Beginning")
+		manager->FinishCurrentEvent();
 }
 
 void UBlindAnimInstance::OnSimonCompleted()

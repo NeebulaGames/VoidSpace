@@ -51,7 +51,7 @@ public:
 
 	UPROPERTY(BlueprintAssignable, Category = EventLifecycle)
 	FOnEventStarted OnEventStarted;
-	
+
 private:
 
 	void LoadNextEvent();
@@ -59,6 +59,7 @@ private:
 
 	float Time = 0;
 	bool bCountDown = false;
+	bool bStartMachine = false;
 
 	FEvent* FirstEvent = nullptr;
 	FEvent* CurrentEvent = nullptr;

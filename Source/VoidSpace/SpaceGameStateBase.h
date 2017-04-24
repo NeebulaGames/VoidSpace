@@ -28,6 +28,7 @@ public:
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void ToggleSpaceSuit(bool activate) const;
 
+	UFUNCTION(Exec)
 	void Die(int reason);
 
 	void EndGame();
