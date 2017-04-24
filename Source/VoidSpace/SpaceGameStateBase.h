@@ -47,6 +47,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameEventManager)
 	bool bLoadEventSM = true;
 
-	UPROPERTY(VisibleAnywhere, Category = GameEventManager)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GameEventManager)
 	class UGameEventManager* GameEventManager;
 };
