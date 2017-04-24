@@ -19,6 +19,12 @@ void UGameEventManager::Tick(float DeltaTime)
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(1, 1, FColor::Red, FString("Time remaining ").Append(FString::FromInt(Time)).Append("s"));
 	}
+
+	if (bStartMachine) 
+	{
+		LoadNextEvent();
+		bStartMachine = false;
+	}
 }
 
 bool UGameEventManager::IsTickable() const
@@ -97,7 +103,7 @@ void UGameEventManager::StartEvents(bool skipDeath)
 	if (FirstEvent)
 	{
 		CurrentEvent = FirstEvent;
-		LoadNextEvent();
+		bStartMachine = true;
 	}
 }
 
