@@ -6,6 +6,7 @@
 #include "SpaceCharacter.h"
 #include "PcAnimInstance.h"
 #include "SpaceGameStateBase.h"
+#include "GameEventManager.h"
 
 
 // Sets default values
@@ -21,6 +22,7 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 9.f));
+	InteractableComponent->BoxComponent->bGenerateOverlapEvents = false;
 
 	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
 
@@ -37,6 +39,10 @@ void APcActor::BeginPlay()
 {
 	Super::BeginPlay();
 	InteractableComponent->OnTriggerEnter.AddDynamic(this, &APcActor::OnEnterCd);
+	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &APcActor::OnActivePc);
+	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
+	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
+	ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 }
 
 void APcActor::OnEnterCd()
@@ -48,6 +54,26 @@ void APcActor::OnEnterCd()
 		character->pickedObject->Destroy();
 		character->ReleaseObject();
 		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
+	}
+}
+
+void APcActor::OnActivePc()
+{
+	if(ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
+	{
+		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
+		InteractableComponent->BoxComponent->bGenerateOverlapEvents = true;
+		bPcIsActive = true;
+	}
+}
+
+void APcActor::OnDisablePc()
+{
+	if (bPcIsActive)
+	{
+		ScreenMaterial->SetScalarParameterValue("Display", 0.f);
+		InteractableComponent->BoxComponent->bGenerateOverlapEvents = false;
+		bPcIsActive = false;
 	}
 }
 

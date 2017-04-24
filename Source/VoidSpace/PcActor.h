@@ -25,6 +25,15 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
 	class UInteractableComponent* InteractableComponent;
 
+	bool bPcIsActive = false;
+	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
+
 	UFUNCTION()
 	void OnEnterCd();
+
+	UFUNCTION()
+	void OnActivePc();
+
+	UFUNCTION()
+	void OnDisablePc();
 };
