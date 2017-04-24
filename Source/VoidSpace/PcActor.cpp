@@ -32,6 +32,14 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
 	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object);
 	PcMeshComponent->SetCollisionProfileName(FName("BlockAll"));
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> screenMaterial(TEXT("Material'/Game/Materials/MScreen.MScreen'"));
+	if (screenMaterial.Object != NULL)
+		ScreenMaterial = (UMaterial*)screenMaterial.Object;
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> pcMaterial(TEXT("Material'/Game/Materials/MComputer.MComputer'"));
+	if (pcMaterial.Object != NULL)
+		PcMaterial = (UMaterial*)pcMaterial.Object;
 }
 
 // Called when the game starts or when spawned
@@ -40,6 +48,8 @@ void APcActor::BeginPlay()
 	Super::BeginPlay();
 	InteractableComponent->OnTriggerEnter.AddDynamic(this, &APcActor::OnEnterCd);
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &APcActor::OnActivePc);
+	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
+	PcMeshComponent->SetMaterial(1, PcMaterial);
 }
 
 void APcActor::OnEnterCd()
@@ -56,9 +66,21 @@ void APcActor::OnEnterCd()
 
 void APcActor::OnActivePc()
 {
-	if(ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("Meteor_Gameplay")))
+	if(ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
 	{
+		PcMeshComponent->SetMaterial(1, ScreenMaterial);
 		InteractableComponent->BoxComponent->bGenerateOverlapEvents = true;
+		bPcIsActive = true;
+	}
+}
+
+void APcActor::OnDisablePc()
+{
+	if (bPcIsActive)
+	{
+		PcMeshComponent->SetMaterial(1, PcMaterial);
+		InteractableComponent->BoxComponent->bGenerateOverlapEvents = true;
+		bPcIsActive = false;
 	}
 }
 
