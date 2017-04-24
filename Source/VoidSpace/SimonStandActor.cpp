@@ -161,8 +161,18 @@ void ASimonStandActor::SequenceWrong()
 
 void ASimonStandActor::EventStarted()
 {
-	SimonStandMesh->bGenerateOverlapEvents = ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning";
-	SimonBoxCollider->bGenerateOverlapEvents = SimonStandMesh->bGenerateOverlapEvents;
+	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name != "Beginning" && !bSimonCompleted)
+	{
+		SequencesSuccess = 3;
+		SimonStandMesh->bGenerateOverlapEvents = false;
+		SimonBoxCollider->bGenerateOverlapEvents = false;
+		SequenceSuccess();
+	}
+	else 
+	{
+		SimonStandMesh->bGenerateOverlapEvents = ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning";
+		SimonBoxCollider->bGenerateOverlapEvents = SimonStandMesh->bGenerateOverlapEvents;
+	}
 }
 
 void ASimonStandActor::EventFinished()
