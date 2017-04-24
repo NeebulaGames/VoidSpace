@@ -25,5 +25,9 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
 	class ASimonStandActor* SimonStandActor;
+
+	//TODO: move to sequence instead of matinee
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
+	class AMatineeActor* MeteorStorm;
 	
 };
