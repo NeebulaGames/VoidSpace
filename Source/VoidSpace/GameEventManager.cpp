@@ -16,6 +16,8 @@ void UGameEventManager::Tick(float DeltaTime)
 	else if (bCountDown)
 	{
 		Time -= DeltaTime;
+		if (GEngine)
+			GEngine->AddOnScreenDebugMessage(1, 1, FColor::Red, FString("Time remaining ").Append(FString::FromInt(Time)).Append("s"));
 	}
 }
 
