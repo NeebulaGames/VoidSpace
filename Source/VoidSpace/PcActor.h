@@ -26,8 +26,7 @@ private:
 	class UInteractableComponent* InteractableComponent;
 
 	bool bPcIsActive = false;
-	UMaterial* PcMaterial;
-	UMaterial* ScreenMaterial;
+	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
 
 	UFUNCTION()
 	void OnEnterCd();
