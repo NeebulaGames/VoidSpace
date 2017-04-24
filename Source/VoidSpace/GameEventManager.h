@@ -38,7 +38,10 @@ public:
 
 	void LoadEventsFromFile(FString& fileName);
 	void StartEvents(bool skipAfterDeath);
+
+	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	void FinishCurrentEvent();
+
 	void SetTime(float time, bool runCountdown = true);
 
 	FEvent* GetCurrentEvent() const { return CurrentEvent; }

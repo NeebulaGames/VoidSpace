@@ -26,8 +26,17 @@ public:
 	bool bIsOpened;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
-	bool bIsClosed;	
-	
+	bool bIsClosed;
+
+	UFUNCTION(BlueprintCallable, Category = EventSystem)
+	void SetExecuted(bool executed) const;
+
+	UFUNCTION(BlueprintCallable, Category = EventSystem)
+	bool HasExecuted() const;
+
+	UFUNCTION(BlueprintCallable, Category = EventSystem)
+	void FinishCurrentEvent();
+
 	UFUNCTION()
 	void OnSimonCompleted();
 
@@ -36,4 +45,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	AMatineeActor* MeteorStorm;
+
+	static bool bExecuted;
+
 };
