@@ -63,6 +63,7 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 	UE_LOG(EventSM, Log, TEXT("Loading events from file %s"), *fileName);
 
 	const FString path = FPaths::Combine(FPaths::Combine(*FPaths::GameContentDir(), *FString("Data")), *fileName);
+	UE_LOG(EventSM, Log, TEXT("Loading events from %s"), *path);
 	FString jsonContent;
 
 	FFileHelper::LoadFileToString(jsonContent, *path);
@@ -98,6 +99,11 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 		}
 
 		FirstEvent = eventMap[jsonObject->GetStringField("FirstEvent")];
+	}
+	else
+	{
+		UE_LOG(EventSM, Warning, TEXT("Could not load any event!"));
+		UE_LOG(EventSM, Log, TEXT("JSON file content:\n%s"), *jsonContent);
 	}
 }
 
