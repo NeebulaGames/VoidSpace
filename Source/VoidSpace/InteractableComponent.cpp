@@ -31,7 +31,6 @@ void UInteractableComponent::Trigger() const
 {
 	if ((!bRequirePlayerNear || bPlayerIsNear) && bRequireUseButton)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Triggered!"));
 		OnTriggerAction.Broadcast();
 	}
 }

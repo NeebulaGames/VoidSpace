@@ -18,6 +18,12 @@ void UGameEventManager::Tick(float DeltaTime)
 		Time -= DeltaTime;
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(1, 1, FColor::Red, FString("Time remaining ").Append(FString::FromInt(Time)).Append("s"));
+
+		if (!bIsFading && Time <= 20.f)
+		{
+			bIsFading = true;
+			UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraFade(0.f, 1.f, Time, FColor::White, true, false);
+		}
 	}
 
 	if (bStartMachine) 
@@ -57,6 +63,7 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 	UE_LOG(EventSM, Log, TEXT("Loading events from file %s"), *fileName);
 
 	const FString path = FPaths::Combine(FPaths::Combine(*FPaths::GameContentDir(), *FString("Data")), *fileName);
+	UE_LOG(EventSM, Log, TEXT("Loading events from %s"), *path);
 	FString jsonContent;
 
 	FFileHelper::LoadFileToString(jsonContent, *path);
@@ -93,6 +100,11 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 
 		FirstEvent = eventMap[jsonObject->GetStringField("FirstEvent")];
 	}
+	else
+	{
+		UE_LOG(EventSM, Warning, TEXT("Could not load any event!"));
+		UE_LOG(EventSM, Log, TEXT("JSON file content:\n%s"), *jsonContent);
+	}
 }
 
 void UGameEventManager::StartEvents(bool skipDeath)
@@ -116,6 +128,12 @@ void UGameEventManager::FinishCurrentEvent()
 	UGameplayStatics::UnloadStreamLevel(this, FName(*CurrentEvent->LevelName), info);
 
 	UE_LOG(EventSM, Log, TEXT("Finish event %s"), *CurrentEvent->Name);
+
+	if (bIsFading)
+	{
+		UGameplayStatics::GetPlayerCameraManager(this, 0)->StopCameraFade();
+		bIsFading = true;
+	}
 
 	if (CurrentEvent->NextEvent)
 	{

@@ -58,6 +58,7 @@ private:
 	void SkipDeathEvents();
 
 	float Time = 0;
+	bool bIsFading = false;
 	bool bCountDown = false;
 	bool bStartMachine = false;
 

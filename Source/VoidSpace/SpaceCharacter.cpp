@@ -50,9 +50,6 @@ void ASpaceCharacter::ReleaseObject()
 	pickedObject = nullptr;
 
 	physics_handle->ReleaseComponent();
-
-	if (GEngine)
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object Released"));
 }
 
 // Enables and disables player's gravity
@@ -137,7 +134,6 @@ void ASpaceCharacter::OnStopJump()
 void ASpaceCharacter::KillPlayer(int mode) const
 {
 	// TODO: Run death animation and trigger event when finished
-	GEngine->AddOnScreenDebugMessage(-1, 15.0f, FColor::Yellow, FString::Printf(TEXT("Killed in mode %d"), mode));
 }
 
 void ASpaceCharacter::Use()
@@ -167,7 +163,7 @@ void ASpaceCharacter::Use()
 
 				else if (pickable != nullptr && pickedObject == nullptr)
 				{
-					DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
+					//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
 					physics_handle->GrabComponentAtLocationWithRotation(
 						hitData.GetComponent(), 
 						"None", 
@@ -175,8 +171,6 @@ void ASpaceCharacter::Use()
 						hitData.GetComponent()->GetComponentRotation());
 
 					pickedObject = hitData.GetActor();
-					if (GEngine)
-						GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, TEXT("Object pickedUp"));
 				}
 			}
 
