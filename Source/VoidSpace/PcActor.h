@@ -12,7 +12,9 @@ class VOIDSPACE_API APcActor : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	APcActor(const FObjectInitializer& ObjectInitializer);
+	APcActor();
+
+	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -27,9 +29,6 @@ private:
 
 	bool bPcIsActive = false;
 	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
-
-	UFUNCTION()
-	void OnEnterCd();
 
 	UFUNCTION()
 	void OnActivePc();

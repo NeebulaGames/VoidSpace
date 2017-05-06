@@ -12,7 +12,7 @@ class VOIDSPACE_API ACdActor : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	ACdActor(const FObjectInitializer& ObjectInitializer);
+	ACdActor();
 
 private:
 	UPROPERTY(VisibleAnywhere, Category = SpaceSuit, meta = (AllowPrivateAccess = "true"))
@@ -20,5 +20,8 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
 	class UPickableComponent* PickableComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Interactable)
+	class UInteractableComponent* InteractableComponent;
 
 };
