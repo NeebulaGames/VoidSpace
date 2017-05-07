@@ -17,6 +17,15 @@
       "SkipAfterDeath": false,
       "Time": 120.0,
       "DeathReason": 0,
+      "NextEvent": "Breathless"
+    },
+    {
+      "Name": "Breathless",
+      "LevelName": "Breathless",
+      "CountDown": true,
+      "SkipAfterDeath": false,
+      "Time": 120.0,
+      "DeathReason": 1,
       "NextEvent": "End"
     },
     {
