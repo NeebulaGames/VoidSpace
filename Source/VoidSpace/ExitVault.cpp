@@ -15,14 +15,14 @@ AExitVault::AExitVault()
 	RootComponent = root;
 
 	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Door.Door'"));
-	ExitInnerDoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Door"));
+	ExitInnerDoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DoorInner"));
 	ExitInnerDoorMeshComponent->SetupAttachment(RootComponent);
 	//ExitInnerDoorMeshComponent->SetSkeletalMesh(door.Object);
 	//ExitInnerDoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object);
 	ExitInnerDoorMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 
 	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Door.Door'"));
-	ExitExternalDoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Door"));
+	ExitExternalDoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DoorExternal"));
 	ExitExternalDoorMeshComponent->SetupAttachment(RootComponent);
 	//ExitExternalDoorMeshComponent->SetSkeletalMesh(door.Object);
 	//ExitExternalDoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object);
@@ -32,6 +32,17 @@ AExitVault::AExitVault()
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->bRequireUseButton = false;
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(130.f, 200.f, 120.f));
+}
+
+
+void AExitVault::OpenInnerDoor() const
+{
+
+}
+
+void AExitVault::OpenExternalDoor() const
+{
+
 }
 
 // Called when the game starts or when spawned
@@ -48,3 +59,7 @@ void AExitVault::Tick(float DeltaTime)
 
 }
 
+void AExitVault::OnVaultEnter()
+{
+
+}
