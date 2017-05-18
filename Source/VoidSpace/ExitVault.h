@@ -31,6 +31,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* ParticleSystem;
+
 	UPROPERTY(VisibleAnywhere, Category = DoorMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* ExitInnerDoorMeshComponent;
 
@@ -42,4 +45,7 @@ public:
 	
 	UFUNCTION()
 	void OnVaultEnter();
+
+	UFUNCTION()
+	void OnVaultExit();
 };

@@ -31,7 +31,13 @@ AExitVault::AExitVault()
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->bRequireUseButton = false;
+
+	// Recalculate Box extension
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(130.f, 200.f, 120.f));
+
+	//static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
+	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MyPSC"));
+	//ParticleSystem->SetTemplate(PS.Object);
 }
 
 
@@ -61,5 +67,31 @@ void AExitVault::Tick(float DeltaTime)
 
 void AExitVault::OnVaultEnter()
 {
+	if (!isOutside)
+	{
+		// closing_door = inner_door
+		// opening_door = external_door
+	}
+	else
+	{
+		// closing_door = external_door
+		// opening_door = inner_door
+	}
 
+	// close closing_door
+
+	// when doors are closed we can proceed 
+
+	// particle effects
+
+	// when particle effects finish we can proceed
+
+	// open opening_door
+
+	// Activate/Deactivate gravity
+}
+
+void AExitVault::OnVaultExit()
+{
+	isOutside = !isOutside;
 }
