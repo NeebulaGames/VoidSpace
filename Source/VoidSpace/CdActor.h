@@ -20,7 +20,4 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
 	class UPickableComponent* PickableComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* BoxComponent;
 };

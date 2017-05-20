@@ -15,14 +15,10 @@ ACdActor::ACdActor()
 	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetStaticMesh(cd.Object);
 	StaticMeshComponent->SetSimulatePhysics(true);
-	StaticMeshComponent->bGenerateOverlapEvents = false;
+	StaticMeshComponent->bGenerateOverlapEvents = true;
 
 	PickableComponent = CreateDefaultSubobject<UPickableComponent>(TEXT("Pickable"));
 	PickableComponent->SetupAttachment(RootComponent);
-
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxOverlapping"));
-	BoxComponent->SetBoxExtent(FVector(11.f, 11.f, 0.5f));
-	BoxComponent->SetupAttachment(RootComponent);
 }
 
 
