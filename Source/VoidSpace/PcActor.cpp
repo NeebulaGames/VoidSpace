@@ -52,8 +52,11 @@ void APcActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
-		character->pickedObject->Destroy();
-		character->ReleaseObject();
+		if(character)
+		{
+			character->pickedObject->Destroy();
+			character->ReleaseObject();
+		}
 		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
 	}
 }
