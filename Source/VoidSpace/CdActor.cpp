@@ -3,8 +3,6 @@
 #include "VoidSpace.h"
 #include "CdActor.h"
 #include "PickableComponent.h"
-#include "InteractableComponent.h"
-
 
 // Sets default values
 ACdActor::ACdActor()
@@ -14,15 +12,17 @@ ACdActor::ACdActor()
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> cd(TEXT("StaticMesh'/Game/Meshes/Cd.Cd'"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cd"));
+	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetStaticMesh(cd.Object);
 	StaticMeshComponent->SetSimulatePhysics(true);
 	StaticMeshComponent->bGenerateOverlapEvents = false;
 
 	PickableComponent = CreateDefaultSubobject<UPickableComponent>(TEXT("Pickable"));
+	PickableComponent->SetupAttachment(RootComponent);
 
-	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableComponent"));
-	InteractableComponent->SetupAttachment(StaticMeshComponent);
-	InteractableComponent->BoxComponent->SetBoxExtent(FVector(11.f, 11.f, 0.5f));
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>(TEXT("BoxOverlapping"));
+	BoxComponent->SetBoxExtent(FVector(11.f, 11.f, 0.5f));
+	BoxComponent->SetupAttachment(RootComponent);
 }
 
 
