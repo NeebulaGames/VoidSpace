@@ -13,12 +13,12 @@ AIdCardActor::AIdCardActor()
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> idCard(TEXT("StaticMesh'/Game/Meshes/IdCard.IdCard'"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("IdCard"));
+	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetStaticMesh(idCard.Object);
 	StaticMeshComponent->SetSimulatePhysics(true);
 	StaticMeshComponent->bGenerateOverlapEvents = true;
 
 	PickableComponent = CreateDefaultSubobject<UPickableComponent>(TEXT("Pickable"));
 	PickableComponent->SetupAttachment(StaticMeshComponent);
-
 }
 

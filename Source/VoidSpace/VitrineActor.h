@@ -20,10 +20,13 @@ protected:
 	void NotifyActorBeginOverlap(AActor* OtherActor);
 
 private:	
-	UPROPERTY(VisibleAnywhere, Category = VitrineMesh, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* VitrineMeshComponent;
 	
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UInteractableComponent* InteractableComponent;
+
+	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	class ASpaceSuitActor* SpaceSuitActor;
 	
 };
