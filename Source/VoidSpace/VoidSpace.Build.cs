@@ -6,7 +6,7 @@ public class VoidSpace : ModuleRules
 {
 	public VoidSpace(TargetInfo Target)
 	{
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "MoviePlayer" });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 
