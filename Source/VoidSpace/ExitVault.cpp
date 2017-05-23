@@ -3,6 +3,8 @@
 #include "VoidSpace.h"
 #include "ExitVault.h"
 #include "InteractableComponent.h"
+#include "ExitVaultDoorAnimInstance.h"
+#include "SpaceGameStateBase.h"
 
 
 // Sets default values
@@ -14,18 +16,20 @@ AExitVault::AExitVault()
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
 
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Door.Door'"));
+	static ConstructorHelpers::FObjectFinder<UClass> exitVaultDoorBlueprint(TEXT("Class'/Game/Animations/ExitVaultDoor/ExitVaultDoorBlueprint.ExitVaultDoorBlueprint_C'"));
+
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> innerDoor(TEXT("SkeletalMesh'/Game/Meshes/ExitVaultDoor/ExitVaultDoor.ExitVaultDoor'"));
 	ExitInnerDoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DoorInner"));
 	ExitInnerDoorMeshComponent->SetupAttachment(RootComponent);
-	//ExitInnerDoorMeshComponent->SetSkeletalMesh(door.Object);
-	//ExitInnerDoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object);
+	ExitInnerDoorMeshComponent->SetSkeletalMesh(innerDoor.Object);
+	ExitInnerDoorMeshComponent->SetAnimInstanceClass(exitVaultDoorBlueprint.Object);
 	ExitInnerDoorMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 
-	//static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Door.Door'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> externalDoor(TEXT("SkeletalMesh'/Game/Meshes/ExitVaultDoor/ExitVaultDoor.ExitVaultDoor'"));
 	ExitExternalDoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("DoorExternal"));
 	ExitExternalDoorMeshComponent->SetupAttachment(RootComponent);
-	//ExitExternalDoorMeshComponent->SetSkeletalMesh(door.Object);
-	//ExitExternalDoorMeshComponent->SetAnimInstanceClass(doorBlueprint.Object);
+	ExitExternalDoorMeshComponent->SetSkeletalMesh(externalDoor.Object);
+	ExitExternalDoorMeshComponent->SetAnimInstanceClass(exitVaultDoorBlueprint.Object);
 	ExitExternalDoorMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
@@ -43,12 +47,47 @@ AExitVault::AExitVault()
 
 void AExitVault::OpenInnerDoor() const
 {
-
+	Cast<UExitVaultDoorAnimInstance>(ExitInnerDoorMeshComponent->GetAnimInstance())->bIsOpening = true;
 }
 
 void AExitVault::OpenExternalDoor() const
 {
+	Cast<UExitVaultDoorAnimInstance>(ExitExternalDoorMeshComponent->GetAnimInstance())->bIsOpening = true;
+}
 
+void AExitVault::CloseInnerDoor() const
+{
+	Cast<UExitVaultDoorAnimInstance>(ExitInnerDoorMeshComponent->GetAnimInstance())->bIsClosing = true;
+}
+
+void AExitVault::CloseExternalDoor() const
+{
+	Cast<UExitVaultDoorAnimInstance>(ExitExternalDoorMeshComponent->GetAnimInstance())->bIsClosing = true;
+}
+
+void AExitVault::doDepressurising() const
+{
+	FTimerHandle DoorHandler;
+	FTimerHandle GravityHandler;
+
+	//do particle and sounds effects
+
+	if (!isOutside)
+		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenExternalDoor, 4.f, false);
+	else
+		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenInnerDoor, 4.f, false);
+
+	GetWorldTimerManager().SetTimer(GravityHandler, this, &AExitVault::ToogleGravity, 3.5f, false);
+}
+
+void AExitVault::ToogleGravity() const
+{
+	ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	if (state)
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggling gravity"));
+		state->TogglePlayerGravity();
+	}
 }
 
 // Called when the game starts or when spawned
@@ -56,6 +95,10 @@ void AExitVault::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	InteractableComponent->OnTriggerEnter.AddDynamic(this, &AExitVault::OnVaultEnter);
+	InteractableComponent->OnTriggerExit.AddDynamic(this, &AExitVault::OnVaultExit);
+
+	OpenInnerDoor();
 }
 
 // Called every frame
@@ -67,31 +110,18 @@ void AExitVault::Tick(float DeltaTime)
 
 void AExitVault::OnVaultEnter()
 {
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Entering ExitVault"));
+	FTimerHandle UnusedHandle;
+
 	if (!isOutside)
-	{
-		// closing_door = inner_door
-		// opening_door = external_door
-	}
+		CloseInnerDoor();
 	else
-	{
-		// closing_door = external_door
-		// opening_door = inner_door
-	}
-
-	// close closing_door
-
-	// when doors are closed we can proceed 
-
-	// particle effects
-
-	// when particle effects finish we can proceed
-
-	// open opening_door
-
-	// Activate/Deactivate gravity
+		CloseExternalDoor();
+	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AExitVault::doDepressurising, 1.8f, false);
 }
 
 void AExitVault::OnVaultExit()
 {
 	isOutside = !isOutside;
+	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Exiting ExitVault"));
 }

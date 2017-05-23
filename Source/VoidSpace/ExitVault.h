@@ -20,8 +20,18 @@ public:
 	UFUNCTION()
 	void OpenExternalDoor() const;
 
+	UFUNCTION()
+	void CloseInnerDoor() const;
+
+	UFUNCTION()
+	void CloseExternalDoor() const;
+
 private:
 	bool isOutside = false;
+
+	void doDepressurising() const;
+
+	void ToogleGravity() const;
 
 protected:
 	// Called when the game starts or when spawned
