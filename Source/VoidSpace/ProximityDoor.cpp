@@ -15,9 +15,9 @@ AProximityDoor::AProximityDoor()
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
 
-	static ConstructorHelpers::FObjectFinder<UClass> doorBlueprint(TEXT("Class'/Game/Animations/Door/DoorBlueprint.DoorBlueprint_C'"));
+	static ConstructorHelpers::FObjectFinder<UClass> doorBlueprint(TEXT("Class'/Game/Animations/Door/Doors_AnimatedBlueprint.Doors_AnimatedBlueprint_C'"));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Door.Door'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> door(TEXT("SkeletalMesh'/Game/Meshes/Door/Doors_Animated.Doors_Animated'"));
 	DoorMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Door"));
 	DoorMeshComponent->SetupAttachment(RootComponent);
 	DoorMeshComponent->SetSkeletalMesh(door.Object);
@@ -27,7 +27,7 @@ AProximityDoor::AProximityDoor()
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->bRequireUseButton = false;
-	InteractableComponent->BoxComponent->SetBoxExtent(FVector(130.f, 200.f, 120.f));
+	InteractableComponent->BoxComponent->SetBoxExtent(FVector(200.f, 200.f, 120.f));
 }
 
 // Called when the game starts or when spawned
