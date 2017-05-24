@@ -6,6 +6,7 @@
 #include "PickableComponent.h"
 #include "SpaceStatics.h"
 #include "SpaceGameStateBase.h"
+#include "EquipableComponent.h"
 
 
 // Sets default values
@@ -155,11 +156,23 @@ void ASpaceCharacter::Use()
 		{
 			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
 			{
+				UEquipableComponent* equipable = hitData.Actor->FindComponentByClass<UEquipableComponent>();
 				UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
 				UPickableComponent* pickable = hitData.Actor->FindComponentByClass<UPickableComponent>();
 
+				if (equipable != nullptr && equipable->IsActive())
+				{
+					equipable->SetActive(false);
+					EquippedObject = equipable;
+					// TODO: Attach to actor
+				}
 				if (interactable != nullptr && interactable->IsActive())
+				{
 					interactable->Trigger();
+
+					if (EquippedObject)
+						EquippedObject->Trigger();
+				}
 
 				else if (pickable != nullptr && pickedObject == nullptr)
 				{

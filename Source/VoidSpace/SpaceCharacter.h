@@ -26,6 +26,8 @@ public:
 	UPhysicsHandleComponent* physics_handle;
 	AActor* pickedObject = nullptr;
 
+	class UEquipableComponent* EquippedObject = nullptr;
+
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
