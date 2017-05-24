@@ -19,12 +19,22 @@ public:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
+	void Equipped();
+
+	void Unequiped();
+
 	void Trigger() const;
 
 public:
 
 	UPROPERTY(BlueprintAssignable, Category = EquipableConfig)
-	FOnEquipableAction OnEquipableUsed;
+	FOnEquipableAction OnEquipped;
+
+	UPROPERTY(BlueprintAssignable, Category = EquipableConfig)
+	FOnEquipableAction OnUnequipped;
+
+	UPROPERTY(BlueprintAssignable, Category = EquipableConfig)
+	FOnEquipableAction OnUsed;
 
 	UPROPERTY(VisibleAnywhere, Category = EquipableConfig)
 	FString Name;

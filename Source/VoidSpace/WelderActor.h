@@ -33,6 +33,13 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UParticleSystemComponent* BeamStreamComponent = nullptr;
 
+	UFUNCTION()
+	void Equipped();
+
+	UFUNCTION()
+	void Unequipped();
+
+	UFUNCTION()
 	void UseWelder();
 	
 };

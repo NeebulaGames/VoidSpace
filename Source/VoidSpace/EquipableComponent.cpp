@@ -11,7 +11,10 @@ UEquipableComponent::UEquipableComponent()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	// ...
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
+	BoxComponent->SetupAttachment(this);
+	BoxComponent->InitBoxExtent(FVector(10));
+	BoxComponent->bSelectable = false;
 }
 
 // Called when the game starts
@@ -20,14 +23,23 @@ void UEquipableComponent::BeginPlay()
 	Super::BeginPlay();
 
 	PrimaryComponentTick.bCanEverTick = false;
+}
 
-	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
-	BoxComponent->SetupAttachment(this);
-	BoxComponent->InitBoxExtent(FVector(50));
-	BoxComponent->bSelectable = false;
+void UEquipableComponent::Equipped()
+{
+	SetActive(false);
+
+	OnEquipped.Broadcast();
+}
+
+void UEquipableComponent::Unequiped()
+{
+	SetActive(true);
+
+	OnUnequipped.Broadcast();
 }
 
 void UEquipableComponent::Trigger() const
 {
-	OnEquipableUsed.Broadcast();
+	OnUsed.Broadcast();
 }

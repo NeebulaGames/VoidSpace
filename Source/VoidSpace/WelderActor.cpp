@@ -30,8 +30,10 @@ AWelderActor::AWelderActor()
 void AWelderActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	EquipableComponent->OnEquipableUsed.AddDynamic(this, &AWelderActor::UseWelder);
+
+	EquipableComponent->OnEquipped.AddDynamic(this, &AWelderActor::Equipped);
+	EquipableComponent->OnUnequipped.AddDynamic(this, &AWelderActor::Unequipped);
+	EquipableComponent->OnUsed.AddDynamic(this, &AWelderActor::UseWelder);
 }
 
 // Called every frame
@@ -39,6 +41,20 @@ void AWelderActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AWelderActor::Equipped()
+{
+	WelderMeshComponent->SetSimulatePhysics(false);
+
+	WelderMeshComponent->SetCollisionProfileName("NoCollision");
+}
+
+void AWelderActor::Unequipped()
+{
+	WelderMeshComponent->SetCollisionProfileName("BlockAll");
+
+	WelderMeshComponent->SetSimulatePhysics(true);
 }
 
 void AWelderActor::UseWelder()

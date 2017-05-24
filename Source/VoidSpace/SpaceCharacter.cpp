@@ -17,7 +17,6 @@ ASpaceCharacter::ASpaceCharacter()
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
 	physics_handle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("physicsHandle"));
-
 }
 
 // Called when the game starts or when spawned
@@ -162,9 +161,11 @@ void ASpaceCharacter::Use()
 
 				if (equipable != nullptr && equipable->IsActive())
 				{
-					equipable->SetActive(false);
+					equipable->Equipped();
 					EquippedObject = equipable;
-					// TODO: Attach to actor
+					
+					equipable->GetOwner()->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
+					equipable->GetOwner()->SetActorRelativeLocation(FVector(20.f, 10.f, 50.f));
 				}
 				if (interactable != nullptr && interactable->IsActive())
 				{
