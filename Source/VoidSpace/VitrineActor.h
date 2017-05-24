@@ -26,7 +26,7 @@ private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UInteractableComponent* InteractableComponent;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, Category = SpaceSuitInside, meta = (AllowPrivateAccess = "true"))
 	class ASpaceSuitActor* SpaceSuitActor;
 	
 };

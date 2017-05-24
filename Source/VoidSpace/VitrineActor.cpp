@@ -36,7 +36,6 @@ AVitrineActor::AVitrineActor()
 void AVitrineActor::BeginPlay()
 {
 	Super::BeginPlay();
-	SpaceSuitActor = FindObject<ASpaceSuitActor>(ANY_PACKAGE, TEXT("SpaceSuit"));
 }
 
 void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
