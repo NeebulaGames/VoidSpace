@@ -15,15 +15,17 @@ AWelderActor::AWelderActor()
 	WelderMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
 	RootComponent = WelderMeshComponent;
 	WelderMeshComponent->SetStaticMesh(welder.Object);
+	WelderMeshComponent->SetSimulatePhysics(true);
 
 	EquipableComponent = CreateDefaultSubobject<UEquipableComponent>(TEXT("Equipable"));
 	EquipableComponent->SetupAttachment(RootComponent);
+	EquipableComponent->bAutoActivate = true;
 
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> beam(TEXT("ParticleSystem'/Game/Particles/P_electricity_arc.P_electricity_arc'"));
 	BeamStreamComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("BeamStream"));
 	BeamStreamComponent->SetupAttachment(WelderMeshComponent, TEXT("WelderStream"));
 	BeamStreamComponent->SetTemplate(beam.Object);
-	BeamStreamComponent->bAutoActivate = true;
+	BeamStreamComponent->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -48,6 +50,7 @@ void AWelderActor::Equipped()
 	WelderMeshComponent->SetSimulatePhysics(false);
 
 	WelderMeshComponent->SetCollisionProfileName("NoCollision");
+	WelderMeshComponent->SetCastShadow(false);
 }
 
 void AWelderActor::Unequipped()
@@ -55,6 +58,7 @@ void AWelderActor::Unequipped()
 	WelderMeshComponent->SetCollisionProfileName("BlockAll");
 
 	WelderMeshComponent->SetSimulatePhysics(true);
+	WelderMeshComponent->SetCastShadow(true);
 }
 
 void AWelderActor::UseWelder()
