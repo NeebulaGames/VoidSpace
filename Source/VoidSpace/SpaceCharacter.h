@@ -65,6 +65,9 @@ private:
 	bool bIsSprinting = false;
 	bool bIsRecovering = false;
 
+	UPROPERTY()
+	class UCameraComponent* FirstPersonCameraComponent = nullptr;
+
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float WalkSpeed = 600;
 

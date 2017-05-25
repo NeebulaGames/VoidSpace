@@ -12,6 +12,15 @@
 // Sets default values
 ASpaceCharacter::ASpaceCharacter()
 {
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
+	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
@@ -164,8 +173,8 @@ void ASpaceCharacter::Use()
 					equipable->Equipped();
 					EquippedObject = equipable;
 					
-					equipable->GetOwner()->AttachToComponent(GetCapsuleComponent(), FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
-					equipable->GetOwner()->SetActorRelativeLocation(FVector(20.f, 10.f, 50.f));
+					equipable->GetOwner()->AttachToComponent(FirstPersonCameraComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
+					equipable->GetOwner()->SetActorRelativeLocation(FVector(20.f, 8.f, -10.f));
 				}
 				if (interactable != nullptr && interactable->IsActive())
 				{
