@@ -33,6 +33,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	class UParticleSystemComponent* BeamStreamComponent = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = "WelderDebug")
+	bool bUsingWelder = false;
+
 	UFUNCTION()
 	void Equipped();
 

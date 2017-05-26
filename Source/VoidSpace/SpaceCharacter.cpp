@@ -152,8 +152,8 @@ void ASpaceCharacter::Use()
 {
 	if (ASpaceGameStateBase::Instance(GetWorld())->bInteractionAllowed)
 	{
-		const FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
-		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
+		const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+		const FVector dir_camera = FirstPersonCameraComponent->GetForwardVector();
 		const FVector End = Start + dir_camera * 250;
 
 		FHitResult hitData(ForceInit);

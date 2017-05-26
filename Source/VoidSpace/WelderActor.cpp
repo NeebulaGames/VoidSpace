@@ -3,6 +3,8 @@
 #include "VoidSpace.h"
 #include "WelderActor.h"
 #include "EquipableComponent.h"
+#include "SpaceStatics.h"
+#include "SpaceCharacter.h"
 
 
 // Sets default values
@@ -44,6 +46,25 @@ void AWelderActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	if (bUsingWelder)
+	{
+		ASpaceCharacter* character = static_cast<ASpaceCharacter*>(GetParentActor());
+		if (character)
+		{
+			const FVector Start = character->FirstPersonCameraComponent->GetComponentLocation();
+			const FVector dir_camera = character->FirstPersonCameraComponent->GetForwardVector();
+			const FVector End = Start + dir_camera * 100;
+
+			FHitResult hitData(ForceInit);
+
+			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+			{
+				AActor* actor = hitData.GetActor();
+
+				// TODO: Detect hole
+			}
+		}
+	}
 }
 
 void AWelderActor::Equipped()
@@ -65,10 +86,14 @@ void AWelderActor::Unequipped()
 void AWelderActor::UseWelder()
 {
 	BeamStreamComponent->ActivateSystem();
+
+	bUsingWelder = true;
 }
 
 void AWelderActor::EndUseWelder()
 {
 	BeamStreamComponent->DeactivateSystem();
+
+	bUsingWelder = false;
 }
 

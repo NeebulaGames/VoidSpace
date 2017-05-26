@@ -28,6 +28,9 @@ public:
 
 	class UEquipableComponent* EquippedObject = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
+	class UCameraComponent* FirstPersonCameraComponent = nullptr;
+
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
@@ -70,9 +73,6 @@ private:
 
 	bool bIsSprinting = false;
 	bool bIsRecovering = false;
-
-	UPROPERTY()
-	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float WalkSpeed = 600;
