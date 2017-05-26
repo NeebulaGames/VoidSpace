@@ -41,6 +41,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UPROPERTY(EditAnywhere, Category = SmokeSound)
+	USoundWave* Smoke;
+
 	UPROPERTY(VisibleAnywhere)
 	class UParticleSystemComponent* ParticleSystem;
 

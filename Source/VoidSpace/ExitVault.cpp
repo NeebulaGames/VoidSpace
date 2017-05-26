@@ -39,9 +39,12 @@ AExitVault::AExitVault()
 	// Recalculate Box extension
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(130.f, 200.f, 120.f));
 
-	//static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/Particles/D_Smoke.D_Smoke'"));
 	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MyPSC"));
-	//ParticleSystem->SetTemplate(PS.Object);
+	ParticleSystem->SetTemplate(PS.Object);
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> zipperSound(TEXT("SoundWave'/Game/Sounds/ChamberDecompressing.ChamberDecompressing'"));
+	Smoke = zipperSound.Object;
 }
 
 
@@ -71,13 +74,15 @@ void AExitVault::doDepressurising() const
 	FTimerHandle GravityHandler;
 
 	//do particle and sounds effects
+	ParticleSystem->Activate();
+	UGameplayStatics::PlaySound2D(GetWorld(), Smoke);
 
 	if (!isOutside)
-		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenExternalDoor, 4.f, false);
+		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenExternalDoor, 5.f, false);
 	else
-		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenInnerDoor, 4.f, false);
+		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenInnerDoor, 5.f, false);
 
-	GetWorldTimerManager().SetTimer(GravityHandler, this, &AExitVault::ToogleGravity, 3.5f, false);
+	GetWorldTimerManager().SetTimer(GravityHandler, this, &AExitVault::ToogleGravity, 4.5f, false);
 }
 
 void AExitVault::ToogleGravity() const
