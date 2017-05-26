@@ -35,7 +35,8 @@ void AWelderActor::BeginPlay()
 
 	EquipableComponent->OnEquipped.AddDynamic(this, &AWelderActor::Equipped);
 	EquipableComponent->OnUnequipped.AddDynamic(this, &AWelderActor::Unequipped);
-	EquipableComponent->OnUsed.AddDynamic(this, &AWelderActor::UseWelder);
+	EquipableComponent->OnFire.AddDynamic(this, &AWelderActor::UseWelder);
+	EquipableComponent->OnEndFire.AddDynamic(this, &AWelderActor::EndUseWelder);
 }
 
 // Called every frame
@@ -63,6 +64,11 @@ void AWelderActor::Unequipped()
 
 void AWelderActor::UseWelder()
 {
+	BeamStreamComponent->ActivateSystem();
+}
 
+void AWelderActor::EndUseWelder()
+{
+	BeamStreamComponent->DeactivateSystem();
 }
 

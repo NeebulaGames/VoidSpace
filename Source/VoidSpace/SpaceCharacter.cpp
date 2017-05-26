@@ -92,11 +92,14 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	InputComponent->BindAxis("Horizontal", this, &ASpaceCharacter::MoveHorizontal);
 	InputComponent->BindAxis("Turn", this, &ASpaceCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &ASpaceCharacter::AddControllerPitchInput);
+
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ASpaceCharacter::OnStartJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ASpaceCharacter::OnStopJump);
 	InputComponent->BindAction("Use", IE_Pressed, this, &ASpaceCharacter::Use);
 	InputComponent->BindAction("Sprint", IE_Pressed, this, &ASpaceCharacter::OnStartSprint);
 	InputComponent->BindAction("Sprint", IE_Released, this, &ASpaceCharacter::OnStopSprint);
+	InputComponent->BindAction("Fire", IE_Pressed, this, &ASpaceCharacter::OnFire);
+	InputComponent->BindAction("Fire", IE_Released, this, &ASpaceCharacter::OnEndFire);
 }
 
 void ASpaceCharacter::MoveForward(float Val)
@@ -179,9 +182,6 @@ void ASpaceCharacter::Use()
 				if (interactable != nullptr && interactable->IsActive())
 				{
 					interactable->Trigger();
-
-					if (EquippedObject)
-						EquippedObject->Trigger();
 				}
 
 				else if (pickable != nullptr && pickedObject == nullptr)
@@ -255,4 +255,20 @@ void ASpaceCharacter::OnStopSprint()
 {
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
+void ASpaceCharacter::OnFire()
+{
+	if (EquippedObject)
+	{
+		EquippedObject->Fire();
+	}
+}
+
+void ASpaceCharacter::OnEndFire()
+{
+	if (EquippedObject)
+	{
+		EquippedObject->EndFire();
+	}
 }

@@ -57,6 +57,12 @@ protected:
 	UFUNCTION()
 		void OnStopSprint();
 
+	UFUNCTION()
+	void OnFire();
+
+	UFUNCTION()
+	void OnEndFire();
+
 private:
 	void Use();
 

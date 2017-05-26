@@ -39,7 +39,12 @@ void UEquipableComponent::Unequiped()
 	OnUnequipped.Broadcast();
 }
 
-void UEquipableComponent::Trigger() const
+void UEquipableComponent::Fire() const
 {
-	OnUsed.Broadcast();
+	OnFire.Broadcast();
+}
+
+void UEquipableComponent::EndFire() const
+{
+	OnEndFire.Broadcast();
 }

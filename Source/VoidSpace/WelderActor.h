@@ -42,4 +42,7 @@ private:
 	UFUNCTION()
 	void UseWelder();
 	
+	UFUNCTION()
+	void EndUseWelder();
+	
 };

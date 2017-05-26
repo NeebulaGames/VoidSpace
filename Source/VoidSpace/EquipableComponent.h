@@ -23,7 +23,9 @@ public:
 
 	void Unequiped();
 
-	void Trigger() const;
+	void Fire() const;
+
+	void EndFire() const;
 
 public:
 
@@ -34,7 +36,10 @@ public:
 	FOnEquipableAction OnUnequipped;
 
 	UPROPERTY(BlueprintAssignable, Category = EquipableConfig)
-	FOnEquipableAction OnUsed;
+	FOnEquipableAction OnFire;
+
+	UPROPERTY(BlueprintAssignable, Category = EquipableConfig)
+	FOnEquipableAction OnEndFire;
 
 	UPROPERTY(VisibleAnywhere, Category = EquipableConfig)
 	FString Name;
