@@ -17,16 +17,16 @@ public:
 	UDoorManagementComponent();
 
 	UPROPERTY(EditAnywhere, Category = Execution)
-	bool OneShoot;
+	bool bOneShoot;
 
 	UPROPERTY(EditAnywhere, Category = Execution)
-	bool IsBeginExecution;
+	bool bIsBeginExecution;
 
 	UPROPERTY(EditAnywhere, Category = Execution)
-	bool OpenDoors;
+	bool bOpenDoors;
 
 	UPROPERTY(EditAnywhere, Category = Execution)
-	bool BlockDoors;
+	bool bBlockDoors;
 
 protected:
 	// Called when the game starts
@@ -34,10 +34,10 @@ protected:
 
 private:
 
-	void lockUnlockDoors();
+	void LockUnlockDoors();
 
 	UPROPERTY(EditAnywhere, Category = DoorList, meta = (AllowPrivateAccess = "true"))
-	TArray<AProximityDoor*> doors;
+	TArray<AProximityDoor*> Doors;
 
 	UFUNCTION()
 	void OnOverlap(AActor* actor1, AActor* actor2);

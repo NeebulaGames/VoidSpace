@@ -9,7 +9,7 @@ UDoorManagementComponent::UDoorManagementComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 
@@ -18,9 +18,9 @@ void UDoorManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (IsBeginExecution)
+	if (bIsBeginExecution)
 	{
-		lockUnlockDoors();
+		LockUnlockDoors();
 	}
 	else
 	{
@@ -28,20 +28,20 @@ void UDoorManagementComponent::BeginPlay()
 	}
 }
 
-void UDoorManagementComponent::lockUnlockDoors()
+void UDoorManagementComponent::LockUnlockDoors()
 {
-	for (AProximityDoor* door : doors)
+	for (AProximityDoor* door : Doors)
 	{
-		OpenDoors ? door->OpenDoor() : door->CloseDoor();
+		bOpenDoors ? door->OpenDoor() : door->CloseDoor();
 
-		BlockDoors ? door->Lock() : door->UnLock();
+		bBlockDoors ? door->Lock() : door->UnLock();
 	}
 }
 
 void UDoorManagementComponent::OnOverlap(AActor* actor1, AActor* actor2)
 {
-	lockUnlockDoors();
+	LockUnlockDoors();
 
-	if (OneShoot)
+	if (bOneShoot)
 		DestroyComponent();
 }
