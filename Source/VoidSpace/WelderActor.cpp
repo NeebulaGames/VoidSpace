@@ -5,6 +5,7 @@
 #include "EquipableComponent.h"
 #include "SpaceStatics.h"
 #include "SpaceCharacter.h"
+#include "OrtoHoleActor.h"
 
 
 // Sets default values
@@ -59,7 +60,24 @@ void AWelderActor::Tick(float DeltaTime)
 
 			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
 			{
-				AActor* actor = hitData.GetActor();
+				AOrtoHoleActor* actor = Cast<AOrtoHoleActor>(hitData.GetActor());
+
+				if (actor)
+				{
+					if (Hole)
+					{
+						Hole->StopClose();
+					}
+
+					Hole = actor;
+					Hole->BeginClose();
+				}
+				else if (Hole)
+				{
+					Hole->StopClose();
+
+					Hole = nullptr;
+				}
 
 				// TODO: Detect hole
 			}

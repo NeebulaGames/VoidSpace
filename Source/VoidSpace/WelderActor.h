@@ -36,6 +36,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "WelderDebug")
 	bool bUsingWelder = false;
 
+	UPROPERTY(VisibleAnywhere, Category = "WelderDebug")
+	class AOrtoHoleActor* Hole = nullptr;
+
 	UFUNCTION()
 	void Equipped();
 
