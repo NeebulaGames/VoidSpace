@@ -10,8 +10,6 @@ UDoorManagementComponent::UDoorManagementComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-
 }
 
 
@@ -28,8 +26,6 @@ void UDoorManagementComponent::BeginPlay()
 	{
 		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
 	}
-
-	
 }
 
 void UDoorManagementComponent::lockUnlockDoors()
@@ -51,4 +47,7 @@ void UDoorManagementComponent::lockUnlockDoors()
 void UDoorManagementComponent::OnOverlap(AActor* actor1, AActor* actor2)
 {
 	lockUnlockDoors();
+
+	if (OneShoot)
+		GetOwner()->OnActorBeginOverlap.RemoveDynamic(this, &UDoorManagementComponent::OnOverlap);
 }

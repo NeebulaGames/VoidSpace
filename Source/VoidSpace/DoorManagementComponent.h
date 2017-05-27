@@ -17,6 +17,9 @@ public:
 	UDoorManagementComponent();
 
 	UPROPERTY(EditAnywhere, Category = Execution)
+	bool OneShoot;
+
+	UPROPERTY(EditAnywhere, Category = Execution)
 	bool IsBeginExecution;
 
 	UPROPERTY(EditAnywhere, Category = Execution)
