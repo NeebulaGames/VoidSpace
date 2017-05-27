@@ -32,14 +32,8 @@ void UDoorManagementComponent::lockUnlockDoors()
 {
 	for (AProximityDoor* door : doors)
 	{
-		if (OpenDoors)
-		{
-			door->OpenDoor();
-		}
-		else
-		{
-			door->CloseDoor();
-		}
+		OpenDoors ? door->OpenDoor() : door->CloseDoor();
+
 		BlockDoors ? door->Lock() : door->UnLock();
 	}
 }
