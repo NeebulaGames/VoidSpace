@@ -7,5 +7,9 @@
 UExitVaultDoorAnimInstance::UExitVaultDoorAnimInstance(const FObjectInitializer& ObjectInitializer)
 	: Super(ObjectInitializer)
 {
+	bIsOpening = false;
+	bIsClosing = false;
+	bIsOpened = false;
+	bIsClosed = false;
 }
 

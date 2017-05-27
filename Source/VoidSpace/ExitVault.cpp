@@ -39,8 +39,8 @@ AExitVault::AExitVault()
 	// Recalculate Box extension
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(130.f, 200.f, 120.f));
 
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/Particles/D_Smoke.D_Smoke'"));
-	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("MyPSC"));
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/Particles/P_Smoke.P_Smoke'"));
+	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SmokeParticle"));
 	ParticleSystem->SetTemplate(PS.Object);
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> zipperSound(TEXT("SoundWave'/Game/Sounds/ChamberDecompressing.ChamberDecompressing'"));
