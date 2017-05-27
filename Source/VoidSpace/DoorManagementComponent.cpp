@@ -43,5 +43,5 @@ void UDoorManagementComponent::OnOverlap(AActor* actor1, AActor* actor2)
 	lockUnlockDoors();
 
 	if (OneShoot)
-		GetOwner()->OnActorBeginOverlap.RemoveDynamic(this, &UDoorManagementComponent::OnOverlap);
+		DestroyComponent();
 }
