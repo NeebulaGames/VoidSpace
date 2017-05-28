@@ -31,5 +31,5 @@ public:
 	FString NextDialogue;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Dialogue)
-	int NextDialogueDelay;
+	float NextDialogueDelay;
 };
