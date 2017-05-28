@@ -12,12 +12,20 @@
 // Sets default values
 ASpaceCharacter::ASpaceCharacter()
 {
+	// Set size for collision capsule
+	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+
+	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
+	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
+	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
+	FirstPersonCameraComponent->bUsePawnControlRotation = true;
+
+
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
 
 	physics_handle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("physicsHandle"));
-
 }
 
 // Called when the game starts or when spawned
@@ -84,11 +92,14 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	InputComponent->BindAxis("Horizontal", this, &ASpaceCharacter::MoveHorizontal);
 	InputComponent->BindAxis("Turn", this, &ASpaceCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &ASpaceCharacter::AddControllerPitchInput);
+
 	InputComponent->BindAction("Jump", IE_Pressed, this, &ASpaceCharacter::OnStartJump);
 	InputComponent->BindAction("Jump", IE_Released, this, &ASpaceCharacter::OnStopJump);
 	InputComponent->BindAction("Use", IE_Pressed, this, &ASpaceCharacter::Use);
 	InputComponent->BindAction("Sprint", IE_Pressed, this, &ASpaceCharacter::OnStartSprint);
 	InputComponent->BindAction("Sprint", IE_Released, this, &ASpaceCharacter::OnStopSprint);
+	InputComponent->BindAction("Fire", IE_Pressed, this, &ASpaceCharacter::OnFire);
+	InputComponent->BindAction("Fire", IE_Released, this, &ASpaceCharacter::OnEndFire);
 }
 
 void ASpaceCharacter::MoveForward(float Val)
@@ -141,8 +152,8 @@ void ASpaceCharacter::Use()
 {
 	if (ASpaceGameStateBase::Instance(GetWorld())->bInteractionAllowed)
 	{
-		const FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
-		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
+		const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+		const FVector dir_camera = FirstPersonCameraComponent->GetForwardVector();
 		const FVector End = Start + dir_camera * 250;
 
 		FHitResult hitData(ForceInit);
@@ -162,16 +173,15 @@ void ASpaceCharacter::Use()
 
 				if (equipable != nullptr && equipable->IsActive())
 				{
-					equipable->SetActive(false);
+					equipable->Equipped();
 					EquippedObject = equipable;
-					// TODO: Attach to actor
+					
+					equipable->GetOwner()->AttachToComponent(FirstPersonCameraComponent, FAttachmentTransformRules(EAttachmentRule::SnapToTarget, true));
+					equipable->GetOwner()->SetActorRelativeLocation(FVector(20.f, 8.f, -10.f));
 				}
 				if (interactable != nullptr && interactable->IsActive())
 				{
 					interactable->Trigger();
-
-					if (EquippedObject)
-						EquippedObject->Trigger();
 				}
 
 				else if (pickable != nullptr && pickedObject == nullptr)
@@ -245,4 +255,20 @@ void ASpaceCharacter::OnStopSprint()
 {
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+}
+
+void ASpaceCharacter::OnFire()
+{
+	if (EquippedObject)
+	{
+		EquippedObject->Fire();
+	}
+}
+
+void ASpaceCharacter::OnEndFire()
+{
+	if (EquippedObject)
+	{
+		EquippedObject->EndFire();
+	}
 }

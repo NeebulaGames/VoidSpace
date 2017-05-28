@@ -28,6 +28,9 @@ public:
 
 	class UEquipableComponent* EquippedObject = nullptr;
 
+	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
+	class UCameraComponent* FirstPersonCameraComponent = nullptr;
+
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;
 
@@ -56,6 +59,12 @@ protected:
 	
 	UFUNCTION()
 		void OnStopSprint();
+
+	UFUNCTION()
+	void OnFire();
+
+	UFUNCTION()
+	void OnEndFire();
 
 private:
 	void Use();
