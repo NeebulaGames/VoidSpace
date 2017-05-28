@@ -14,7 +14,10 @@ public:
 	// Sets default values for this actor's properties
 	AProximityDoor();
 
+	UFUNCTION()
 	void Lock();
+
+	UFUNCTION()
 	void UnLock();
 
 	UFUNCTION()
@@ -40,5 +43,6 @@ private:
 	UFUNCTION()
 	void OnDoorExit();
 
+	UPROPERTY(VisibleAnywhere, Category = Lock, meta = (AllowPrivateAccess = "true"))
 	bool bLocked = false;
 };
