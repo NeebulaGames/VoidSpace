@@ -66,7 +66,9 @@ void ASpaceCharacter::ToggleGravity()
 {
 	if (!bWearsSpaceSuit)
 	{
-		// TODO: Die here
+		ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+		if (state)
+			state->Die(0);
 	}
 	else
 	{
