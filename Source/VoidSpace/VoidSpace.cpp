@@ -5,3 +5,4 @@
 IMPLEMENT_PRIMARY_GAME_MODULE( FDefaultGameModuleImpl, VoidSpace, "VoidSpace" );
 
 DEFINE_LOG_CATEGORY(EventSM);
+DEFINE_LOG_CATEGORY(DialogueManager);
