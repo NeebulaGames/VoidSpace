@@ -24,8 +24,8 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = PcMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* PcMeshComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableComponent;
+	UPROPERTY(VisibleAnywhere, Category = BoxTrigger, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* BoxComponent;
 
 	bool bPcIsActive = false;
 	UMaterialInstanceDynamic* ScreenMaterial = nullptr;

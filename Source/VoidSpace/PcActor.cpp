@@ -19,11 +19,11 @@ APcActor::APcActor()
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
 
-	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
-	InteractableComponent->SetupAttachment(RootComponent);
-	InteractableComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
-	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 14.f));
-	InteractableComponent->BoxComponent->bGenerateOverlapEvents = false;
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
+	BoxComponent->SetupAttachment(RootComponent);
+	BoxComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
+	BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 14.f));
+	BoxComponent->bGenerateOverlapEvents = false;
 
 	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
 
@@ -66,7 +66,7 @@ void APcActor::OnActivePc()
 	if(ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
 	{
 		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
-		InteractableComponent->BoxComponent->bGenerateOverlapEvents = true;
+		BoxComponent->bGenerateOverlapEvents = true;
 		bPcIsActive = true;
 	}
 }
@@ -76,7 +76,7 @@ void APcActor::OnDisablePc()
 	if (bPcIsActive)
 	{
 		ScreenMaterial->SetScalarParameterValue("Display", 0.f);
-		InteractableComponent->BoxComponent->bGenerateOverlapEvents = false;
+		BoxComponent->bGenerateOverlapEvents = false;
 		bPcIsActive = false;
 	}
 }
