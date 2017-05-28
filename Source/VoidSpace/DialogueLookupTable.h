@@ -22,7 +22,7 @@ public:
 	FString DialogueName;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Dialogue)
-	TAssetPtr<UDialogueWave> DialogueWave;
+	TAssetPtr<USoundCue> DialogueWave;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Dialogue)
 	bool Trigger;

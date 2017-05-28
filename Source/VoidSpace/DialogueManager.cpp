@@ -31,23 +31,25 @@ void UDialogueManager::PlayDialogue(const FString& name)
 
 	if (row)
 	{
-		UDialogueWave* wave = row->DialogueWave.LoadSynchronous();
-		UGameplayStatics::PlayDialogue2D(GetWorld(), wave, wave->ContextMappings[0].Context);
+		UWorld* World = GetOuter()->GetWorld();
+
+		USoundCue* wave = row->DialogueWave.LoadSynchronous();
+		UGameplayStatics::PlaySound2D(World, wave);
 
 		if (!row->NextDialogue.IsEmpty())
 		{
 			FTimerDelegate callback;
 			callback.BindLambda([&row, this]() -> void {this->PlayDialogue(row->NextDialogue); });
-			float delay = wave->GetWaveFromContext(wave->ContextMappings[0].Context)->GetDuration() + row->NextDialogueDelay;
-			GetWorld()->GetTimerManager().SetTimer(unusedHandle, callback, delay, false);
+			float delay = wave->GetDuration() + row->NextDialogueDelay;
+			World->GetTimerManager().SetTimer(unusedHandle, callback, delay, false);
 		}
 
 		if (row->Trigger)
 		{
 			FTimerDelegate callback;
 			callback.BindLambda([name, this]() -> void {OnDialogueFinished.Broadcast(name); });
-			float delay = wave->GetWaveFromContext(wave->ContextMappings[0].Context)->GetDuration();
-			GetWorld()->GetTimerManager().SetTimer(unusedHandle2, callback, delay, false);
+			float delay = wave->GetDuration();
+			World->GetTimerManager().SetTimer(unusedHandle2, callback, delay, false);
 		}
 	}
 	else
