@@ -25,7 +25,10 @@ void UDialogueTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InteractableComponent->OnTriggerEnter.AddDynamic(this, &UDialogueTriggerComponent::OnTriggerEnter);
+	if (bPlayOnTrigger)
+		InteractableComponent->OnTriggerEnter.AddDynamic(this, &UDialogueTriggerComponent::OnTriggerEnter);
+	else
+		OnTriggerEnter();
 }
 
 void UDialogueTriggerComponent::OnTriggerEnter()

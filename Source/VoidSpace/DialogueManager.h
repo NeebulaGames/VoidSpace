@@ -21,14 +21,18 @@ public:
 
 	void LoadManager(const FString& file);
 
+	UFUNCTION(BlueprintCallable, Category = DialogueManager)
+	void LoadManager(UDataTable* dataTable);
+
+	UFUNCTION(BlueprintCallable, Category = Dialogue)
 	void PlayDialogue(const FString& name);
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Dialogue)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DialogueProperties)
 	FDialogueContext DialogueContext;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Dialogue)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DialogueProperties)
 	UDataTable* DialogueLookupTable;
 	
-	UPROPERTY(BlueprintAssignable, Category = Dialogue)
+	UPROPERTY(BlueprintAssignable, Category = DialogueEvents)
 	FOnDialogueFinished OnDialogueFinished;
 };

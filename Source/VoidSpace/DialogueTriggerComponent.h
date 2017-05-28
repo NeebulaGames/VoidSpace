@@ -18,12 +18,16 @@ public:
 	UPROPERTY(EditAnywhere, Category = Dialogue)
 	FString DialogueName;
 
+	UPROPERTY(EditAnywhere, Category = Dialogue)
+	bool bPlayOnTrigger;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
 
+	UPROPERTY(VisibleAnywhere, Category = Trigger, meta = ( AllowPrivateAccess = "true", EditCondition = "bPlayOnTrigger" ))
 	class UInteractableComponent* InteractableComponent;
 
 	UFUNCTION()

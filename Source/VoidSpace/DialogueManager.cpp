@@ -13,7 +13,12 @@ void UDialogueManager::LoadManager(const FString& name)
 	ConstructorHelpers::FObjectFinder<UDataTable>
 		DataTable(*name);
 
-	DialogueLookupTable = DataTable.Object;
+	LoadManager(DataTable.Object);
+}
+
+void UDialogueManager::LoadManager(UDataTable* dataTable)
+{
+	DialogueLookupTable = dataTable;
 }
 
 void UDialogueManager::PlayDialogue(const FString& name)
@@ -26,13 +31,14 @@ void UDialogueManager::PlayDialogue(const FString& name)
 
 	if (row)
 	{
-		UGameplayStatics::PlayDialogue2D(GetWorld(), row->DialogueWave.Get(), DialogueContext);
+		UDialogueWave* wave = row->DialogueWave.LoadSynchronous();
+		UGameplayStatics::PlayDialogue2D(GetWorld(), wave, wave->ContextMappings[0].Context);
 
 		if (!row->NextDialogue.IsEmpty())
 		{
 			FTimerDelegate callback;
 			callback.BindLambda([&row, this]() -> void {this->PlayDialogue(row->NextDialogue); });
-			float delay = row->DialogueWave.Get()->GetWaveFromContext(DialogueContext)->GetDuration() + row->NextDialogueDelay;
+			float delay = wave->GetWaveFromContext(wave->ContextMappings[0].Context)->GetDuration() + row->NextDialogueDelay;
 			GetWorld()->GetTimerManager().SetTimer(unusedHandle, callback, delay, false);
 		}
 
@@ -40,7 +46,7 @@ void UDialogueManager::PlayDialogue(const FString& name)
 		{
 			FTimerDelegate callback;
 			callback.BindLambda([name, this]() -> void {OnDialogueFinished.Broadcast(name); });
-			float delay = row->DialogueWave.Get()->GetWaveFromContext(DialogueContext)->GetDuration();
+			float delay = wave->GetWaveFromContext(wave->ContextMappings[0].Context)->GetDuration();
 			GetWorld()->GetTimerManager().SetTimer(unusedHandle2, callback, delay, false);
 		}
 	}
