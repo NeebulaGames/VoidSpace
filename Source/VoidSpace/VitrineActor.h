@@ -24,7 +24,7 @@ private:
 	class USkeletalMeshComponent* VitrineMeshComponent;
 	
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableComponent;
+	class UBoxComponent* BoxComponent;
 
 	UPROPERTY(EditAnywhere, Category = SpaceSuitInside, meta = (AllowPrivateAccess = "true"))
 	class ASpaceSuitActor* SpaceSuitActor;
