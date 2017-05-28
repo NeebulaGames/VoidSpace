@@ -28,13 +28,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = Execution)
 	bool bBlockDoors;
 
+	void LockUnlockDoors();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 
 private:
-
-	void LockUnlockDoors();
 
 	UPROPERTY(EditAnywhere, Category = DoorList, meta = (AllowPrivateAccess = "true"))
 	TArray<AProximityDoor*> Doors;
