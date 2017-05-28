@@ -13,14 +13,25 @@ AObservatoryBlind::AObservatoryBlind()
 
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
-
-	static ConstructorHelpers::FObjectFinder<UClass> blindBlueprint(TEXT("Class'/Game/Animations/BlindBlueprint.BlindBlueprint_C'"));
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> blinds(TEXT("SkeletalMesh'/Game/Meshes/Blinds/Blinds_Animated.Blinds_Animated'"));
-	BlindMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Blinds"));
-	BlindMeshComponent->SetupAttachment(RootComponent);
-	BlindMeshComponent->SetSkeletalMesh(blinds.Object);
-	BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
+	
+	if (bBig)
+	{
+		static ConstructorHelpers::FObjectFinder<UClass> blindBlueprint(TEXT("Class'/Game/Animations/Blinds/Big/BigBlindBlueprint.BigBlindBlueprint_C'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> Bigblinds(TEXT("SkeletalMesh'/Game/Meshes/Blinds/Big/ObservatoryBlindBig.ObservatoryBlindBig'"));
+		BlindMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Blinds"));
+		BlindMeshComponent->SetupAttachment(RootComponent);
+		BlindMeshComponent->SetSkeletalMesh(Bigblinds.Object);
+		BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
+	}
+	else
+	{
+		static ConstructorHelpers::FObjectFinder<UClass> blindBlueprint(TEXT("Class'/Game/Animations/Blinds/Small/SmallBlindBlueprint.SmallBlindBlueprint_C'"));
+		static ConstructorHelpers::FObjectFinder<USkeletalMesh> Smallblinds(TEXT("SkeletalMesh'/Game/Meshes/Blinds/Small/ObservatoryBlindSmall.ObservatoryBlindSmall'"));
+		BlindMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Blinds"));
+		BlindMeshComponent->SetupAttachment(RootComponent);
+		BlindMeshComponent->SetSkeletalMesh(Smallblinds.Object);
+		BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
+	}
 }
 
 // Called when the game starts or when spawned
