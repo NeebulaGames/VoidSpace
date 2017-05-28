@@ -19,8 +19,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-	UPROPERTY(EditAnywhere, Category = BlindType)
-	bool bBig;
 
 	UPROPERTY(VisibleAnywhere, Category = BlindMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* BlindMeshComponent;
