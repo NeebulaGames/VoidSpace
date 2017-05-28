@@ -46,8 +46,11 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		Cast<UVitrineAnimInstance>(VitrineMeshComponent->GetAnimInstance())->bIsOpening = true;
-		character->pickedObject->Destroy();
-		character->ReleaseObject();
+		if(character)
+		{
+			character->pickedObject->Destroy();
+			character->ReleaseObject();
+		}
 		
 		if(SpaceSuitActor)
 			SpaceSuitActor->InteractableComponent->SetActive(true);	//Doesn't work
