@@ -15,7 +15,7 @@ AVitrineActor::AVitrineActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> vitrine(TEXT("SkeletalMesh'/Game/Meshes/Vitrine/Vitrine.Vitrine'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> vitrine(TEXT("SkeletalMesh'/Game/Meshes/Vitrine/ExitVaultVitrine.ExitVaultVitrine'"));
 	VitrineMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Vitrine"));
 	RootComponent = VitrineMeshComponent;
 	VitrineMeshComponent->SetSkeletalMesh(vitrine.Object); 
@@ -26,8 +26,8 @@ AVitrineActor::AVitrineActor()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
 	BoxComponent->SetupAttachment(VitrineMeshComponent);
-	BoxComponent->SetRelativeLocation(FVector(-70.f, 20.f, 95.f));
-	BoxComponent->SetBoxExtent(FVector(13.5f, 16.5f, 10.f));
+	BoxComponent->SetRelativeLocation(FVector(-60.f, 28.f, 95.f));
+	BoxComponent->SetBoxExtent(FVector(20.f, 19.f, 14.f));
 	BoxComponent->SetRelativeRotation(FRotator(0.f, 151.f, 0.f));
 	BoxComponent->bGenerateOverlapEvents = true;
 }
