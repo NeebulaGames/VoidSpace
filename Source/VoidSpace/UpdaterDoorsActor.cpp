@@ -3,6 +3,7 @@
 #include "VoidSpace.h"
 #include "UpdaterDoorsActor.h"
 #include "SpaceGameStateBase.h"
+#include "DoorManagementComponent.h"
 
 
 // Sets default values
@@ -26,7 +27,7 @@ void AUpdaterDoorsActor::BeginPlay()
 
 void AUpdaterDoorsActor::UpdateDoors()
 {
-	if (EndedEventName != "" && manager->GetCurrentEvent()->Name == EndedEventName)
+	if (!EndedEventName.Equals(TEXT("")) && manager->GetCurrentEvent()->Name.Equals(EndedEventName))
 		DoorManagementComponent->LockUnlockDoors();
 }
 
