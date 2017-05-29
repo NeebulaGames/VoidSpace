@@ -34,9 +34,10 @@ public:
 	void EndGame();
 
 	// TODO: Remove me! Only for testing purposes
-	UFUNCTION(Exec)
+	UFUNCTION(Exec, BlueprintCallable)
 	void FinishEvent();
 
+	UFUNCTION(BlueprintCallable, Category = GameState)
 	static ASpaceGameStateBase* Instance(UObject* world);
 
 	UPROPERTY(VisibleAnywhere)

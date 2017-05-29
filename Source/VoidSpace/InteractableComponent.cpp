@@ -41,7 +41,9 @@ void UInteractableComponent::OnBeginOverlap(AActor* actor1, AActor* actor2)
 	if (actor2->IsA(ASpaceCharacter::StaticClass()))
 	{
 		bPlayerIsNear = true;
-		OnTriggerEnter.Broadcast();
+		
+		if (IsActive())
+		    OnTriggerEnter.Broadcast();
 	}
 }
 
@@ -50,6 +52,8 @@ void UInteractableComponent::OnEndOverlap(AActor* actor1, AActor* actor2)
 	if (actor2->IsA(ASpaceCharacter::StaticClass()))
 	{
 		bPlayerIsNear = false;
-		OnTriggerExit.Broadcast();
+		
+		if (IsActive())
+		    OnTriggerExit.Broadcast();
 	}
 }
