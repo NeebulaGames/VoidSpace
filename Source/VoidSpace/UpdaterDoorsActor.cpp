@@ -2,6 +2,7 @@
 
 #include "VoidSpace.h"
 #include "UpdaterDoorsActor.h"
+#include "SpaceGameStateBase.h"
 
 
 // Sets default values
@@ -10,10 +11,8 @@ AUpdaterDoorsActor::AUpdaterDoorsActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
-	RootComponent = root;
-
 	DoorManagementComponent = CreateDefaultSubobject<UDoorManagementComponent>(TEXT("DoorManager"));
+	RootComponent = DoorManagementComponent;
 }
 
 // Called when the game starts or when spawned

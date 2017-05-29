@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "GameEventManager.h"
 #include "GameFramework/Actor.h"
 #include "UpdaterDoorsActor.generated.h"
 

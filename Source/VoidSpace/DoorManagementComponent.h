@@ -8,7 +8,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class VOIDSPACE_API UDoorManagementComponent : public UActorComponent
+class VOIDSPACE_API UDoorManagementComponent : public USceneComponent
 {
 	GENERATED_BODY()
 
