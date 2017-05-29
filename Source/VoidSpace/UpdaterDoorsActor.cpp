@@ -22,12 +22,12 @@ void AUpdaterDoorsActor::BeginPlay()
 	Super::BeginPlay();
 	
 	manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
-	manager->OnEventFinished.AddDynamic(this, &AUpdaterDoorsActor::UpdateDoors);
+	manager->OnEventStarted.AddDynamic(this, &AUpdaterDoorsActor::UpdateDoors);
 }
 
 void AUpdaterDoorsActor::UpdateDoors()
 {
-	if (!EndedEventName.Equals(TEXT("")) && manager->GetCurrentEvent()->Name.Equals(EndedEventName))
+	if (!EventName.Equals(TEXT("")) && manager->GetCurrentEvent()->Name.Equals(EventName))
 		DoorManagementComponent->LockUnlockDoors();
 }
 

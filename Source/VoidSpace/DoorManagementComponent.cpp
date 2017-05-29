@@ -18,14 +18,7 @@ void UDoorManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	if (bIsBeginExecution)
-	{
-		LockUnlockDoors();
-	}
-	else
-	{
-		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
-	}
+	GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
 }
 
 void UDoorManagementComponent::LockUnlockDoors()

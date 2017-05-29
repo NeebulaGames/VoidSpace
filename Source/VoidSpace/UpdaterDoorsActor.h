@@ -25,7 +25,7 @@ private:
 	class UDoorManagementComponent* DoorManagementComponent;
 
 	UPROPERTY(EditAnywhere, Category = EndedEvent, meta = (AllowPrivateAccess = "true"))
-	FString EndedEventName;
+	FString EventName;
 
 	UFUNCTION()
 	void UpdateDoors();

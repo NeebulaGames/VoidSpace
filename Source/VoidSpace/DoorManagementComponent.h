@@ -20,9 +20,6 @@ public:
 	bool bOneShoot;
 
 	UPROPERTY(EditAnywhere, Category = Execution)
-	bool bIsBeginExecution;
-
-	UPROPERTY(EditAnywhere, Category = Execution)
 	bool bOpenDoors;
 
 	UPROPERTY(EditAnywhere, Category = Execution)
