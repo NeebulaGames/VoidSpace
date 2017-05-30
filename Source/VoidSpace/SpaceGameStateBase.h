@@ -50,4 +50,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = GameEventManager)
 	class UGameEventManager* GameEventManager;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DialogueManager)
+	class UDialogueManager* DialogueManager;
 };

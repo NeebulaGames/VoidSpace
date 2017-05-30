@@ -9,6 +9,7 @@
 ASpaceGameStateBase::ASpaceGameStateBase()
 {
 	GameEventManager = CreateDefaultSubobject<UGameEventManager>("GameEventManager");
+	DialogueManager = CreateDefaultSubobject<UDialogueManager>("DialogueManager");
 }
 
 void ASpaceGameStateBase::StartEventSM()
