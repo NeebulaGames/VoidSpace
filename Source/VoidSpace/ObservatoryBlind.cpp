@@ -13,14 +13,14 @@ AObservatoryBlind::AObservatoryBlind()
 
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
-
-	static ConstructorHelpers::FObjectFinder<UClass> blindBlueprint(TEXT("Class'/Game/Animations/BlindBlueprint.BlindBlueprint_C'"));
-
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> blinds(TEXT("SkeletalMesh'/Game/Meshes/Blinds/Blinds_Animated.Blinds_Animated'"));
+	
+	static ConstructorHelpers::FObjectFinder<UClass> blindBlueprint(TEXT("Class'/Game/Animations/Blinds/Small/SmallBlindBlueprint.SmallBlindBlueprint_C'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> Smallblinds(TEXT("SkeletalMesh'/Game/Meshes/Blinds/Small/ObservatoryBlindSmall.ObservatoryBlindSmall'"));
 	BlindMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Blinds"));
 	BlindMeshComponent->SetupAttachment(RootComponent);
-	BlindMeshComponent->SetSkeletalMesh(blinds.Object);
+	BlindMeshComponent->SetSkeletalMesh(Smallblinds.Object);
 	BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
+
 }
 
 // Called when the game starts or when spawned
