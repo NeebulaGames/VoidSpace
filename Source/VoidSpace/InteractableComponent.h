@@ -34,7 +34,7 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = TriggerConfig)
 		FOnTriggerAction OnTriggerExit;
 
-	UPROPERTY(VisibleAnywhere)
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly)
 	class UBoxComponent* BoxComponent;
 
 	UPROPERTY(EditAnywhere, Category = TriggerConfig)

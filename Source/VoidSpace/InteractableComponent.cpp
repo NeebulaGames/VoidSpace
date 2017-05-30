@@ -16,6 +16,8 @@ UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectI
 	BoxComponent->SetupAttachment(this);
 	BoxComponent->InitBoxExtent(FVector(50));
 	BoxComponent->bSelectable = false;
+
+	bAutoActivate = true;
 }
 
 
@@ -42,7 +44,7 @@ void UInteractableComponent::OnBeginOverlap(AActor* actor1, AActor* actor2)
 	{
 		bPlayerIsNear = true;
 		
-		if (IsActive())
+		//if (IsActive()) // TODO: Enable me when map can be edited
 		    OnTriggerEnter.Broadcast();
 	}
 }
@@ -53,7 +55,7 @@ void UInteractableComponent::OnEndOverlap(AActor* actor1, AActor* actor2)
 	{
 		bPlayerIsNear = false;
 		
-		if (IsActive())
+		//if (IsActive()) // TODO: Enable me when map can be edited
 		    OnTriggerExit.Broadcast();
 	}
 }
