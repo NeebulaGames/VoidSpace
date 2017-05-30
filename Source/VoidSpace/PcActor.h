@@ -12,7 +12,9 @@ class VOIDSPACE_API APcActor : public AActor
 	
 public:	
 	// Sets default values for this actor's properties
-	APcActor(const FObjectInitializer& ObjectInitializer);
+	APcActor();
+
+	void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 protected:
 	// Called when the game starts or when spawned
@@ -22,14 +24,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = PcMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* PcMeshComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableComponent;
+	UPROPERTY(VisibleAnywhere, Category = BoxTrigger, meta = (AllowPrivateAccess = "true"))
+	class UBoxComponent* BoxComponent;
 
 	bool bPcIsActive = false;
 	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
-
-	UFUNCTION()
-	void OnEnterCd();
 
 	UFUNCTION()
 	void OnActivePc();

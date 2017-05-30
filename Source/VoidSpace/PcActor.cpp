@@ -7,10 +7,11 @@
 #include "PcAnimInstance.h"
 #include "SpaceGameStateBase.h"
 #include "GameEventManager.h"
+#include "CdActor.h"
 
 
 // Sets default values
-APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+APcActor::APcActor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -18,11 +19,11 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
 
-	InteractableComponent = ObjectInitializer.CreateDefaultSubobject<UInteractableComponent>(this, TEXT("Interactable"));
-	InteractableComponent->SetupAttachment(RootComponent);
-	InteractableComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
-	InteractableComponent->BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 9.f));
-	InteractableComponent->BoxComponent->bGenerateOverlapEvents = false;
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
+	BoxComponent->SetupAttachment(RootComponent);
+	BoxComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
+	BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 14.f));
+	BoxComponent->bGenerateOverlapEvents = false;
 
 	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
 
@@ -38,21 +39,24 @@ APcActor::APcActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectIn
 void APcActor::BeginPlay()
 {
 	Super::BeginPlay();
-	InteractableComponent->OnTriggerEnter.AddDynamic(this, &APcActor::OnEnterCd);
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &APcActor::OnActivePc);
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
 	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
 	ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 }
 
-void APcActor::OnEnterCd()
+void APcActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-	if (character->pickedObject != nullptr && character->pickedObject->GetName().Contains("CD"))
+	Super::NotifyActorBeginOverlap(OtherActor);
+	if (OtherActor->IsA(ACdActor::StaticClass()))
 	{
+		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
-		character->pickedObject->Destroy();
-		character->ReleaseObject();
+		if(character)
+		{
+			character->pickedObject->Destroy();
+			character->ReleaseObject();
+		}
 		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
 	}
 }
@@ -62,7 +66,7 @@ void APcActor::OnActivePc()
 	if(ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
 	{
 		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
-		InteractableComponent->BoxComponent->bGenerateOverlapEvents = true;
+		BoxComponent->bGenerateOverlapEvents = true;
 		bPcIsActive = true;
 	}
 }
@@ -72,7 +76,7 @@ void APcActor::OnDisablePc()
 	if (bPcIsActive)
 	{
 		ScreenMaterial->SetScalarParameterValue("Display", 0.f);
-		InteractableComponent->BoxComponent->bGenerateOverlapEvents = false;
+		BoxComponent->bGenerateOverlapEvents = false;
 		bPcIsActive = false;
 	}
 }
