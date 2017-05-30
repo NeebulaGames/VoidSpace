@@ -2,6 +2,7 @@
 
 #include "VoidSpace.h"
 #include "InteractableComponent.h"
+#include "SpaceCharacter.h"
 
 // Sets default values for this component's properties
 UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectInitializer) 
@@ -37,14 +38,18 @@ void UInteractableComponent::Trigger() const
 
 void UInteractableComponent::OnBeginOverlap(AActor* actor1, AActor* actor2)
 {
-	bPlayerIsNear = true;
-
-	OnTriggerEnter.Broadcast();
+	if (actor2->IsA(ASpaceCharacter::StaticClass()))
+	{
+		bPlayerIsNear = true;
+		OnTriggerEnter.Broadcast();
+	}
 }
 
 void UInteractableComponent::OnEndOverlap(AActor* actor1, AActor* actor2)
 {
-	bPlayerIsNear = false;
-
-	OnTriggerExit.Broadcast();
+	if (actor2->IsA(ASpaceCharacter::StaticClass()))
+	{
+		bPlayerIsNear = false;
+		OnTriggerExit.Broadcast();
+	}
 }
