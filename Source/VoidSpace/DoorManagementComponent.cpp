@@ -2,7 +2,7 @@
 
 #include "VoidSpace.h"
 #include "DoorManagementComponent.h"
-
+#include "SpaceGameStateBase.h" 
 
 // Sets default values for this component's properties
 UDoorManagementComponent::UDoorManagementComponent()
@@ -17,15 +17,21 @@ UDoorManagementComponent::UDoorManagementComponent()
 void UDoorManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
 
-	if (bIsBeginExecution)
-	{
-		LockUnlockDoors();
+	if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnBeginExecution) 
+	{ 
+		LockUnlockDoors(); 
 	}
-	else
-	{
-		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
-	}
+	else if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnBeginEvent)
+	{ 
+		manager->OnEventStarted.AddDynamic(this, &UDoorManagementComponent::UpdateDoors);
+	} 
+	else if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnOverlap)
+	{ 
+		manager->OnEventStarted.AddDynamic(this, &UDoorManagementComponent::UpdateOverlap);
+	} 
 }
 
 void UDoorManagementComponent::LockUnlockDoors()
@@ -44,4 +50,18 @@ void UDoorManagementComponent::OnOverlap(AActor* actor1, AActor* actor2)
 
 	if (bOneShoot)
 		DestroyComponent();
+}
+
+void UDoorManagementComponent::UpdateDoors()
+{
+	if (!EventName.Equals(TEXT("")) && manager->GetCurrentEvent()->Name.Equals(EventName))
+		LockUnlockDoors();
+}
+
+void UDoorManagementComponent::UpdateOverlap()
+{
+	if (!EventName.Equals(TEXT("")) && manager->GetCurrentEvent()->Name.Equals(EventName))
+		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
+	else
+		GetOwner()->OnActorBeginOverlap.RemoveDynamic(this, &UDoorManagementComponent::OnOverlap);
 }
