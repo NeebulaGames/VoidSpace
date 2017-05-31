@@ -2,7 +2,7 @@
 
 #include "VoidSpace.h"
 #include "DoorManagementComponent.h"
-
+#include "SpaceGameStateBase.h" 
 
 // Sets default values for this component's properties
 UDoorManagementComponent::UDoorManagementComponent()
@@ -18,7 +18,19 @@ void UDoorManagementComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
+	if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnBeginExecution) 
+	{ 
+	  LockUnlockDoors(); 
+	}
+	else if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnBeginEvent)
+	{ 
+		manager = ASpaceGameStateBase::Instance(this)->GameEventManager; 
+		manager->OnEventStarted.AddDynamic(this, &UDoorManagementComponent::UpdateDoors);
+	} 
+	else if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnOverlap)
+	{ 
+		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap); 
+	} 
 }
 
 void UDoorManagementComponent::LockUnlockDoors()
@@ -37,4 +49,10 @@ void UDoorManagementComponent::OnOverlap(AActor* actor1, AActor* actor2)
 
 	if (bOneShoot)
 		DestroyComponent();
+}
+
+void UDoorManagementComponent::UpdateDoors()
+{
+	if (!EventName.Equals(TEXT("")) && manager->GetCurrentEvent()->Name.Equals(EventName))
+		LockUnlockDoors();
 }
