@@ -42,7 +42,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	void FinishCurrentEvent();
 
+	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	void SetTime(float time, bool runCountdown = true);
+
+	UFUNCTION(BlueprintCallable, Category = StateManagement)
+	float GetTime() const { return Time; }
 
 	FEvent* GetCurrentEvent() const { return CurrentEvent; }
 
