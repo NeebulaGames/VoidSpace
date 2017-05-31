@@ -5,13 +5,15 @@
 #include "EquipableComponent.h"
 #include "SpaceStatics.h"
 #include "SpaceCharacter.h"
+#include "OrtoHoleActor.h"
 
 
 // Sets default values
 AWelderActor::AWelderActor()
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bStartWithTickEnabled = true;
 
 	static ConstructorHelpers::FObjectFinder<UStaticMesh> welder(TEXT("StaticMesh'/Game/Meshes/Welder/Welder.Welder'"));
 	WelderMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh"));
@@ -48,18 +50,35 @@ void AWelderActor::Tick(float DeltaTime)
 
 	if (bUsingWelder)
 	{
-		ASpaceCharacter* character = static_cast<ASpaceCharacter*>(GetParentActor());
+		ASpaceCharacter* character = static_cast<ASpaceCharacter*>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		if (character)
 		{
 			const FVector Start = character->FirstPersonCameraComponent->GetComponentLocation();
 			const FVector dir_camera = character->FirstPersonCameraComponent->GetForwardVector();
-			const FVector End = Start + dir_camera * 100;
+			const FVector End = Start + dir_camera * 200;
 
 			FHitResult hitData(ForceInit);
 
-			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+			if (USpaceStatics::Trace(GetWorld(), character, Start, End, hitData))
 			{
-				AActor* actor = hitData.GetActor();
+				AOrtoHoleActor* actor = Cast<AOrtoHoleActor>(hitData.GetActor());
+
+				if (actor)
+				{
+					if (Hole)
+					{
+						Hole->StopClose();
+					}
+
+					Hole = actor;
+					Hole->BeginClose();
+				}
+				else if (Hole)
+				{
+					Hole->StopClose();
+
+					Hole = nullptr;
+				}
 
 				// TODO: Detect hole
 			}
