@@ -5,6 +5,7 @@
 #include "InteractableComponent.h"
 #include "SpaceGameStateBase.h"
 #include "GameEventManager.h"
+#include "DialogueManager.h"
 
 // Sets default values
 AEndGameTrigger::AEndGameTrigger()
@@ -26,17 +27,19 @@ void AEndGameTrigger::BeginPlay()
 
 void AEndGameTrigger::OnTriggerEnter()
 {
+	UDialogueManager* dialogueManager = ASpaceGameStateBase::Instance(GetWorld())->DialogueManager;
+	dialogueManager->PlayDialogue("Assistant_020");
+	dialogueManager->OnDialogueFinished.AddDynamic(this, &AEndGameTrigger::OnDialogueCompleted);
+
+
 	float delay = 1.f;
 	UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraFade(0.f, 1.f, delay, FLinearColor::Black, false, true);
 
 	if (GEngine)
 		GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Green, "Congratulations for completing the game");
-
-	FTimerHandle unused;
-	GetWorldTimerManager().SetTimer(unused, this, &AEndGameTrigger::OnFadeOut, delay);
 }
 
-void AEndGameTrigger::OnFadeOut()
+void AEndGameTrigger::OnDialogueCompleted(const FString& finishedDialogue)
 {
 	ASpaceGameStateBase::Instance(this)->GameEventManager->FinishCurrentEvent();
 }

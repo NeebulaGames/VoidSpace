@@ -23,7 +23,8 @@ private:
 	UFUNCTION()
 	void OnTriggerEnter();
 
-	void OnFadeOut();
+	UFUNCTION()
+	void OnDialogueCompleted(const FString& finishedDialogue);
 
 	UPROPERTY(VisibleAnywhere, Category = TriggerConfig)
 	class UInteractableComponent* InteractableComponent;
