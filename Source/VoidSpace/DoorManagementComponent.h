@@ -12,7 +12,8 @@ enum class EDoorStartTriggerEnum : uint8
 { 
   DSTE_OnBeginExecution   UMETA(DisplayName = "OnBeginExecution"), 
   DSTE_OnBeginEvent   UMETA(DisplayName = "OnBeginEvent"), 
-  DSTE_OnOverlap  UMETA(DisplayName = "OnOverlap") 
+  DSTE_OnOverlap  UMETA(DisplayName = "OnOverlap"),
+  DSTE_Deactivate  UMETA(DisplayName = "Deactivate")
 }; 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -44,7 +45,7 @@ private:
 
 	UGameEventManager* manager; 
 
-	UPROPERTY(EditAnywhere, Category = EndedEvent, meta = (AllowPrivateAccess = "true")) 
+	UPROPERTY(EditAnywhere, Category = Event, meta = (AllowPrivateAccess = "true")) 
 	FString EventName; 
  
 	void LockUnlockDoors();
@@ -57,5 +58,7 @@ private:
 		
 	UFUNCTION()
 	void UpdateDoors();
-	
+
+	UFUNCTION()
+	void UpdateOverlap();
 };
