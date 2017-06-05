@@ -20,7 +20,7 @@ public:
 	UFUNCTION()
 	virtual void BeginLoadingScreen(const FString& MapName);
 	UFUNCTION()
-	virtual void EndLoadingScreen();
+	virtual void EndLoadingScreen(UWorld* LoadedWorld);
 
 	int LastDeathReason = -1;
 	

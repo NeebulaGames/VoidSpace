@@ -10,7 +10,7 @@ void USpaceGameInstance::Init()
 	UGameInstance::Init();
 
 	FCoreUObjectDelegates::PreLoadMap.AddUObject(this, &USpaceGameInstance::BeginLoadingScreen);
-	FCoreUObjectDelegates::PostLoadMap.AddUObject(this, &USpaceGameInstance::EndLoadingScreen);
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &USpaceGameInstance::EndLoadingScreen);
 }
 
 void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
@@ -25,6 +25,6 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 	}
 }
 
-void USpaceGameInstance::EndLoadingScreen()
+void USpaceGameInstance::EndLoadingScreen(UWorld* LoadedWorld)
 {
 }

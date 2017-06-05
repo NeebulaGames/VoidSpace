@@ -4,8 +4,8 @@ using UnrealBuildTool;
 
 public class VoidSpace : ModuleRules
 {
-	public VoidSpace(TargetInfo Target)
-	{
+	public VoidSpace(ReadOnlyTargetRules ROTargetRules) : base(ROTargetRules)
+    {
         PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "MoviePlayer" });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
