@@ -50,6 +50,28 @@ void ASpaceCharacter::Tick(float DeltaTime)
 
 		physics_handle->SetTargetLocationAndRotation(End, pawn->GetControlRotation());
 	}
+	else
+	{
+		FHitResult hitData;
+
+		if (CastRay(hitData))
+		{
+			UHighlightComponent* highlight = hitData.Actor->FindComponentByClass<UHighlightComponent>();
+
+			if (LookedObject && LookedObject != highlight)
+				LookedObject->OnStopLooking();
+
+			LookedObject = highlight;
+
+			if (highlight)
+				highlight->OnBeginLooking();
+		}
+		else if (LookedObject)
+		{
+			LookedObject->OnStopLooking();
+			LookedObject = nullptr;
+		}
+	}
 
 	SprintControl(DeltaTime);
 }
@@ -154,11 +176,7 @@ void ASpaceCharacter::Use()
 {
 	if (ASpaceGameStateBase::Instance(GetWorld())->bInteractionAllowed)
 	{
-		const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
-		const FVector dir_camera = FirstPersonCameraComponent->GetForwardVector();
-		const FVector End = Start + dir_camera * 250;
-
-		FHitResult hitData(ForceInit);
+		FHitResult hitData;
 
 		// RELEASE OBJECT
 		if (pickedObject != nullptr)
@@ -167,7 +185,7 @@ void ASpaceCharacter::Use()
 		}
 		else
 		{
-			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+			if (CastRay(hitData))
 			{
 				UEquipableComponent* equipable = hitData.Actor->FindComponentByClass<UEquipableComponent>();
 				UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
@@ -242,6 +260,17 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 	}
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), StaminaDuration));
+}
+
+bool ASpaceCharacter::CastRay(FHitResult& result)
+{
+	const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+	const FVector dir_camera = FirstPersonCameraComponent->GetForwardVector();
+	const FVector End = Start + dir_camera * 250;
+
+	result.Init();
+
+	return USpaceStatics::Trace(GetWorld(), this, Start, End, result);
 }
 
 void ASpaceCharacter::OnStartSprint()

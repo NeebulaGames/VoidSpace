@@ -2,19 +2,19 @@
 
 #pragma once
 
-#include "Components/SceneComponent.h"
+#include "HighlightComponent.h"
 #include "InteractableComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent), HideCategories = (Transform,Mobility) )
-class VOIDSPACE_API UInteractableComponent : public USceneComponent
+class VOIDSPACE_API UInteractableComponent : public UHighlightComponent
 {
 	GENERATED_BODY()
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnTriggerAction);
 
 public:
 	// Sets default values for this component's properties
-	UInteractableComponent(const FObjectInitializer& ObjectInitializer);
+	UInteractableComponent();
 
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -22,6 +22,7 @@ public:
 	void Trigger() const;
 
 public:
+
 	// Triggers when the action button is pressed
 	UPROPERTY(BlueprintAssignable, Category = TriggerConfig)
 	FOnTriggerAction OnTriggerAction;
@@ -32,7 +33,7 @@ public:
 
 	// Triggers when a character exits the trigger cube
 	UPROPERTY(BlueprintAssignable, Category = TriggerConfig)
-		FOnTriggerAction OnTriggerExit;
+	FOnTriggerAction OnTriggerExit;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadonly)
 	class UBoxComponent* BoxComponent;
