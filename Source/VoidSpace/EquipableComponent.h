@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "Components/ActorComponent.h"
+#include "HighlightComponent.h"
 #include "EquipableComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class VOIDSPACE_API UEquipableComponent : public USceneComponent
+class VOIDSPACE_API UEquipableComponent : public UHighlightComponent
 {
 	GENERATED_BODY()
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEquipableAction);
