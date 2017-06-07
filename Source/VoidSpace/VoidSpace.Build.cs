@@ -6,7 +6,7 @@ public class VoidSpace : ModuleRules
 {
 	public VoidSpace(ReadOnlyTargetRules ROTargetRules) : base(ROTargetRules)
     {
-        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "MoviePlayer" });
+        PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "UMG", "MoviePlayer", "MovieScene", "LevelSequence" });
 
         PrivateDependencyModuleNames.AddRange(new string[] {  });
 

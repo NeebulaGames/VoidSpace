@@ -1,7 +1,6 @@
 // All rights Neebula Games
 
 #pragma once
-
 #include "BlindAnimInstance.generated.h"
 
 class ASimonStandActor;
@@ -44,7 +43,7 @@ public:
 	void SetSimonStandToInstance(ASimonStandActor* SimonStand);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
-	AMatineeActor* MeteorStorm;
+	class ULevelSequence* MeteorStorm;
 
 	static bool bExecuted;
 
