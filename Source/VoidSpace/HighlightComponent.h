@@ -33,5 +33,5 @@ public:
 
 private:
 
-	UStaticMeshComponent* ParentMesh = nullptr;
+	UMeshComponent* ParentMesh = nullptr;
 };

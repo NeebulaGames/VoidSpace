@@ -25,7 +25,7 @@ void UHighlightComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ParentMesh = GetOwner()->FindComponentByClass<UStaticMeshComponent>();
+	ParentMesh = GetOwner()->FindComponentByClass<UMeshComponent>();
 }
 
 
