@@ -28,15 +28,6 @@ void UHighlightComponent::BeginPlay()
 	ParentMesh = GetOwner()->FindComponentByClass<UMeshComponent>();
 }
 
-
-// Called every frame
-void UHighlightComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	// ...
-}
-
 void UHighlightComponent::OnBeginLooking()
 {
 	if (bHighlight && ParentMesh)
