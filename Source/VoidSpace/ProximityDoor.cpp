@@ -27,6 +27,7 @@ AProximityDoor::AProximityDoor()
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->bRequireUseButton = false;
+	InteractableComponent->bHighlight = false;
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(200.f, 200.f, 120.f));
 }
 
