@@ -17,15 +17,11 @@ public:
 	// Sets default values for this actor's properties
 	ASimonStandActor();
 
-	virtual void Tick(float DeltaTime) override;
-
-	void PostInitializeComponents() override;
-	void NotifyActorBeginOverlap(AActor* OtherActor) override;
-
-	TArray<ASimonButtonActor*> Buttons;
-
 	UPROPERTY(BlueprintAssignable)
 	FSimonCompleted OnSimonCompleted;
+
+	UPROPERTY(VisibleAnywhere, Category = Interactable)
+	class UInteractableComponent* InteractableComponent;
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,12 +29,7 @@ protected:
 
 private:
 
-	void RestoreButtons();
-	void ContinueSequence();
-	void ShutAllButtons();
-	void GenerateSequence(int elements);
-	void SequenceSuccess();
-	void SequenceWrong();
+	void SimonCompleted();
 
 	UFUNCTION()
 	void EventStarted();
@@ -46,21 +37,12 @@ private:
 	UFUNCTION()
 	void EventFinished();
 
-	UFUNCTION()
-	void ButtonPressed(int button);
-
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
 
-	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
-	class UBoxComponent* SimonBoxCollider;
+	//UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
+	//class UBoxComponent* SimonBoxCollider;
 
 	bool bSimonCompleted = false;
-	int SequencesSuccess = 0;
-	int CurrentButtonSequence = 0;
-	int CurrentSequencePosition = 0;
-	static const FLinearColor Colors[3];
 	bool bActivateSimon = false;
-	TArray<int> Sequence;
-	FTimerHandle TimerHandle;
 };
