@@ -50,6 +50,28 @@ void ASpaceCharacter::Tick(float DeltaTime)
 
 		physics_handle->SetTargetLocationAndRotation(End, pawn->GetControlRotation());
 	}
+	else
+	{
+		FHitResult hitData;
+
+		if (CastRay(hitData))
+		{
+			UHighlightComponent* highlight = hitData.Actor->FindComponentByClass<UHighlightComponent>();
+
+			if (LookedObject && LookedObject != highlight)
+				LookedObject->OnStopLooking();
+
+			LookedObject = highlight;
+
+			if (highlight)
+				highlight->OnBeginLooking();
+		}
+		else if (LookedObject)
+		{
+			LookedObject->OnStopLooking();
+			LookedObject = nullptr;
+		}
+	}
 
 	SprintControl(DeltaTime);
 }
@@ -154,12 +176,6 @@ void ASpaceCharacter::Use()
 {
 	if (ASpaceGameStateBase::Instance(GetWorld())->bInteractionAllowed)
 	{
-		const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
-		const FVector dir_camera = FirstPersonCameraComponent->GetForwardVector();
-		const FVector End = Start + dir_camera * 250;
-
-		FHitResult hitData(ForceInit);
-
 		// RELEASE OBJECT
 		if (pickedObject != nullptr)
 		{
@@ -167,11 +183,14 @@ void ASpaceCharacter::Use()
 		}
 		else
 		{
-			if (USpaceStatics::Trace(GetWorld(), this, Start, End, hitData))
+			if (LookedObject)
 			{
-				UEquipableComponent* equipable = hitData.Actor->FindComponentByClass<UEquipableComponent>();
-				UInteractableComponent* interactable = hitData.Actor->FindComponentByClass<UInteractableComponent>();
-				UPickableComponent* pickable = hitData.Actor->FindComponentByClass<UPickableComponent>();
+				LookedObject->OnStopLooking();
+
+				AActor* lookedActor = LookedObject->GetOwner();
+				UEquipableComponent* equipable = lookedActor->FindComponentByClass<UEquipableComponent>();
+				UInteractableComponent* interactable = lookedActor->FindComponentByClass<UInteractableComponent>();
+				UPickableComponent* pickable = lookedActor->FindComponentByClass<UPickableComponent>();
 
 				if (equipable != nullptr && equipable->IsActive())
 				{
@@ -188,14 +207,15 @@ void ASpaceCharacter::Use()
 
 				else if (pickable != nullptr && pickedObject == nullptr)
 				{
+					UPrimitiveComponent* component = pickable->GetOwner()->FindComponentByClass<UPrimitiveComponent>();
 					//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
 					physics_handle->GrabComponentAtLocationWithRotation(
-						hitData.GetComponent(), 
+						component, 
 						"None", 
-						hitData.GetComponent()->GetComponentLocation(), 
-						hitData.GetComponent()->GetComponentRotation());
+						component->GetComponentLocation(), 
+						component->GetComponentRotation());
 
-					pickedObject = hitData.GetActor();
+					pickedObject = LookedObject->GetOwner();
 				}
 			}
 
@@ -242,6 +262,17 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 	}
 	
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Black, FString::Printf(TEXT("Stamina: %f"), StaminaDuration));
+}
+
+bool ASpaceCharacter::CastRay(FHitResult& result)
+{
+	const FVector Start = FirstPersonCameraComponent->GetComponentLocation();
+	const FVector dir_camera = FirstPersonCameraComponent->GetForwardVector();
+	const FVector End = Start + dir_camera * 250;
+
+	result.Init();
+
+	return USpaceStatics::Trace(GetWorld(), this, Start, End, result);
 }
 
 void ASpaceCharacter::OnStartSprint()

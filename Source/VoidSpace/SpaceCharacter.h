@@ -71,6 +71,8 @@ private:
 
 	void SprintControl(float DeltaTime);
 
+	bool CastRay(FHitResult& result);
+
 	bool bIsSprinting = false;
 	bool bIsRecovering = false;
 
@@ -92,6 +94,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float MaxStamina = 100;
 
+	class UHighlightComponent* LookedObject = nullptr;
 
 	bool bGravityEnabled = true;
 	bool bWearsSpaceSuit = false;

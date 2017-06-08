@@ -5,14 +5,14 @@
 #include "SpaceCharacter.h"
 
 // Sets default values for this component's properties
-UInteractableComponent::UInteractableComponent(const FObjectInitializer& ObjectInitializer) 
-	: Super(ObjectInitializer), bRequirePlayerNear(true), bRequireUseButton(true), bPlayerIsNear(false)
+UInteractableComponent::UInteractableComponent() 
+	: Super(), bRequirePlayerNear(true), bRequireUseButton(true), bPlayerIsNear(false)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = false;
 
-	BoxComponent = ObjectInitializer.CreateDefaultSubobject<UBoxComponent>(this, "TriggerBox");
+	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
 	BoxComponent->SetupAttachment(this);
 	BoxComponent->InitBoxExtent(FVector(50));
 	BoxComponent->bSelectable = false;

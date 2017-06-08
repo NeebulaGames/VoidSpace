@@ -2,12 +2,12 @@
 
 #pragma once
 
-#include "Components/SceneComponent.h"
+#include "HighlightComponent.h"
 #include "PickableComponent.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class VOIDSPACE_API UPickableComponent : public USceneComponent
+class VOIDSPACE_API UPickableComponent : public UHighlightComponent
 {
 	GENERATED_BODY()
 
@@ -22,7 +22,4 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-		
-	
 };
