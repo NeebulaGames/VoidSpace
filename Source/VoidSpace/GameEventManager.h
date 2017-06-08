@@ -18,6 +18,7 @@ class VOIDSPACE_API UGameEventManager : public UObject, public FTickableGameObje
 	struct FEvent 
 	{
 		bool bCountDown = false;
+		bool bKillAtEnd = false;
 		bool bSkipAfterDeath = false;
 		float Time = 0.f;
 		int DeathReason = 0;

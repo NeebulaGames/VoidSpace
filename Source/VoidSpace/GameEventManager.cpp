@@ -83,6 +83,7 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 			ev->Name = obj->GetStringField("Name");
 			ev->LevelName = obj->GetStringField("LevelName");
 			ev->bCountDown = obj->GetBoolField("CountDown");
+			ev->bKillAtEnd = obj->GetBoolField("KillAtEnd");
 			ev->bSkipAfterDeath = obj->GetBoolField("SkipAfterDeath");
 			ev->Time = obj->GetNumberField("Time");
 			ev->DeathReason = obj->GetIntegerField("DeathReason");
@@ -133,6 +134,12 @@ void UGameEventManager::FinishCurrentEvent()
 	{
 		UGameplayStatics::GetPlayerCameraManager(this, 0)->StopCameraFade();
 		bIsFading = true;
+	}
+
+	if (CurrentEvent->bKillAtEnd)
+	{
+		ASpaceGameStateBase::Instance(GetWorld())->Die(CurrentEvent->DeathReason);
+		return;
 	}
 
 	if (CurrentEvent->NextEvent)
