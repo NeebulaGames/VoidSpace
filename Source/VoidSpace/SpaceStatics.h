@@ -2,6 +2,20 @@
 
 #pragma once
 
+enum ELightState 
+{
+	LIGHT_ON,
+	LIGHT_OFF,
+	LIGHT_EMERGENCY
+};
+
+enum ELedState 
+{
+	LED_ON,
+	LED_EMERGENCY
+};
+
+
 /**
  * 
  */
