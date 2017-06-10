@@ -2,7 +2,6 @@
 
 #include "VoidSpace.h"
 #include "SimonStandActor.h"
-#include "PickableComponent.h"
 #include "SpaceGameStateBase.h"
 #include "GameEventManager.h"
 #include "InteractableComponent.h"
@@ -21,12 +20,8 @@ ASimonStandActor::ASimonStandActor()
 
 	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableComponent"));
 	InteractableComponent->SetupAttachment(RootComponent);
-	InteractableComponent->SetActive(false);
-	InteractableComponent->Deactivate();
 	InteractableComponent->BoxComponent->SetRelativeLocation(FVector(0.f, 8.f, 127.f));
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(54.f, 20.f, 20.f));
-	InteractableComponent->bRequireUseButton = true;
-	InteractableComponent->bRequirePlayerNear = false;
 }
 
 // Called when the game starts or when spawned
@@ -44,27 +39,18 @@ void ASimonStandActor::BeginPlay()
 void ASimonStandActor::SimonCompleted()
 {
 	bSimonCompleted = true;
+	InteractableComponent->SetActive(false);
 	OnSimonCompleted.Broadcast();
 }
 
 void ASimonStandActor::EventStarted()
 {
 	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name != "Beginning" && !bSimonCompleted)
-	{
-		SimonStandMesh->bGenerateOverlapEvents = false;
 		SimonCompleted();
-	}
-	else 
-	{
-		SimonStandMesh->bGenerateOverlapEvents = ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning";
-	}
 }
 
 void ASimonStandActor::EventFinished()
 {
 	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning" && !bSimonCompleted)
-	{
-		SimonStandMesh->bGenerateOverlapEvents = false;
 		SimonCompleted();
-	}
 }

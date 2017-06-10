@@ -29,6 +29,7 @@ protected:
 
 private:
 
+	UFUNCTION()
 	void SimonCompleted();
 
 	UFUNCTION()
@@ -40,9 +41,5 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
 
-	//UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
-	//class UBoxComponent* SimonBoxCollider;
-
 	bool bSimonCompleted = false;
-	bool bActivateSimon = false;
 };
