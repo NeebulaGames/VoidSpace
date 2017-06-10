@@ -3,7 +3,6 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "SimonButtonActor.h"
 #include "SimonStandActor.generated.h"
 
 UCLASS()
