@@ -39,7 +39,7 @@ void ASimonStandActor::BeginPlay()
 void ASimonStandActor::SimonCompleted()
 {
 	bSimonCompleted = true;
-	InteractableComponent->SetActive(false);
+	InteractableComponent->DestroyComponent();
 	OnSimonCompleted.Broadcast();
 }
 
