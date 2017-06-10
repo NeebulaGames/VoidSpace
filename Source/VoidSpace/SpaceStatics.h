@@ -2,14 +2,16 @@
 
 #pragma once
 
-enum ELightState 
+UENUM(BlueprintType)
+enum class ELightState : uint8
 {
 	LIGHT_ON,
 	LIGHT_OFF,
 	LIGHT_EMERGENCY
 };
 
-enum ELedState 
+UENUM(BlueprintType)
+enum class ELedState : uint8
 {
 	LED_ON,
 	LED_EMERGENCY

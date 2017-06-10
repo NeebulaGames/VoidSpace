@@ -25,8 +25,8 @@ public:
 		bool bSkipAfterDeath = false;
 		float Time = 0.f;
 		int DeathReason = 0;
-		ELightState LightsState = LIGHT_ON;
-		ELedState LedsState = LED_ON;
+		ELightState LightsState = ELightState::LIGHT_ON;
+		ELedState LedsState = ELedState::LED_ON;
 		FEvent* NextEvent = nullptr;
 		FString NextEventName = "";
 		FString Name;
@@ -51,6 +51,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	float GetTime() const { return Time; }
+
+	UFUNCTION(BlueprintCallable, Category = StateManagement)
+	bool IsCounting() const { return bCountDown; }
 
 	FEvent* GetCurrentEvent() const { return CurrentEvent; }
 

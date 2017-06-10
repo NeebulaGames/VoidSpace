@@ -19,6 +19,8 @@ public:
 
 	ASpaceGameStateBase();
 
+	void BeginPlay() override;
+
 	UFUNCTION(BlueprintCallable, Category = GameEventManager)
 	void StartEventSM();
 
@@ -54,4 +56,7 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DialogueManager)
 	class UDialogueManager* DialogueManager;
+
+	class ASpacestationManagementActor* SpacestationManager;
+
 };

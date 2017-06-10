@@ -26,7 +26,32 @@ void ASpacestationManagementActor::BeginPlay()
 
 void ASpacestationManagementActor::Tick(float DeltaSeconds)
 {
+	if (bReduceOxygen)
+		OxygenTime -= DeltaSeconds;
 
+	UGameEventManager::FEvent* current = EventManager->GetCurrentEvent();
+
+	if (EventManager->IsCounting())
+	{
+		ScreensState = EScreenState::SCREEN_WARNING;
+		float time = EventManager->GetTime();
+		if (current->DeathReason == 2)
+		{
+			ScreenMessage = FString::Printf(TEXT("{0}%"), (bReduceOxygen ? OxygenTime : time) * ReduceFactor);
+		}
+		else
+		{
+			ScreenMessage = FString::Printf(TEXT("{0}:{1}"), time / 60.f, FMath::Fmod(time, 60.f));
+		}
+	}
+	else
+	{
+		if (current->DeathReason == 0)
+			ScreensState = EScreenState::SCREEN_OK;
+		else if (current->DeathReason == 1)
+			ScreensState = EScreenState::SCREEN_NOSIGNAL;
+		ScreenMessage.Reset(0);
+	}
 }
 
 void ASpacestationManagementActor::OnEventStarted()
@@ -35,4 +60,9 @@ void ASpacestationManagementActor::OnEventStarted()
 
 	LightsState = current->LightsState;
 	LedsState = current->LedsState;
+	
+	if (current->DeathReason == 1)
+	{
+		ReduceFactor = 100.f / current->Time;
+	}
 }
