@@ -32,6 +32,14 @@ void UBlindAnimInstance::FinishCurrentEvent()
 		manager->FinishCurrentEvent();
 }
 
+bool UBlindAnimInstance::IsBeginningEvent()
+{
+	UGameEventManager* manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
+	if (manager->GetCurrentEvent()->Name == "Beginning")
+		return true;
+	return false;
+}
+
 void UBlindAnimInstance::OnSimonCompleted()
 {
 	bIsOpening = true;

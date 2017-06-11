@@ -36,6 +36,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = EventSystem)
 	void FinishCurrentEvent();
 
+	UFUNCTION(BlueprintCallable, Category = EventSystem)
+	bool IsBeginningEvent();
+
 	UFUNCTION()
 	void OnSimonCompleted();
 
