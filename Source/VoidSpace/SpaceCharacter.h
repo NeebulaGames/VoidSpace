@@ -66,6 +66,9 @@ protected:
 	UFUNCTION()
 	void OnEndFire();
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Spacesuit, meta = (AllowPrivateAccess = "true"))
+	bool bWearsSpaceSuit = false;
+
 private:
 	void Use();
 
@@ -96,6 +99,6 @@ private:
 
 	class UHighlightComponent* LookedObject = nullptr;
 
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpaceSuit, meta = (AllowPrivateAccess = "true"))
 	bool bGravityEnabled = true;
-	bool bWearsSpaceSuit = false;
 };
