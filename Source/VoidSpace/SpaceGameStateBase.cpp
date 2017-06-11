@@ -50,7 +50,10 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 
 	if (character)
 	{
-		character->ToggleSpaceSuit(activate);
+		ASpaceSuitActor* spaceSuit = nullptr;
+		if (activate)
+			spaceSuit = *TActorIterator<ASpaceSuitActor>(GetWorld());
+		character->ToggleSpaceSuit(spaceSuit);
 	}
 }
 

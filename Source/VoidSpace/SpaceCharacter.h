@@ -5,6 +5,8 @@
 #include "GameFramework/Character.h"
 #include "SpaceCharacter.generated.h"
 
+class ASpaceSuitActor;
+
 UCLASS()
 class VOIDSPACE_API ASpaceCharacter : public ACharacter
 {
@@ -21,7 +23,13 @@ public:
 
 	void ReleaseObject();
 	void ToggleGravity();
-	void ToggleSpaceSuit(bool activate);
+	void ToggleSpaceSuit(ASpaceSuitActor* spaceSuit);
+
+	UFUNCTION(BlueprintCallable, Category = Spacesuit)
+	bool WearsSpaceSuit() const;
+	
+	UFUNCTION(Exec, Category = ExecFunctions)
+	void KillPlayer(int mode) const;
 
 	UPhysicsHandleComponent* physics_handle;
 	AActor* pickedObject = nullptr;
@@ -30,9 +38,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
 	class UCameraComponent* FirstPersonCameraComponent = nullptr;
-
-	UFUNCTION(Exec, Category = ExecFunctions)
-	void KillPlayer(int mode) const;
 
 protected:
 
@@ -43,31 +48,28 @@ protected:
 
 	//handles moving forward/backward
 	UFUNCTION()
-		void MoveForward(float Val);
+	void MoveForward(float Val);
 	//handles strafing
 	UFUNCTION()
-		void MoveHorizontal(float Val);
+	void MoveHorizontal(float Val);
 
 	UFUNCTION()
-		void OnStartJump();
+	void OnStartJump();
 
 	UFUNCTION()
-		void OnStopJump();
+	void OnStopJump();
 
 	UFUNCTION()
-		void OnStartSprint();
+	void OnStartSprint();
 	
 	UFUNCTION()
-		void OnStopSprint();
+	void OnStopSprint();
 
 	UFUNCTION()
 	void OnFire();
 
 	UFUNCTION()
 	void OnEndFire();
-
-	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Spacesuit, meta = (AllowPrivateAccess = "true"))
-	bool bWearsSpaceSuit = false;
 
 private:
 	void Use();
@@ -98,6 +100,9 @@ private:
 	float MaxStamina = 100;
 
 	class UHighlightComponent* LookedObject = nullptr;
+
+	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Spacesuit, meta = (AllowPrivateAccess = "true"))
+	ASpaceSuitActor* EquippedSuit = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpaceSuit, meta = (AllowPrivateAccess = "true"))
 	bool bGravityEnabled = true;

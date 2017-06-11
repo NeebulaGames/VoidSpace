@@ -7,6 +7,7 @@
 #include "SpaceStatics.h"
 #include "SpaceGameStateBase.h"
 #include "EquipableComponent.h"
+#include "SpaceSuitActor.h"
 
 
 // Sets default values
@@ -86,7 +87,7 @@ void ASpaceCharacter::ReleaseObject()
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
-	if (!bWearsSpaceSuit)
+	if (!EquippedSuit)
 	{
 		ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 		if (state)
@@ -99,12 +100,22 @@ void ASpaceCharacter::ToggleGravity()
 		UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
 		characterMovement->MovementMode = characterMovement->DefaultLandMovementMode = bGravityEnabled ? MOVE_Walking : MOVE_Flying;
+
+		if (bGravityEnabled)
+			EquippedSuit->StopConsumingOxygen();
+		else
+			EquippedSuit->StartConsumingOxygen();
 	}
 }
 
-void ASpaceCharacter::ToggleSpaceSuit(bool activate)
+void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 {
-	bWearsSpaceSuit = activate;
+	EquippedSuit = spaceSuit;
+}
+
+bool ASpaceCharacter::WearsSpaceSuit() const
+{
+	return EquippedSuit != nullptr;
 }
 
 // Called to bind functionality to input

@@ -15,8 +15,19 @@ public:
 	// Sets default values for this actor's properties
 	ASpaceSuitActor(const FObjectInitializer& ObjectInitializer);
 
+	void Tick(float DeltaSeconds) override;
+
+	void StartConsumingOxygen();
+	void StopConsumingOxygen();
+
+	UFUNCTION(BlueprintCallable, Category = SpacesuitOxygen)
+	float GetRemainingOxygen() const;
+
 	UPROPERTY(VisibleAnywhere, Category = Interactable)
 	class UInteractableComponent* InteractableComponent;
+
+	UPROPERTY(BlueprintReadOnly, VisibleAnywhere, Category = SpacesuitOxygen)
+	float OxygenDelta;
 
 protected:
 	// Called when the game starts or when spawned
@@ -40,4 +51,22 @@ private:
 
 	UFUNCTION()
 	void OnFadeInFinished();
+
+	UFUNCTION()
+	void OnEventStarted();
+
+	UFUNCTION()
+	void OnEventFinished();
+
+	bool bConsumingOxygen = false;
+
+	bool bActive = false;
+
+	class UGameEventManager* GameEventManager = nullptr;
+
+	bool bCountingDown = false;
+
+	float TimeRemaining = 0.f;
+
+	float OxygenTime = 120.f;
 };

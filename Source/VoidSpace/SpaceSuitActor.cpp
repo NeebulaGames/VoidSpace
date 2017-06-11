@@ -4,13 +4,15 @@
 #include "SpaceSuitActor.h"
 #include "InteractableComponent.h"
 #include "SpaceGameStateBase.h"
+#include "GameEventManager.h"
+#include "SpaceCharacter.h"
 
 
 // Sets default values
 ASpaceSuitActor::ASpaceSuitActor(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 
 	USceneComponent* root = ObjectInitializer.CreateDefaultSubobject<USceneComponent>(this, TEXT("Root"));
 	RootComponent = root;
@@ -25,6 +27,50 @@ ASpaceSuitActor::ASpaceSuitActor(const FObjectInitializer& ObjectInitializer) : 
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> zipperSound(TEXT("SoundWave'/Game/Sounds/zipper.zipper'"));
 	Zipper = zipperSound.Object;
+
+	OxygenDelta = 100.f / OxygenTime;
+}
+
+void ASpaceSuitActor::Tick(float DeltaSeconds)
+{
+	if (bCountingDown)
+	{
+		TimeRemaining -= DeltaSeconds;
+
+		if (TimeRemaining <= 0.f && GameEventManager->GetCurrentEvent()->DeathReason != 2)
+			ASpaceGameStateBase::Instance(GetWorld())->Die(GameEventManager->GetCurrentEvent()->DeathReason);
+	}
+}
+
+void ASpaceSuitActor::StartConsumingOxygen()
+{
+	bCountingDown = GameEventManager->IsCounting();
+	TimeRemaining = GameEventManager->GetTime();
+
+	bConsumingOxygen = true;
+
+	GameEventManager->OnEventStarted.AddDynamic(this, &ASpaceSuitActor::OnEventStarted);
+	GameEventManager->OnEventFinished.AddDynamic(this, &ASpaceSuitActor::OnEventFinished);
+
+	GameEventManager->SetTime(OxygenTime, true);
+}
+
+void ASpaceSuitActor::StopConsumingOxygen()
+{
+	OxygenTime = GameEventManager->GetTime();
+	GameEventManager->SetTime(TimeRemaining, bCountingDown);
+
+	GameEventManager->OnEventStarted.RemoveDynamic(this, &ASpaceSuitActor::OnEventStarted);
+	GameEventManager->OnEventFinished.RemoveDynamic(this, &ASpaceSuitActor::OnEventFinished);
+
+	bConsumingOxygen = false;
+}
+
+float ASpaceSuitActor::GetRemainingOxygen() const
+{
+	if (bActive && bConsumingOxygen)
+		return GameEventManager->GetTime();
+	return OxygenTime;
 }
 
 // Called when the game starts or when spawned
@@ -33,6 +79,8 @@ void ASpaceSuitActor::BeginPlay()
 	Super::BeginPlay();
 
 	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASpaceSuitActor::OnSuitTrigger);
+
+	GameEventManager = ASpaceGameStateBase::Instance(GetWorld())->GameEventManager;
 }
 
 void ASpaceSuitActor::OnSuitTrigger()
@@ -50,13 +98,19 @@ void ASpaceSuitActor::OnSuitTrigger()
 
 void ASpaceSuitActor::OnFadeOutFinish()
 {
-	ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
+	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	bActive = !bActive;
+
+	if (character)
+	{
+		character->ToggleSpaceSuit(bActive ? this : nullptr);
+	}
 
 	UGameplayStatics::PlaySound2D(GetWorld(), Zipper);
 
 	SpaceSuitComponent->ToggleVisibility();
 	SpaceSuitComponent->ToggleActive();
-	state->ToggleSpaceSuit(!SpaceSuitComponent->IsVisible());
 
 	static FTimerHandle unusedHandle;
 	GetWorldTimerManager().SetTimer(unusedHandle, this, &ASpaceSuitActor::OnSoundFinished, Zipper->Duration);
@@ -76,4 +130,17 @@ void ASpaceSuitActor::OnFadeInFinished()
 	ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
 	state->bMovementAllowed = true;
 	state->bInteractionAllowed = true;
+}
+
+void ASpaceSuitActor::OnEventStarted()
+{
+	bCountingDown = GameEventManager->IsCounting();
+	TimeRemaining = GameEventManager->GetTime();
+
+	GameEventManager->SetTime(OxygenTime, true);
+}
+
+void ASpaceSuitActor::OnEventFinished()
+{
+	OxygenTime = GameEventManager->GetTime();
 }
