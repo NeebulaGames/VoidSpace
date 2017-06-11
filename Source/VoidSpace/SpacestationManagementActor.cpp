@@ -33,14 +33,15 @@ void ASpacestationManagementActor::Tick(float DeltaSeconds)
 
 	if (EventManager->IsCounting())
 	{
-		ScreensState = EScreenState::SCREEN_WARNING;
 		float time = EventManager->GetTime();
 		if (current->DeathReason == 2)
 		{
+			ScreensState = EScreenState::SCREEN_WARNING_OXYGEN;
 			ScreenMessage = FString::Printf(TEXT("{0}%"), (bReduceOxygen ? OxygenTime : time) * ReduceFactor);
 		}
 		else
 		{
+			ScreensState = EScreenState::SCREEN_WARNING_METEORITE;
 			ScreenMessage = FString::Printf(TEXT("{0}:{1}"), time / 60.f, FMath::Fmod(time, 60.f));
 		}
 	}
