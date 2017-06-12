@@ -2,6 +2,22 @@
 
 #pragma once
 
+UENUM(BlueprintType)
+enum class ELightState : uint8
+{
+	LIGHT_ON,
+	LIGHT_OFF,
+	LIGHT_EMERGENCY
+};
+
+UENUM(BlueprintType)
+enum class ELedState : uint8
+{
+	LED_ON,
+	LED_EMERGENCY
+};
+
+
 /**
  * 
  */

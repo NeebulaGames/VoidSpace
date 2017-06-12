@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include "SpaceStatics.h"
 #include "GameEventManager.generated.h"
 
 /**
@@ -15,20 +16,22 @@ class VOIDSPACE_API UGameEventManager : public UObject, public FTickableGameObje
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEventFinished);
 	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnEventStarted);
 
-	struct FEvent 
+public:
+
+	struct FEvent
 	{
 		bool bCountDown = false;
 		bool bKillAtEnd = false;
 		bool bSkipAfterDeath = false;
 		float Time = 0.f;
 		int DeathReason = 0;
+		ELightState LightsState = ELightState::LIGHT_ON;
+		ELedState LedsState = ELedState::LED_ON;
 		FEvent* NextEvent = nullptr;
 		FString NextEventName = "";
 		FString Name;
 		FString LevelName = "";
 	};
-
-public:
 
 	void Tick(float DeltaTime) override;
 	bool IsTickable() const override;
@@ -48,6 +51,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	float GetTime() const { return Time; }
+
+	UFUNCTION(BlueprintCallable, Category = StateManagement)
+	bool IsCounting() const { return bCountDown; }
 
 	FEvent* GetCurrentEvent() const { return CurrentEvent; }
 

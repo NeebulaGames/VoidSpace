@@ -5,11 +5,20 @@
 #include "SpaceCharacter.h"
 #include "GameEventManager.h"
 #include "SpaceGameInstance.h"
+#include "SpacestationManagementActor.h"
 
 ASpaceGameStateBase::ASpaceGameStateBase()
 {
 	GameEventManager = CreateDefaultSubobject<UGameEventManager>("GameEventManager");
 	DialogueManager = CreateDefaultSubobject<UDialogueManager>("DialogueManager");
+}
+
+void ASpaceGameStateBase::BeginPlay()
+{
+	TActorIterator<ASpacestationManagementActor> managerItr(GetWorld());
+	
+	if (managerItr)
+		SpacestationManager = *managerItr;
 }
 
 void ASpaceGameStateBase::StartEventSM()
