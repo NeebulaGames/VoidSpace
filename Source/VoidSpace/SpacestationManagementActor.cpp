@@ -47,10 +47,10 @@ void ASpacestationManagementActor::Tick(float DeltaSeconds)
 	}
 	else
 	{
-		if (current->DeathReason == 0)
-			ScreensState = EScreenState::SCREEN_OK;
-		else if (current->DeathReason == 1)
+		if (current->DeathReason == 1)
 			ScreensState = EScreenState::SCREEN_NOSIGNAL;
+		else
+			ScreensState = EScreenState::SCREEN_OK;
 		ScreenMessage.Reset(0);
 	}
 }
