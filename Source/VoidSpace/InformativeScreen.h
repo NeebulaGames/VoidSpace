@@ -31,10 +31,15 @@ public:
 
 private:
 
+	class ASpacestationManagementActor* StationManager;
+
 	void SetScreenMat(UMaterial* mat);
 
 	void SetTextToScren(FText string);
 
-	
+	UMaterial* MatNoSignal;
+	UMaterial* MatStatusOk;
+	UMaterial* MatWarningMeteo;
+	UMaterial* MatWarningOX;
 	
 };
