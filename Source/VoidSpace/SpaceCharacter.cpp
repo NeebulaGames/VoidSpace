@@ -8,6 +8,7 @@
 #include "SpaceGameStateBase.h"
 #include "EquipableComponent.h"
 #include "SpaceSuitActor.h"
+#include "SpacestationManagementActor.h"
 
 
 // Sets default values
@@ -87,15 +88,17 @@ void ASpaceCharacter::ReleaseObject()
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
+	ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 	if (!EquippedSuit)
 	{
-		ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 		if (state)
 			state->Die(0);
 	}
 	else
 	{
 		bGravityEnabled = !bGravityEnabled;
+
+		state->SpacestationManager->bReduceOxygen = !bGravityEnabled;
 
 		UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
