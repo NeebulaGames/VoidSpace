@@ -18,16 +18,8 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* ScreenMesh;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(VisibleAnywhere)
 	UTextRenderComponent* Text;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 
 private:
 
@@ -37,9 +29,17 @@ private:
 
 	void SetTextToScren(FText string);
 
-	UMaterial* MatNoSignal;
-	UMaterial* MatStatusOk;
-	UMaterial* MatWarningMeteo;
-	UMaterial* MatWarningOX;
+	UMaterial* MaterialNoSignal;
+	UMaterial* MaterialStatusOK;
+	UMaterial* MaterialWarningMeteorStorm;
+	UMaterial* MaterialWarningOxygen;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
+
+public:	
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
 	
 };

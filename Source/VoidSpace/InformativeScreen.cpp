@@ -25,31 +25,26 @@ AInformativeScreen::AInformativeScreen()
 	ConstructorHelpers::FObjectFinder<UFont> textFont(TEXT("Font'/Game/Fonts/DynaGrotesk_LXC_Bold_Font.DynaGrotesk_LXC_Bold_Font'"));
 	ConstructorHelpers::FObjectFinder<UMaterial> fontMat(TEXT("Material'/Game/Fonts/M_DynaGrotesk.M_DynaGrotesk'"));
 
-
 	ConstructorHelpers::FObjectFinder<UMaterial> noSignal(TEXT("Material'/Game/Materials/Props/InformativeScreen/M_NoSignal.M_NoSignal'"));
 	ConstructorHelpers::FObjectFinder<UMaterial> statusOK(TEXT("Material'/Game/Materials/Props/InformativeScreen/M_StatusOK.M_StatusOK'"));
 	ConstructorHelpers::FObjectFinder<UMaterial> warningMeteo(TEXT("Material'/Game/Materials/Props/InformativeScreen/M_WarningTime.M_WarningTime'"));
 	ConstructorHelpers::FObjectFinder<UMaterial> warningOx(TEXT("Material'/Game/Materials/Props/InformativeScreen/M_WarningOx.M_WarningOx'"));
 
-	MatNoSignal = noSignal.Object;
-	MatStatusOk = statusOK.Object;
-	MatWarningMeteo = warningMeteo.Object;
-	MatWarningOX = warningOx.Object;
+	MaterialNoSignal = noSignal.Object;
+	MaterialStatusOK = statusOK.Object;
+	MaterialWarningMeteorStorm = warningMeteo.Object;
+	MaterialWarningOxygen = warningOx.Object;
 
 	Text->SetRelativeLocation(FVector(17, 6, -26));
 	Text->SetRelativeRotation(FQuat::MakeFromEuler(FVector(0, 0, 90)));
 
 	Text->SetupAttachment(RootComponent);
 
-	FText informativeText = NSLOCTEXT("LOCNAMESPACE", "Sample", "MyText");
-
-	Text->SetText(informativeText);
+	Text->SetText(FText::AsCultureInvariant("TimeLeft"));
 	Text->SetMaterial(0, fontMat.Object);
 	Text->SetFont(textFont.Object);
 	Text->SetTextRenderColor(FColor::Red);
 	Text->SetHorizontalAlignment(EHTA_Center);
-
-
 }
 
 // Called when the game starts or when spawned
@@ -69,28 +64,28 @@ void AInformativeScreen::Tick(float DeltaTime)
 	switch (StationManager->ScreensState)
 	{
 		case EScreenState::SCREEN_NOSIGNAL:
-			SetScreenMat(MatNoSignal);
+			SetScreenMat(MaterialNoSignal);
 			SetTextToScren(FText::GetEmpty());
 			break;
 		case EScreenState::SCREEN_OK:
-			SetScreenMat(MatStatusOk);
+			SetScreenMat(MaterialStatusOK);
 			SetTextToScren(FText::GetEmpty());
 			break;
 		case EScreenState::SCREEN_WARNING_METEORITE:
-			SetScreenMat(MatWarningMeteo);
+			SetScreenMat(MaterialWarningMeteorStorm);
 			SetTextToScren(FText::AsCultureInvariant(StationManager->ScreenMessage));
 			break;
 		case EScreenState::SCREEN_WARNING_OXYGEN:
-			SetScreenMat(MatWarningOX);
+			SetScreenMat(MaterialWarningOxygen);
 			SetTextToScren(FText::AsCultureInvariant(StationManager->ScreenMessage));
 			break;
 	}
-
 }
 
 void AInformativeScreen::SetScreenMat(UMaterial* mat)
 {
-	ScreenMesh->SetMaterial(1, mat);
+	if (mat != nullptr && mat != ScreenMesh->GetMaterial(1))
+		ScreenMesh->SetMaterial(1, mat);
 }
 
 void AInformativeScreen::SetTextToScren(FText string)
