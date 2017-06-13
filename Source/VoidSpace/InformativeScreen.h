@@ -15,11 +15,18 @@ public:
 	// Sets default values for this actor's properties
 	AInformativeScreen();
 
+	// Called every frame
+	virtual void Tick(float DeltaTime) override;
+
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* ScreenMesh;
 
 	UPROPERTY(VisibleAnywhere)
 	UTextRenderComponent* Text;
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;
 
 private:
 
@@ -33,13 +40,5 @@ private:
 	UMaterial* MaterialStatusOK;
 	UMaterial* MaterialWarningMeteorStorm;
 	UMaterial* MaterialWarningOxygen;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
 	
 };
