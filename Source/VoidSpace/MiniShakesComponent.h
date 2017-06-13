@@ -7,7 +7,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class VOIDSPACE_API UMiniShakesComponent : public USceneComponent
+class VOIDSPACE_API UMiniShakesComponent : public UActorComponent
 {
 	GENERATED_BODY()
 
