@@ -114,6 +114,10 @@ void ASpaceCharacter::ToggleGravity()
 void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 {
 	EquippedSuit = spaceSuit;
+	
+	bool set = spaceSuit != nullptr;
+	FirstPersonCameraComponent->PostProcessSettings.BloomDirtMaskIntensity = set ? 8.f : 0.f;
+	FirstPersonCameraComponent->PostProcessSettings.bOverride_BloomDirtMaskIntensity = set;
 }
 
 bool ASpaceCharacter::WearsSpaceSuit() const
