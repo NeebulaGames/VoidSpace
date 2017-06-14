@@ -40,7 +40,7 @@ void ASpacestationManagementActor::Tick(float DeltaSeconds)
 		if (current->DeathReason == 2)
 		{
 			ScreensState = EScreenState::SCREEN_WARNING_OXYGEN;
-			ScreenMessage = FString::Printf(TEXT("%02d%%"), time * ReduceFactor));
+			ScreenMessage = FString::Printf(TEXT("%02d%%"), FMath::Floor(time * ReduceFactor));
 		}
 		else
 		{
