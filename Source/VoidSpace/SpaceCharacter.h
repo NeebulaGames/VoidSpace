@@ -27,6 +27,9 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Spacesuit)
 	bool WearsSpaceSuit() const;
+
+	UFUNCTION(BlueprintCallable, Category = Spacesuit)
+	ASpaceSuitActor* GetEquippedSuit() const;
 	
 	UFUNCTION(Exec, Category = ExecFunctions)
 	void KillPlayer(int mode) const;

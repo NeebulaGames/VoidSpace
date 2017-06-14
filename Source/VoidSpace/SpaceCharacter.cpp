@@ -9,6 +9,7 @@
 #include "EquipableComponent.h"
 #include "SpaceSuitActor.h"
 #include "SpacestationManagementActor.h"
+#include "GameEventManager.h"
 
 
 // Sets default values
@@ -98,7 +99,8 @@ void ASpaceCharacter::ToggleGravity()
 	{
 		bGravityEnabled = !bGravityEnabled;
 
-		state->SpacestationManager->bReduceOxygen = !bGravityEnabled;
+		state->SpacestationManager->bReduceLifeTime = !bGravityEnabled;
+		state->SpacestationManager->LifeTime = state->GameEventManager->GetTime();
 
 		UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
@@ -123,6 +125,11 @@ void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 bool ASpaceCharacter::WearsSpaceSuit() const
 {
 	return EquippedSuit != nullptr;
+}
+
+ASpaceSuitActor* ASpaceCharacter::GetEquippedSuit() const
+{
+	return EquippedSuit;
 }
 
 // Called to bind functionality to input

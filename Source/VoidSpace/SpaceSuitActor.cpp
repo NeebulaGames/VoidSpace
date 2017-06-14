@@ -44,15 +44,18 @@ void ASpaceSuitActor::Tick(float DeltaSeconds)
 
 void ASpaceSuitActor::StartConsumingOxygen()
 {
-	bCountingDown = GameEventManager->IsCounting();
-	TimeRemaining = GameEventManager->GetTime();
+	if (!bConsumingOxygen)
+	{
+		bCountingDown = GameEventManager->IsCounting();
+		TimeRemaining = GameEventManager->GetTime();
+
+		GameEventManager->OnEventStarted.AddDynamic(this, &ASpaceSuitActor::OnEventStarted);
+		GameEventManager->OnEventFinished.AddDynamic(this, &ASpaceSuitActor::OnEventFinished);
+
+		GameEventManager->SetTime(OxygenTime, true);
+	}
 
 	bConsumingOxygen = true;
-
-	GameEventManager->OnEventStarted.AddDynamic(this, &ASpaceSuitActor::OnEventStarted);
-	GameEventManager->OnEventFinished.AddDynamic(this, &ASpaceSuitActor::OnEventFinished);
-
-	GameEventManager->SetTime(OxygenTime, true);
 }
 
 void ASpaceSuitActor::StopConsumingOxygen()
@@ -71,6 +74,11 @@ float ASpaceSuitActor::GetRemainingOxygen() const
 	if (bActive && bConsumingOxygen)
 		return GameEventManager->GetTime();
 	return OxygenTime;
+}
+
+bool ASpaceSuitActor::IsConsumingOxygen() const
+{
+	return bConsumingOxygen;
 }
 
 // Called when the game starts or when spawned

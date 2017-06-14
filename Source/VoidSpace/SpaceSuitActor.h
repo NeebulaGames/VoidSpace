@@ -23,6 +23,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = SpacesuitOxygen)
 	float GetRemainingOxygen() const;
 
+	UFUNCTION(BlueprintCallable, Category = SpacesuitOxygen)
+	bool IsConsumingOxygen() const;
+
 	UPROPERTY(VisibleAnywhere, Category = Interactable)
 	class UInteractableComponent* InteractableComponent;
 
