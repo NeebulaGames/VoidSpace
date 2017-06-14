@@ -26,18 +26,21 @@ void ASpacestationManagementActor::BeginPlay()
 
 void ASpacestationManagementActor::Tick(float DeltaSeconds)
 {
-	if (bReduceOxygen)
-		OxygenTime -= DeltaSeconds;
+	if (bReduceLifeTime)
+	{
+		LifeTime -= DeltaSeconds;
+		LifeTime = FMath::Max(LifeTime, 0.f);
+	}
 
 	UGameEventManager::FEvent* current = EventManager->GetCurrentEvent();
 
 	if (EventManager->IsCounting())
 	{
-		float time = EventManager->GetTime();
+		float time = bReduceLifeTime ? LifeTime : EventManager->GetTime();
 		if (current->DeathReason == 2)
 		{
 			ScreensState = EScreenState::SCREEN_WARNING_OXYGEN;
-			ScreenMessage = FString::Printf(TEXT("%02d%%"), FMath::Floor((bReduceOxygen ? OxygenTime : time) * ReduceFactor));
+			ScreenMessage = FString::Printf(TEXT("%02d%%"), time * ReduceFactor));
 		}
 		else
 		{
