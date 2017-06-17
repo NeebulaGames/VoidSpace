@@ -109,4 +109,7 @@ private:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpaceSuit, meta = (AllowPrivateAccess = "true"))
 	bool bGravityEnabled = true;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystemComponent* jetpackSmoke;
 };

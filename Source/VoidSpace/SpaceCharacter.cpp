@@ -23,6 +23,12 @@ ASpaceCharacter::ASpaceCharacter()
 	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
+
+	jetpackSmoke = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke"));
+	jetpackSmoke->SetupAttachment(GetCapsuleComponent());
+	jetpackSmoke->Template = SmokeJetpack.Object;
+	jetpackSmoke->RelativeLocation = FVector(0.f, 0.f, 130.f);
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
