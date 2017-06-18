@@ -112,4 +112,8 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	class UParticleSystemComponent* jetpackSmoke;
+
+	bool bWearsSpaceSuit = false;
+
+	float forwardAxisVal;
 };

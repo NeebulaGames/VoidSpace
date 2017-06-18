@@ -173,6 +173,9 @@ void ASpaceCharacter::MoveForward(float Val)
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
 		AddMovementInput(Direction, Val);
 
+		float yaw = static_cast<float>(FMath::RadiansToDegrees(acos(-Val)));
+		jetpackSmoke->RelativeRotation = FRotator(0.f, yaw, 0.f);
+		forwardAxisVal = Val;
 	}
 }
 
@@ -185,6 +188,11 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Val);
+
+		float angleYAxisInRadians = static_cast<float>(fmod(0.5 * PI - atan2(-forwardAxisVal, -Val), 2.0 * PI));
+		float angleYAxis = FMath::RadiansToDegrees(angleYAxisInRadians);
+		jetpackSmoke->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
+		forwardAxisVal = 0.f;
 	}
 }
 
