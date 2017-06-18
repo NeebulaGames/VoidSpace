@@ -22,8 +22,10 @@ void ULightStateComponent::BeginPlay()
 
 	ParentLight = GetOwner()->FindComponentByClass<ULightComponent>();
 	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
+
+	LightIntensity = ParentLight->Intensity;
 	
-	ChangeLighting(StationManager->LightsState);
+	ChangeLighting(StationManager->LightsState);	
 }
 
 void ULightStateComponent::ChangeLighting(ELightState lightState)
@@ -31,19 +33,16 @@ void ULightStateComponent::ChangeLighting(ELightState lightState)
 	switch (lightState)
 	{
 	case ELightState::LIGHT_ON:
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("ON"));
 		ParentLight->SetLightColor(FLinearColor(FColor::White));
-		ParentLight->SetIntensity(5000.0f);
+		ParentLight->SetIntensity(LightIntensity);
 		break;
 	case ELightState::LIGHT_OFF:
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("OFF"));
 		ParentLight->SetLightColor(FLinearColor(FColor::White));
 		ParentLight->SetIntensity(0.f);
 		break;
 	case ELightState::LIGHT_EMERGENCY:
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Emergency"));
 		ParentLight->SetLightColor(FLinearColor(FColor::Red));
-		ParentLight->SetIntensity(5000.0f);
+		ParentLight->SetIntensity(LightIntensity);
 		break;
 	}
 

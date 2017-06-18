@@ -25,6 +25,7 @@ private:
 
 	void ChangeLighting(ELightState lightState);
 
+	float LightIntensity;
 	ELightState CurrentState;
 	ULightComponent* ParentLight;
 	class ASpacestationManagementActor* StationManager;
