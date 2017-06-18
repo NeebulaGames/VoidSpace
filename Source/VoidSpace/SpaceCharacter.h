@@ -91,6 +91,9 @@ private:
 	float RunSpeed = 1000;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float EVASpeed = 200;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float StaminaDuration = 100;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
