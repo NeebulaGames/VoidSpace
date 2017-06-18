@@ -74,6 +74,9 @@ protected:
 	UFUNCTION()
 	void OnEndFire();
 
+	UFUNCTION()
+	void OnEndGas();
+
 private:
 	void Use();
 
@@ -111,7 +114,10 @@ private:
 	bool bGravityEnabled = true;
 
 	UPROPERTY(EditAnywhere)
-	class UParticleSystemComponent* jetpackSmoke;
+	class UParticleSystemComponent* jetpackSmoke1;
+
+	UPROPERTY(EditAnywhere)
+	class UParticleSystemComponent* jetpackSmoke2;
 
 	bool bWearsSpaceSuit = false;
 
