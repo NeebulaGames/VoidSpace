@@ -140,6 +140,7 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 	InputComponent->BindAxis("Forward", this, &ASpaceCharacter::MoveForward);
 	InputComponent->BindAxis("Horizontal", this, &ASpaceCharacter::MoveHorizontal);
+	InputComponent->BindAxis("Vertical", this, &ASpaceCharacter::MoveVertical);
 	InputComponent->BindAxis("Turn", this, &ASpaceCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &ASpaceCharacter::AddControllerPitchInput);
 
@@ -178,6 +179,18 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
+		// add movement in that direction
+		AddMovementInput(Direction, Val);
+	}
+}
+
+void ASpaceCharacter::MoveVertical(float Val)
+{
+	if (GetCharacterMovement()->IsFlying() && ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
+	{
+		// find out which way is right
+		const FRotator Rotation = Controller->GetControlRotation();
+		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Z);
 		// add movement in that direction
 		AddMovementInput(Direction, Val);
 	}

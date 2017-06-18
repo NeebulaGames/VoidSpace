@@ -57,6 +57,9 @@ protected:
 	void MoveHorizontal(float Val);
 
 	UFUNCTION()
+	void MoveVertical(float Val);
+
+	UFUNCTION()
 	void OnStartJump();
 
 	UFUNCTION()
