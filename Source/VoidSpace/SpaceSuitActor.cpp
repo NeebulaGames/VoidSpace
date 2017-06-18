@@ -25,6 +25,20 @@ ASpaceSuitActor::ASpaceSuitActor(const FObjectInitializer& ObjectInitializer) : 
 	SpaceSuitComponent->SetupAttachment(RootComponent);
 	SpaceSuitComponent->SetStaticMesh(spaceSuit.Object);
 
+	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
+
+	jetpackSmoke1 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke1"));
+	jetpackSmoke1->SetupAttachment(RootComponent);
+	jetpackSmoke1->Template = SmokeJetpack.Object;
+	jetpackSmoke1->RelativeLocation = FVector(0.f, -50.f, 0.f);
+	jetpackSmoke1->Deactivate();
+
+	jetpackSmoke2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
+	jetpackSmoke2->SetupAttachment(RootComponent);
+	jetpackSmoke2->Template = SmokeJetpack.Object;
+	jetpackSmoke2->RelativeLocation = FVector(0.f, 50.f, 0.f);
+	jetpackSmoke2->Deactivate();
+
 	static ConstructorHelpers::FObjectFinder<USoundWave> zipperSound(TEXT("SoundWave'/Game/Sounds/zipper.zipper'"));
 	Zipper = zipperSound.Object;
 
@@ -33,6 +47,7 @@ ASpaceSuitActor::ASpaceSuitActor(const FObjectInitializer& ObjectInitializer) : 
 
 void ASpaceSuitActor::Tick(float DeltaSeconds)
 {
+	Super::Tick(DeltaSeconds);
 	if (bCountingDown)
 	{
 		TimeRemaining -= DeltaSeconds;
@@ -53,6 +68,8 @@ void ASpaceSuitActor::StartConsumingOxygen()
 		GameEventManager->OnEventFinished.AddDynamic(this, &ASpaceSuitActor::OnEventFinished);
 
 		GameEventManager->SetTime(OxygenTime, true);
+
+		SetupInput();
 	}
 
 	bConsumingOxygen = true;
@@ -65,6 +82,8 @@ void ASpaceSuitActor::StopConsumingOxygen()
 
 	GameEventManager->OnEventStarted.RemoveDynamic(this, &ASpaceSuitActor::OnEventStarted);
 	GameEventManager->OnEventFinished.RemoveDynamic(this, &ASpaceSuitActor::OnEventFinished);
+
+	DisableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
 
 	bConsumingOxygen = false;
 }
@@ -89,6 +108,55 @@ void ASpaceSuitActor::BeginPlay()
 	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASpaceSuitActor::OnSuitTrigger);
 
 	GameEventManager = ASpaceGameStateBase::Instance(GetWorld())->GameEventManager;
+}
+
+void ASpaceSuitActor::MoveForward(float Val)
+{
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed)
+	{
+		if(Val != 0.0f)
+		{
+			float yaw = static_cast<float>(FMath::RadiansToDegrees(acos(-Val)));
+			if (yaw > -90.f && yaw < 90.f)
+			{
+				jetpackSmoke1->Activate();
+				jetpackSmoke2->Activate();
+				jetpackSmoke1->RelativeRotation = jetpackSmoke2->RelativeRotation = FRotator(0.f, yaw, 0.f);
+			}
+			else
+			{
+				jetpackSmoke1->Deactivate();
+				jetpackSmoke2->Deactivate();
+			}
+			forwardAxisVal = Val;
+		}
+		else
+		{
+			jetpackSmoke1->Deactivate();
+			jetpackSmoke2->Deactivate();
+		}
+	}
+}
+
+void ASpaceSuitActor::MoveHorizontal(float Val)
+{
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Val != 0.0f)
+	{
+		float angleYAxisInRadians = static_cast<float>(fmod(0.5 * PI - atan2(-forwardAxisVal, -Val), 2.0 * PI));
+		float angleYAxis = FMath::RadiansToDegrees(angleYAxisInRadians);
+		if (angleYAxis > -90.f && angleYAxis < 90.f)
+		{
+			jetpackSmoke1->Activate();
+			jetpackSmoke2->Activate();
+			jetpackSmoke1->RelativeRotation = jetpackSmoke2->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
+		}
+		else
+		{
+			jetpackSmoke1->Deactivate();
+			jetpackSmoke2->Deactivate();
+		}
+		forwardAxisVal = 0.f;
+	}
 }
 
 void ASpaceSuitActor::OnSuitTrigger()
@@ -151,4 +219,13 @@ void ASpaceSuitActor::OnEventStarted()
 void ASpaceSuitActor::OnEventFinished()
 {
 	OxygenTime = GameEventManager->GetTime();
+}
+
+void ASpaceSuitActor::SetupInput()
+{
+	EnableInput(UGameplayStatics::GetPlayerController(GetWorld(), 0));
+	check(InputComponent);
+
+	InputComponent->BindAxis("Forward", this, &ASpaceSuitActor::MoveForward).bConsumeInput = false;
+	InputComponent->BindAxis("Horizontal", this, &ASpaceSuitActor::MoveHorizontal).bConsumeInput = false;
 }

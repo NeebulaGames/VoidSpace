@@ -36,6 +36,14 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+	//handles moving forward/backward
+	UFUNCTION()
+	void MoveForward(float Val);
+
+	//handles strafing
+	UFUNCTION()
+	void MoveHorizontal(float Val);
+
 private:
 	UPROPERTY(EditAnywhere, Category = SpaceSuit)
 	USoundWave* Zipper;
@@ -61,6 +69,9 @@ private:
 	UFUNCTION()
 	void OnEventFinished();
 
+	UFUNCTION()
+	void SetupInput();
+
 	bool bConsumingOxygen = false;
 
 	bool bActive = false;
@@ -72,4 +83,12 @@ private:
 	float TimeRemaining = 0.f;
 
 	float OxygenTime = 120.f;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* jetpackSmoke1;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* jetpackSmoke2;
+
+	float forwardAxisVal;
 };
