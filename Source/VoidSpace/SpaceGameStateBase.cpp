@@ -6,6 +6,7 @@
 #include "GameEventManager.h"
 #include "SpaceGameInstance.h"
 #include "SpacestationManagementActor.h"
+#include "SpaceSuitActor.h"
 
 ASpaceGameStateBase::ASpaceGameStateBase()
 {
@@ -50,7 +51,10 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 
 	if (character)
 	{
-		character->ToggleSpaceSuit(activate);
+		ASpaceSuitActor* spaceSuit = nullptr;
+		if (activate)
+			spaceSuit = *TActorIterator<ASpaceSuitActor>(GetWorld());
+		character->ToggleSpaceSuit(spaceSuit);
 	}
 }
 
@@ -60,13 +64,18 @@ void ASpaceGameStateBase::Die(int reason)
 
 	if (character)
 	{
-		character->KillPlayer(reason);
+		if (reason == 2 && character->WearsSpaceSuit() && !character->GetEquippedSuit()->IsConsumingOxygen())
+			character->GetEquippedSuit()->StartConsumingOxygen();
+		else
+		{
+			character->KillPlayer(reason);
+
+			static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
+
+			// TODO: Wait for player animation trigger if necessary
+			UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+		}
 	}
-
-	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
-
-	// TODO: Wait for player animation trigger if necessary
-	UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 }
 
 void ASpaceGameStateBase::EndGame()

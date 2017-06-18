@@ -42,9 +42,9 @@ public:
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpacestationState)
 	ELedState LedsState;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpacestationControl)
-	float OxygenTime = 0.f;
+	float LifeTime = 0.f;
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpacestationControl)
-	bool bReduceOxygen = false;
+	bool bReduceLifeTime = false;
 
 private:
 

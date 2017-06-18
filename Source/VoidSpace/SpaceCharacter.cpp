@@ -7,6 +7,9 @@
 #include "SpaceStatics.h"
 #include "SpaceGameStateBase.h"
 #include "EquipableComponent.h"
+#include "SpaceSuitActor.h"
+#include "SpacestationManagementActor.h"
+#include "GameEventManager.h"
 
 
 // Sets default values
@@ -86,9 +89,9 @@ void ASpaceCharacter::ReleaseObject()
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
-	if (!bWearsSpaceSuit)
+	ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+	if (!EquippedSuit)
 	{
-		ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 		if (state)
 			state->Die(0);
 	}
@@ -96,15 +99,37 @@ void ASpaceCharacter::ToggleGravity()
 	{
 		bGravityEnabled = !bGravityEnabled;
 
+		state->SpacestationManager->bReduceLifeTime = !bGravityEnabled;
+		state->SpacestationManager->LifeTime = state->GameEventManager->GetTime();
+
 		UCharacterMovementComponent* characterMovement = GetCharacterMovement();
 
 		characterMovement->MovementMode = characterMovement->DefaultLandMovementMode = bGravityEnabled ? MOVE_Walking : MOVE_Flying;
+
+		if (bGravityEnabled)
+			EquippedSuit->StopConsumingOxygen();
+		else
+			EquippedSuit->StartConsumingOxygen();
 	}
 }
 
-void ASpaceCharacter::ToggleSpaceSuit(bool activate)
+void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 {
-	bWearsSpaceSuit = activate;
+	EquippedSuit = spaceSuit;
+	
+	bool set = spaceSuit != nullptr;
+	FirstPersonCameraComponent->PostProcessSettings.BloomDirtMaskIntensity = set ? 8.f : 0.f;
+	FirstPersonCameraComponent->PostProcessSettings.bOverride_BloomDirtMaskIntensity = set;
+}
+
+bool ASpaceCharacter::WearsSpaceSuit() const
+{
+	return EquippedSuit != nullptr;
+}
+
+ASpaceSuitActor* ASpaceCharacter::GetEquippedSuit() const
+{
+	return EquippedSuit;
 }
 
 // Called to bind functionality to input
