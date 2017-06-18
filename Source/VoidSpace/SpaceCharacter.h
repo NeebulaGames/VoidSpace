@@ -74,9 +74,6 @@ protected:
 	UFUNCTION()
 	void OnEndFire();
 
-	UFUNCTION()
-	void OnEndGas();
-
 private:
 	void Use();
 

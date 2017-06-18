@@ -29,11 +29,13 @@ ASpaceCharacter::ASpaceCharacter()
 	jetpackSmoke1->SetupAttachment(GetCapsuleComponent());
 	jetpackSmoke1->Template = SmokeJetpack.Object;
 	jetpackSmoke1->RelativeLocation = FVector(0.f, -50.f, 0.f);
+	jetpackSmoke1->Deactivate();
 
 	jetpackSmoke2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
 	jetpackSmoke2->SetupAttachment(GetCapsuleComponent());
 	jetpackSmoke2->Template = SmokeJetpack.Object;
 	jetpackSmoke2->RelativeLocation = FVector(0.f, 50.f, 0.f);
+	jetpackSmoke2->Deactivate();
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -149,9 +151,7 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
 	InputComponent->BindAxis("Forward", this, &ASpaceCharacter::MoveForward);
-	InputComponent->BindAction("Forward", IE_Released, this, &ASpaceCharacter::OnEndGas);
 	InputComponent->BindAxis("Horizontal", this, &ASpaceCharacter::MoveHorizontal);
-	InputComponent->BindAction("Horizontal", IE_Released, this, &ASpaceCharacter::OnEndGas);
 	InputComponent->BindAxis("Turn", this, &ASpaceCharacter::AddControllerYawInput);
 	InputComponent->BindAxis("LookUp", this, &ASpaceCharacter::AddControllerPitchInput);
 
@@ -183,7 +183,7 @@ void ASpaceCharacter::MoveForward(float Val)
 			AddMovementInput(Direction, Val);
 
 			float yaw = static_cast<float>(FMath::RadiansToDegrees(acos(-Val)));
-			if (yaw > -90.f && yaw < 90.f)
+			if (yaw > -90.f && yaw < 90.f && bWearsSpaceSuit && !bGravityEnabled)
 			{
 				jetpackSmoke1->Activate();
 				jetpackSmoke2->Activate();
@@ -216,7 +216,7 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 
 		float angleYAxisInRadians = static_cast<float>(fmod(0.5 * PI - atan2(-forwardAxisVal, -Val), 2.0 * PI));
 		float angleYAxis = FMath::RadiansToDegrees(angleYAxisInRadians);
-		if (angleYAxis > -90.f && angleYAxis < 90.f)
+		if (angleYAxis > -90.f && angleYAxis < 90.f && bWearsSpaceSuit && !bGravityEnabled)
 		{
 			jetpackSmoke1->Activate();
 			jetpackSmoke2->Activate();
@@ -378,9 +378,4 @@ void ASpaceCharacter::OnEndFire()
 	{
 		EquippedObject->EndFire();
 	}
-}
-
-void ASpaceCharacter::OnEndGas()
-{
-	jetpackSmoke1->Deactivate();
 }
