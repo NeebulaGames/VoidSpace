@@ -23,6 +23,20 @@ ASpaceCharacter::ASpaceCharacter()
 	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
+
+	jetpackSmoke1 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke1"));
+	jetpackSmoke1->SetupAttachment(GetCapsuleComponent());
+	jetpackSmoke1->Template = SmokeJetpack.Object;
+	jetpackSmoke1->RelativeLocation = FVector(0.f, -50.f, 0.f);
+	jetpackSmoke1->Deactivate();
+
+	jetpackSmoke2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
+	jetpackSmoke2->SetupAttachment(GetCapsuleComponent());
+	jetpackSmoke2->Template = SmokeJetpack.Object;
+	jetpackSmoke2->RelativeLocation = FVector(0.f, 50.f, 0.f);
+	jetpackSmoke2->Deactivate();
+
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
@@ -152,19 +166,41 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
-	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Controller != nullptr && Val != 0.0f)
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Controller != nullptr)
 	{
-		// find out which way is forward
-		FRotator Rotation = Controller->GetControlRotation();
-		// Limit pitch when walking or falling
-		if (!GetCharacterMovement()->IsFlying() &&
-			GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+		if(Val != 0.0f)
 		{
-			Rotation.Pitch = 0.0f;
+			// find out which way is forward
+			FRotator Rotation = Controller->GetControlRotation();
+			// Limit pitch when walking or falling
+			if (!GetCharacterMovement()->IsFlying() &&
+				GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+			{
+				Rotation.Pitch = 0.0f;
+			}
+			// add movement in that direction
+			const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
+			AddMovementInput(Direction, Val);
+
+			float yaw = static_cast<float>(FMath::RadiansToDegrees(acos(-Val)));
+			if (yaw > -90.f && yaw < 90.f && WearsSpaceSuit() && !bGravityEnabled)
+			{
+				jetpackSmoke1->Activate();
+				jetpackSmoke2->Activate();
+				jetpackSmoke1->RelativeRotation  = jetpackSmoke2->RelativeRotation = FRotator(0.f, yaw, 0.f);
+			}
+			else
+			{
+				jetpackSmoke1->Deactivate();
+				jetpackSmoke2->Deactivate();
+			}
+			forwardAxisVal = Val;
 		}
-		// add movement in that direction
-		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
-		AddMovementInput(Direction, Val);
+		else
+		{
+			jetpackSmoke1->Deactivate();
+			jetpackSmoke2->Deactivate();
+		}
 	}
 }
 
@@ -177,6 +213,21 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Val);
+
+		float angleYAxisInRadians = static_cast<float>(fmod(0.5 * PI - atan2(-forwardAxisVal, -Val), 2.0 * PI));
+		float angleYAxis = FMath::RadiansToDegrees(angleYAxisInRadians);
+		if (angleYAxis > -90.f && angleYAxis < 90.f && WearsSpaceSuit() && !bGravityEnabled)
+		{
+			jetpackSmoke1->Activate();
+			jetpackSmoke2->Activate();
+			jetpackSmoke1->RelativeRotation = jetpackSmoke2->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
+		}
+		else
+		{
+			jetpackSmoke1->Deactivate();
+			jetpackSmoke2->Deactivate();
+		}
+		forwardAxisVal = 0.f;
 	}
 }
 
