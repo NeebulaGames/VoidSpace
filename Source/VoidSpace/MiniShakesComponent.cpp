@@ -24,7 +24,6 @@ void UMiniShakesComponent::BeginPlay()
 
 	UGameEventManager* manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
 	manager->OnEventStarted.AddDynamic(this, &UMiniShakesComponent::StartMiniShakes);
-	manager->OnEventFinished.AddDynamic(this, &UMiniShakesComponent::StopMiniShakes);
 }
 
 void UMiniShakesComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
@@ -40,7 +39,7 @@ void UMiniShakesComponent::OnOverlap(AActor* actor1, AActor* actor2)
 	{
 		bIsPlayingMiniShakes = true;
 		TriggerMiniShakeWithDelay(0.1f);
-		GetOwner()->FindComponentByClass<UBoxComponent>()->bGenerateOverlapEvents = false;
+		GetOwner()->FindComponentByClass<UBoxComponent>()->DestroyComponent();
 	}
 }
 
@@ -58,18 +57,15 @@ void UMiniShakesComponent::TriggerMiniShakeWithDelay(float seconds)
 	GetWorld()->GetTimerManager().SetTimer(MiniShakeTimerHandle, this, &UMiniShakesComponent::TriggerMiniShake, seconds);
 }
 
-void UMiniShakesComponent::StopMiniShakes()
-{
-	if(ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name.Contains("The Meteor") && bIsPlayingMiniShakes)
-		bIsPlayingMiniShakes = false;
-}
-
 void UMiniShakesComponent::StartMiniShakes()
 {
 	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name.Contains("The Meteor") && !bIsPlayingMiniShakes)
 	{
 		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));
 		bIsPlayingMiniShakes = true;
+	}else
+	{
+		bIsPlayingMiniShakes = false;
 	}
 }
 

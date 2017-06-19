@@ -33,9 +33,6 @@ private:
 
 	UFUNCTION()
 	void TriggerMiniShakeWithDelay(float seconds);
-
-	UFUNCTION()
-	void StopMiniShakes();
 	
 	UFUNCTION()
 	void StartMiniShakes();
@@ -47,7 +44,7 @@ private:
 	bool bIsPlayingMiniShakes;
 
 	const float MIN_SHAKE_DELAY = 1.f;
-	const float MAX_SHAKE_DELAY = 2.f;
+	const float MAX_SHAKE_DELAY = 4.f;
 	const float MIN_SHAKE_SCALE = 0.f;
 	const float MAX_SHAKE_SCALE = 1.f;
 };
