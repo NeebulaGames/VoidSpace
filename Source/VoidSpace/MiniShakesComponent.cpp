@@ -9,7 +9,7 @@
 // Sets default values for this component's properties
 UMiniShakesComponent::UMiniShakesComponent() : bIsPlayingMiniShakes(false)
 {
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 }
 
 // Called when the game starts
@@ -27,14 +27,6 @@ void UMiniShakesComponent::BeginPlay()
 	manager->OnEventFinished.AddDynamic(this, &UMiniShakesComponent::StopMiniShakes);
 }
 
-void UMiniShakesComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
-{
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (bIsPlayingMiniShakes && GetWorld()->GetTimerManager().GetTimerRemaining(MiniShakeTimerHandle) <= 0.f)
-		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));
-}
-
 void UMiniShakesComponent::EndPlay(const EEndPlayReason::Type EndPlayReason)
 {
 	Super::EndPlay(EndPlayReason);
@@ -47,7 +39,7 @@ void UMiniShakesComponent::OnOverlap(AActor* actor1, AActor* actor2)
 	if (actor2 == UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))
 	{
 		bIsPlayingMiniShakes = true;
-		TriggerMiniShakeWithDelay(0.f);
+		TriggerMiniShakeWithDelay(0.1f);
 		GetOwner()->FindComponentByClass<UBoxComponent>()->bGenerateOverlapEvents = false;
 	}
 }
@@ -56,6 +48,9 @@ void UMiniShakesComponent::TriggerMiniShake()
 {
 	if(CameraMiniShakes)
 		playerController->ClientPlayCameraShake(CameraMiniShakes, FMath::RandRange(MIN_SHAKE_SCALE, MAX_SHAKE_SCALE));
+	
+	if(bIsPlayingMiniShakes)
+		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));
 }
 
 void UMiniShakesComponent::TriggerMiniShakeWithDelay(float seconds)
@@ -72,6 +67,9 @@ void UMiniShakesComponent::StopMiniShakes()
 void UMiniShakesComponent::StartMiniShakes()
 {
 	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name.Contains("The Meteor") && !bIsPlayingMiniShakes)
+	{
+		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));
 		bIsPlayingMiniShakes = true;
+	}
 }
 
