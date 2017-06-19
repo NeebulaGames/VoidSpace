@@ -25,17 +25,17 @@ ASpaceCharacter::ASpaceCharacter()
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
 
-	jetpackSmoke1 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke1"));
-	jetpackSmoke1->SetupAttachment(GetCapsuleComponent());
-	jetpackSmoke1->Template = SmokeJetpack.Object;
-	jetpackSmoke1->RelativeLocation = FVector(0.f, -50.f, 0.f);
-	jetpackSmoke1->Deactivate();
+	JetpackSmokeComponent1 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke1"));
+	JetpackSmokeComponent1->SetupAttachment(GetCapsuleComponent());
+	JetpackSmokeComponent1->Template = SmokeJetpack.Object;
+	JetpackSmokeComponent1->RelativeLocation = FVector(0.f, -50.f, 0.f);
+	JetpackSmokeComponent1->Deactivate();
 
-	jetpackSmoke2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
-	jetpackSmoke2->SetupAttachment(GetCapsuleComponent());
-	jetpackSmoke2->Template = SmokeJetpack.Object;
-	jetpackSmoke2->RelativeLocation = FVector(0.f, 50.f, 0.f);
-	jetpackSmoke2->Deactivate();
+	JetpackSmokeComponent2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
+	JetpackSmokeComponent2->SetupAttachment(GetCapsuleComponent());
+	JetpackSmokeComponent2->Template = SmokeJetpack.Object;
+	JetpackSmokeComponent2->RelativeLocation = FVector(0.f, 50.f, 0.f);
+	JetpackSmokeComponent2->Deactivate();
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -185,21 +185,21 @@ void ASpaceCharacter::MoveForward(float Val)
 			float yaw = static_cast<float>(FMath::RadiansToDegrees(acos(-Val)));
 			if (yaw > -90.f && yaw < 90.f && WearsSpaceSuit() && !bGravityEnabled)
 			{
-				jetpackSmoke1->Activate();
-				jetpackSmoke2->Activate();
-				jetpackSmoke1->RelativeRotation  = jetpackSmoke2->RelativeRotation = FRotator(0.f, yaw, 0.f);
+				JetpackSmokeComponent1->Activate();
+				JetpackSmokeComponent2->Activate();
+				JetpackSmokeComponent1->RelativeRotation  = JetpackSmokeComponent2->RelativeRotation = FRotator(0.f, yaw, 0.f);
 			}
 			else
 			{
-				jetpackSmoke1->Deactivate();
-				jetpackSmoke2->Deactivate();
+				JetpackSmokeComponent1->Deactivate();
+				JetpackSmokeComponent2->Deactivate();
 			}
 			forwardAxisVal = Val;
 		}
 		else
 		{
-			jetpackSmoke1->Deactivate();
-			jetpackSmoke2->Deactivate();
+			JetpackSmokeComponent1->Deactivate();
+			JetpackSmokeComponent2->Deactivate();
 		}
 	}
 }
@@ -218,14 +218,14 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		float angleYAxis = FMath::RadiansToDegrees(angleYAxisInRadians);
 		if (angleYAxis > -90.f && angleYAxis < 90.f && WearsSpaceSuit() && !bGravityEnabled)
 		{
-			jetpackSmoke1->Activate();
-			jetpackSmoke2->Activate();
-			jetpackSmoke1->RelativeRotation = jetpackSmoke2->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
+			JetpackSmokeComponent1->Activate();
+			JetpackSmokeComponent2->Activate();
+			JetpackSmokeComponent1->RelativeRotation = JetpackSmokeComponent2->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
 		}
 		else
 		{
-			jetpackSmoke1->Deactivate();
-			jetpackSmoke2->Deactivate();
+			JetpackSmokeComponent1->Deactivate();
+			JetpackSmokeComponent2->Deactivate();
 		}
 		forwardAxisVal = 0.f;
 	}
