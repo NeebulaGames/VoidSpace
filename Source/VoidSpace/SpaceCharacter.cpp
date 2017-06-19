@@ -188,7 +188,7 @@ void ASpaceCharacter::MoveVertical(float Val)
 {
 	if (GetCharacterMovement()->IsFlying() && ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
 	{
-		// find out which way is right
+		// find out which way is up
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Z);
 		// add movement in that direction
