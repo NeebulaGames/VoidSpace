@@ -19,7 +19,8 @@ public:
 
 	ASpaceGameStateBase();
 
-	void BeginPlay() override;
+
+	void PostInitializeComponents() override;
 
 	UFUNCTION(BlueprintCallable, Category = GameEventManager)
 	void StartEventSM();
