@@ -14,9 +14,7 @@ class VOIDSPACE_API ADoorPanel : public AActor
 	
 public:	
 	ADoorPanel();
-
-	virtual void Tick(float DeltaTime) override;
-
+	
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* PanelMesh;
 	

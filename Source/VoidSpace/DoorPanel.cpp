@@ -18,13 +18,6 @@ ADoorPanel::ADoorPanel()
 	PanelMesh->SetStaticMesh(panelMesh.Object);
 }
 
-// Called every frame
-void ADoorPanel::Tick(float DeltaTime)
-{
-	Super::Tick(DeltaTime);
-
-}
-
 void ADoorPanel::BeginPlay()
 {
 	Super::BeginPlay();
