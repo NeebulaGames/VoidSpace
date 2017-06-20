@@ -19,7 +19,6 @@ public:
 
 	ASpaceGameStateBase();
 
-
 	void PostInitializeComponents() override;
 
 	UFUNCTION(BlueprintCallable, Category = GameEventManager)

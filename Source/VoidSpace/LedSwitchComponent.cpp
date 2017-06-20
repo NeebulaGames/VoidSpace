@@ -49,5 +49,7 @@ void ULedSwitchComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 		MaterialInstance->SetScalarParameterValue("Color", color);
 		MaterialInstance->SetScalarParameterValue("Blink", blink);
+
+		CurrentState = StationManager->LedsState;
 	}
 }
