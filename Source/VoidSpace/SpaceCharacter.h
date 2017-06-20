@@ -111,10 +111,10 @@ private:
 	bool bGravityEnabled = true;
 
 	UPROPERTY(VisibleAnywhere)
-	class UParticleSystemComponent* JetpackSmokeComponent1 = nullptr;
+	class UParticleSystemComponent* LeftJetpackSmokeComponent = nullptr;
 
 	UPROPERTY(VisibleAnywhere)
-	class UParticleSystemComponent* JetpackSmokeComponent2 = nullptr;
+	class UParticleSystemComponent* RightJetpackSmokeComponent = nullptr;
 
-	float forwardAxisVal;
+	float ForwardAxisVal;
 };
