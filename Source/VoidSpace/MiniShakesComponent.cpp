@@ -63,7 +63,8 @@ void UMiniShakesComponent::StartMiniShakes()
 	{
 		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));
 		bIsPlayingMiniShakes = true;
-	}else
+	}
+	else
 	{
 		bIsPlayingMiniShakes = false;
 	}
