@@ -57,6 +57,9 @@ protected:
 	void MoveHorizontal(float Val);
 
 	UFUNCTION()
+	void MoveVertical(float Val);
+
+	UFUNCTION()
 	void OnStartJump();
 
 	UFUNCTION()
@@ -89,6 +92,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float RunSpeed = 1000;
+
+	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
+	float EVASpeed = 200;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float StaminaDuration = 100;
