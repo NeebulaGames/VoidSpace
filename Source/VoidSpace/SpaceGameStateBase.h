@@ -57,6 +57,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = DialogueManager)
 	class UDialogueManager* DialogueManager;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SpacestationManagement)
 	class ASpacestationManagementActor* SpacestationManager;
 
 };
