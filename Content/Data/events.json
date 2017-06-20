@@ -31,7 +31,7 @@
       "SkipAfterDeath": false,
       "Time": 120.0,
       "DeathReason": 2,
-      "LighstsState": 1,
+      "LighstsState": 0,
       "NextEvent": "End"
     },
     {
