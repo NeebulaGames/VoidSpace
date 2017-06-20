@@ -23,6 +23,19 @@ ASpaceCharacter::ASpaceCharacter()
 	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
+	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
+
+	LeftJetpackSmokeComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke1"));
+	LeftJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
+	LeftJetpackSmokeComponent->Template = SmokeJetpack.Object;
+	LeftJetpackSmokeComponent->RelativeLocation = FVector(0.f, -50.f, 0.f);
+	LeftJetpackSmokeComponent->Deactivate();
+
+	RightJetpackSmokeComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
+	RightJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
+	RightJetpackSmokeComponent->Template = SmokeJetpack.Object;
+	RightJetpackSmokeComponent->RelativeLocation = FVector(0.f, 50.f, 0.f);
+	RightJetpackSmokeComponent->Deactivate();
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -155,32 +168,68 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
-	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Controller != nullptr)
 	{
-		// find out which way is forward
-		FRotator Rotation = Controller->GetControlRotation();
-		// Limit pitch when walking or falling
-		if (!GetCharacterMovement()->IsFlying() &&
-			GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+		if(Val != 0.0f)
 		{
-			Rotation.Pitch = 0.0f;
-		}
-		// add movement in that direction
-		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
-		AddMovementInput(Direction, Val);
+			// find out which way is forward
+			FRotator Rotation = Controller->GetControlRotation();
+			// Limit pitch when walking or falling
+			if (!GetCharacterMovement()->IsFlying() &&
+				GetCharacterMovement()->IsMovingOnGround() || GetCharacterMovement()->IsFalling())
+			{
+				Rotation.Pitch = 0.0f;
+			}
+			// add movement in that direction
+			const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::X);
+			AddMovementInput(Direction, Val);
 
+			float yaw = static_cast<float>(FMath::RadiansToDegrees(acos(-Val)));
+			if (yaw > -90.f && yaw < 90.f && WearsSpaceSuit() && !bGravityEnabled)
+			{
+				LeftJetpackSmokeComponent->Activate();
+				RightJetpackSmokeComponent->Activate();
+				LeftJetpackSmokeComponent->RelativeRotation  = RightJetpackSmokeComponent->RelativeRotation = FRotator(0.f, yaw, 0.f);
+			}
+			else
+			{
+				LeftJetpackSmokeComponent->Deactivate();
+				RightJetpackSmokeComponent->Deactivate();
+			}
+			ForwardAxisVal = Val;
+		}
+		else
+		{
+			LeftJetpackSmokeComponent->Deactivate();
+			RightJetpackSmokeComponent->Deactivate();
+		}
 	}
 }
 
 void ASpaceCharacter::MoveHorizontal(float Val)
 {
-	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
+	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Controller != nullptr && Val != 0.0f)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
 		// add movement in that direction
 		AddMovementInput(Direction, Val);
+
+		float angleYAxisInRadians = static_cast<float>(fmod(0.5 * PI - atan2(-ForwardAxisVal, -Val), 2.0 * PI));
+		float angleYAxis = FMath::RadiansToDegrees(angleYAxisInRadians);
+		if (angleYAxis > -90.f && angleYAxis < 90.f && WearsSpaceSuit() && !bGravityEnabled)
+		{
+			LeftJetpackSmokeComponent->Activate();
+			RightJetpackSmokeComponent->Activate();
+			LeftJetpackSmokeComponent->RelativeRotation = RightJetpackSmokeComponent->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
+		}
+		else
+		{
+			LeftJetpackSmokeComponent->Deactivate();
+			RightJetpackSmokeComponent->Deactivate();
+		}
+		ForwardAxisVal = 0.f;
 	}
 }
 

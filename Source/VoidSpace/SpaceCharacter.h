@@ -115,4 +115,12 @@ private:
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = SpaceSuit, meta = (AllowPrivateAccess = "true"))
 	bool bGravityEnabled = true;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* LeftJetpackSmokeComponent = nullptr;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* RightJetpackSmokeComponent = nullptr;
+
+	float ForwardAxisVal;
 };
