@@ -6,15 +6,6 @@
 #include "GameFramework/Actor.h"
 #include "DoorPanel.generated.h"
 
-UENUM(BlueprintType)
-enum class PanelModule : uint8
-{
-	PANEL_BEDROOM,
-	PANEL_EXITVAULT,
-	PANEL_MAINTENANCE,
-	PANEL_OBSERVATORY,
-	PANEL_CONTROLROOM
-};
 
 UCLASS()
 class VOIDSPACE_API ADoorPanel : public AActor
@@ -28,18 +19,16 @@ public:
 
 	UPROPERTY(VisibleAnywhere)
 	class UStaticMeshComponent* PanelMesh;
-
+	
 	UPROPERTY(EditAnywhere)
-	PanelModule PanelModuleText;
+	UTexture2D* ScreenText;
 
 protected:
-	virtual void BeginPlay() override;
+
+	void BeginPlay() override;
+	void OnConstruction(const FTransform& Transform) override;
 
 private:
-	UMaterial* MaterialBedroom;
-	UMaterial* MaterialExitVault;
-	UMaterial* MaterialMaintenance;
-	UMaterial* MaterialObservatory;
-	UMaterial* MaterialControlRoom;
+	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
 	
 };
