@@ -30,7 +30,7 @@ void ULedSwitchComponent::BeginPlay()
 	}
 
 	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
-	CurrentState = StationManager->LedsState;
+	SetLedState(StationManager->LedsState);
 }
 
 
@@ -41,15 +41,20 @@ void ULedSwitchComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 	if (CurrentState != StationManager->LedsState && MaterialInstance)
 	{
-		float blink, color;
-		blink = color = 0.f;
-
-		if (StationManager->LedsState == ELedState::LED_EMERGENCY)
-			blink = color = 1.f;
-
-		MaterialInstance->SetScalarParameterValue("Color", color);
-		MaterialInstance->SetScalarParameterValue("Blink", blink);
-
-		CurrentState = StationManager->LedsState;
+		SetLedState(StationManager->LedsState);
 	}
+}
+
+void ULedSwitchComponent::SetLedState(ELedState state)
+{
+	float blink, color;
+	blink = color = 0.f;
+
+	if (state == ELedState::LED_EMERGENCY)
+		blink = color = 1.f;
+
+	MaterialInstance->SetScalarParameterValue("Color", color);
+	MaterialInstance->SetScalarParameterValue("Blink", blink);
+
+	CurrentState = state;
 }

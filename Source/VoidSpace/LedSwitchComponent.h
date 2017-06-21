@@ -26,6 +26,9 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
+
+	void SetLedState(ELedState state);
+
 	ELedState CurrentState;
 	class ASpacestationManagementActor* StationManager;
 	UMaterialInstanceDynamic* MaterialInstance;
