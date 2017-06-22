@@ -48,6 +48,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	bool IsInputEnabled() const;
 
+	UFUNCTION(BlueprintCallable, Category = Cinematics)
+	static bool SkipCinematics();
+
 	UFUNCTION(BlueprintCallable, Category = GameState)
 	static ASpaceGameStateBase* Instance(UObject* world);
 
