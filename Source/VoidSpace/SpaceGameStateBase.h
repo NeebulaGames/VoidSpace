@@ -54,6 +54,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = GameState)
 	static ASpaceGameStateBase* Instance(UObject* world);
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameEventManager)
+	bool bEnableHUD = true;
+
 	UPROPERTY(VisibleAnywhere)
 	bool bInteractionAllowed = true;
 
