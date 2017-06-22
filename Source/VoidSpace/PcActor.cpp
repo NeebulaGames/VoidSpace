@@ -21,13 +21,13 @@ APcActor::APcActor()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
 	BoxComponent->SetupAttachment(RootComponent);
-	BoxComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
+	BoxComponent->SetRelativeLocation(FVector(84.f, -5.f, 0.f));
 	BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 14.f));
 	BoxComponent->bGenerateOverlapEvents = false;
 
-	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
+	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC2/PcBlueprint.PcBlueprint_C'"));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC/PC.PC'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC2/PC.PC'"));
 	PcMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PC"));
 	PcMeshComponent->SetupAttachment(RootComponent);
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
