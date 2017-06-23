@@ -90,6 +90,26 @@ void ASpaceGameStateBase::FinishEvent()
 	GameEventManager->FinishCurrentEvent();
 }
 
+void ASpaceGameStateBase::EnablePlayerInput() const
+{
+	ACharacter* character = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	character->EnableInput(controller);
+}
+
+void ASpaceGameStateBase::DisablePlayerInput() const
+{
+	ACharacter* character = UGameplayStatics::GetPlayerCharacter(GetWorld(), 0);
+	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	character->DisableInput(controller);
+}
+
+bool ASpaceGameStateBase::IsInputEnabled() const
+{
+	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+	return controller->InputEnabled();
+}
+
 ASpaceGameStateBase* ASpaceGameStateBase::Instance(UObject* world)
 {
 	return Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(world));

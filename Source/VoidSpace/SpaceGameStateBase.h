@@ -39,12 +39,18 @@ public:
 	UFUNCTION(Exec, BlueprintCallable)
 	void FinishEvent();
 
+	UFUNCTION(BlueprintCallable, Category = Interaction)
+	void EnablePlayerInput() const;
+
+	UFUNCTION(BlueprintCallable, Category = Interaction)
+	void DisablePlayerInput() const;
+
+	UFUNCTION(BlueprintCallable, Category = Input)
+	bool IsInputEnabled() const;
+
 	UFUNCTION(BlueprintCallable, Category = GameState)
 	static ASpaceGameStateBase* Instance(UObject* world);
 
-	UPROPERTY(VisibleAnywhere)
-	bool bMovementAllowed = true;
-	
 	UPROPERTY(VisibleAnywhere)
 	bool bInteractionAllowed = true;
 
@@ -59,5 +65,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SpacestationManagement)
 	class ASpacestationManagementActor* SpacestationManager;
-
 };
