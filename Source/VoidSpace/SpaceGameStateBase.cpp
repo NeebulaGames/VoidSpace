@@ -14,8 +14,9 @@ ASpaceGameStateBase::ASpaceGameStateBase()
 	DialogueManager = CreateDefaultSubobject<UDialogueManager>("DialogueManager");
 }
 
-void ASpaceGameStateBase::BeginPlay()
+void ASpaceGameStateBase::PostInitializeComponents()
 {
+	Super::PostInitializeComponents();
 	TActorIterator<ASpacestationManagementActor> managerItr(GetWorld());
 	
 	if (managerItr)
