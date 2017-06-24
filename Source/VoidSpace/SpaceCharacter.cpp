@@ -168,7 +168,7 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
-	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Controller != nullptr)
+	if (Controller != nullptr)
 	{
 		if(Val != 0.0f)
 		{
@@ -208,7 +208,7 @@ void ASpaceCharacter::MoveForward(float Val)
 
 void ASpaceCharacter::MoveHorizontal(float Val)
 {
-	if (ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && Controller != nullptr && Val != 0.0f)
+	if (Controller != nullptr && Val != 0.0f)
 	{
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -235,7 +235,7 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 
 void ASpaceCharacter::MoveVertical(float Val)
 {
-	if (GetCharacterMovement()->IsFlying() && ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed && (Controller != nullptr) && (Val != 0.0f))
+	if (GetCharacterMovement()->IsFlying() && (Controller != nullptr) && (Val != 0.0f))
 	{
 		// find out which way is up
 		const FRotator Rotation = Controller->GetControlRotation();
@@ -247,7 +247,7 @@ void ASpaceCharacter::MoveVertical(float Val)
 
 void ASpaceCharacter::OnStartJump()
 {
-	bPressedJump = ASpaceGameStateBase::Instance(GetWorld())->bMovementAllowed;
+	bPressedJump = ASpaceGameStateBase::Instance(GetWorld())->IsInputEnabled();
 }
 
 void ASpaceCharacter::OnStopJump()

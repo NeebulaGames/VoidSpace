@@ -47,7 +47,7 @@ void AElevatorActor::Tick(float DeltaTime)
 		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraFade(0.f, 1.f, delay, FLinearColor::Black, false, true);
 
 		ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
-		state->bMovementAllowed = false;
+		state->DisablePlayerInput();
 		state->bInteractionAllowed = false;
 
 		static FTimerHandle unusedHandle;
@@ -79,7 +79,7 @@ void AElevatorActor::OnFadeOutFinish()
 	UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraFade(1.f, 0.f, delay, FLinearColor::Black, false, true);
 
 	ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
-	state->bMovementAllowed = true;
+	state->EnablePlayerInput();
 	state->bInteractionAllowed = true;
 
 	AnimInstance->bIsOpening = true;
