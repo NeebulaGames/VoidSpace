@@ -25,9 +25,9 @@ APcActor::APcActor()
 	BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 14.f));
 	BoxComponent->bGenerateOverlapEvents = false;
 
-	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC2/PcBlueprint.PcBlueprint_C'"));
+	static ConstructorHelpers::FObjectFinder<UClass> pcBlueprint(TEXT("Class'/Game/Animations/PC/PcBlueprint.PcBlueprint_C'"));
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC2/PC.PC'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> pc(TEXT("SkeletalMesh'/Game/Meshes/PC/PC.PC'"));
 	PcMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("PC"));
 	PcMeshComponent->SetupAttachment(RootComponent);
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
