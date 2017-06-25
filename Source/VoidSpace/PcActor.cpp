@@ -41,7 +41,7 @@ void APcActor::BeginPlay()
 	Super::BeginPlay();
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &APcActor::OnActivePc);
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
-	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
+	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(6);
 	ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 }
 
