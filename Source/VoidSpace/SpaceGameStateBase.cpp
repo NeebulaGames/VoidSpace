@@ -8,6 +8,12 @@
 #include "SpacestationManagementActor.h"
 #include "SpaceSuitActor.h"
 
+static TAutoConsoleVariable<int32> CVarSkipCinematics(
+	TEXT("d.SkipCinematics"),
+	0,
+	TEXT("Specifies if cinematics should be skipped\n"),
+	ECVF_Cheat);
+
 ASpaceGameStateBase::ASpaceGameStateBase()
 {
 	GameEventManager = CreateDefaultSubobject<UGameEventManager>("GameEventManager");
@@ -109,6 +115,11 @@ bool ASpaceGameStateBase::IsInputEnabled() const
 {
 	APlayerController* controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	return controller->InputEnabled();
+}
+
+bool ASpaceGameStateBase::SkipCinematics()
+{
+	return CVarSkipCinematics.GetValueOnGameThread() != 0;
 }
 
 ASpaceGameStateBase* ASpaceGameStateBase::Instance(UObject* world)

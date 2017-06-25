@@ -48,8 +48,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Input)
 	bool IsInputEnabled() const;
 
+	UFUNCTION(BlueprintCallable, Category = Cinematics)
+	static bool SkipCinematics();
+
 	UFUNCTION(BlueprintCallable, Category = GameState)
 	static ASpaceGameStateBase* Instance(UObject* world);
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = GameEventManager)
+	bool bEnableHUD = true;
 
 	UPROPERTY(VisibleAnywhere)
 	bool bInteractionAllowed = true;
