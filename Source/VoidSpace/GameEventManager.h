@@ -55,6 +55,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	bool IsCounting() const { return bCountDown; }
 
+	UFUNCTION(BlueprintCallable, Category = StateManagement)
+	FString& GetCurrentEventName() const { return CurrentEvent->Name; }
+
 	FEvent* GetCurrentEvent() const { return CurrentEvent; }
 
 	UPROPERTY(BlueprintAssignable, Category = EventLifecycle)
