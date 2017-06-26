@@ -23,13 +23,11 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	UMeshComponent* ParentMesh = nullptr;
 
 public:
 
 	virtual void OnBeginLooking();
 	virtual void OnStopLooking();
-
-private:
-
-	UMeshComponent* ParentMesh = nullptr;
+	
 };

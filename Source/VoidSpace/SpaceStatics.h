@@ -31,7 +31,7 @@ public:
 		const FVector& Start,
 		const FVector& End,
 		FHitResult& HitOut,
-		ECollisionChannel CollisionChannel = ECC_Pawn,
+		ECollisionChannel CollisionChannel = ECC_Visibility,
 		bool ReturnPhysMat = true
 	)
 	{
