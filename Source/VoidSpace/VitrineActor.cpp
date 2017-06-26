@@ -53,7 +53,10 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		}
 		
 		if(SpaceSuitActor)
-			SpaceSuitActor->InteractableComponent->SetActive(true);	//Doesn't work
+		{
+			SpaceSuitActor->InteractableComponent->SetActive(true);
+			SpaceSuitActor->InteractableComponent->bHighlight = true;
+		}
 	}
 }
 
