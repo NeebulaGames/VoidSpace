@@ -31,6 +31,11 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	USoundWave* OpenDoorSound;
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	USoundWave* CloseDoorSound;
+
 	UPROPERTY(VisibleAnywhere, Category = DoorMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* DoorMeshComponent;
 
