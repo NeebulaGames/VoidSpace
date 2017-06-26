@@ -9,6 +9,7 @@
       "SkipAfterDeath": true,
       "Time": 0.0,
       "DeathReason": 1,
+      "LedsState": 0,
       "LighstsState": 0,
       "NextEvent": "The Meteor"
     },
@@ -20,6 +21,7 @@
       "SkipAfterDeath": false,
       "Time": 120.0,
       "DeathReason": 1,
+      "LedsState": 1,
       "LighstsState": 2,
       "NextEvent": "Breathless"
     },
@@ -31,6 +33,7 @@
       "SkipAfterDeath": false,
       "Time": 120.0,
       "DeathReason": 2,
+      "LedsState": 0,
       "LighstsState": 0,
       "NextEvent": "End"
     },
@@ -42,6 +45,7 @@
       "SkipAfterDeath": false,
       "Time": 0.0,
       "DeathReason": 0,
+      "LedsState": 0,
       "LighstsState": 0,
       "NextEvent": ""
     }
