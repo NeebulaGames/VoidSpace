@@ -21,7 +21,7 @@ APcActor::APcActor()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
 	BoxComponent->SetupAttachment(RootComponent);
-	BoxComponent->SetRelativeLocation(FVector(60.f, 40.f, 0.f));
+	BoxComponent->SetRelativeLocation(FVector(84.f, -5.f, 0.f));
 	BoxComponent->SetBoxExtent(FVector(20.f, 30.f, 14.f));
 	BoxComponent->bGenerateOverlapEvents = false;
 
@@ -41,7 +41,7 @@ void APcActor::BeginPlay()
 	Super::BeginPlay();
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &APcActor::OnActivePc);
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
-	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
+	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(6);
 	ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 }
 
