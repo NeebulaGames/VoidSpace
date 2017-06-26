@@ -13,7 +13,7 @@ enum class EDoorStartTriggerEnum : uint8
   DSTE_OnBeginExecution   UMETA(DisplayName = "OnBeginExecution"), 
   DSTE_OnBeginEvent   UMETA(DisplayName = "OnBeginEvent"), 
   DSTE_OnOverlap  UMETA(DisplayName = "OnOverlap"),
-  DSTE_OnDialogFinished UMETA(DisplayName = "OnDialogFinished"),
+  DSTE_OnDialogueFinished UMETA(DisplayName = "OnDialogueFinished"),
   DSTE_Deactivate  UMETA(DisplayName = "Deactivate")
 }; 
 
@@ -50,7 +50,7 @@ private:
 	FString EventName; 
 
 	UPROPERTY(EditAnywhere, Category = Event, meta = (AllowPrivateAccess = "true"))
-	FString DialogeName;
+	FString DialogueName;
  
 	void LockUnlockDoors();
 
