@@ -21,6 +21,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	USoundWave* InsertCDSound;
+	
 	UPROPERTY(VisibleAnywhere, Category = PcMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* PcMeshComponent;
 
