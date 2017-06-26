@@ -14,6 +14,8 @@ class VOIDSPACE_API UBlindAnimInstance : public UAnimInstance
 	GENERATED_UCLASS_BODY()
 	
 public:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Audio)
+	USoundWave* BlindSound;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	bool bIsOpening;

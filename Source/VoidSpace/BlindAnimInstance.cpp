@@ -43,6 +43,8 @@ bool UBlindAnimInstance::IsBeginningEvent()
 void UBlindAnimInstance::OnSimonCompleted()
 {
 	bIsOpening = true;
+	if(!bExecuted)
+		UGameplayStatics::PlaySound2D(GetWorld(), BlindSound);
 }
 
 void UBlindAnimInstance::SetSimonStandToInstance(ASimonStandActor* SimonStand)
