@@ -19,7 +19,7 @@ void UGameEventManager::Tick(float DeltaTime)
 		if (GEngine)
 			GEngine->AddOnScreenDebugMessage(1, 1, FColor::Red, FString("Time remaining ").Append(FString::FromInt(Time)).Append("s"));
 
-		if (!bIsFading && Time <= 20.f)
+		if (!bIsFading && Time <= 5.f)
 		{
 			bIsFading = true;
 			UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraFade(0.f, 1.f, Time, FColor::White, true, false);
