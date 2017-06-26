@@ -61,7 +61,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 	{
 		const FVector Start = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetCameraLocation();
 		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
-		const FVector End = Start + dir_camera * 150;
+		const FVector End = Start + dir_camera * 130;
 
 		APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
 
