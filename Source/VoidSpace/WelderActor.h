@@ -23,6 +23,10 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 private:
+	class UAudioComponent* AudioComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	class USoundWave* WelderSound;
 
 	UPROPERTY(VisibleAnywhere)
 	class UEquipableComponent* EquipableComponent = nullptr;

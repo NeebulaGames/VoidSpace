@@ -30,6 +30,9 @@ AWelderActor::AWelderActor()
 	BeamStreamComponent->SetupAttachment(WelderMeshComponent, TEXT("WelderStream"));
 	BeamStreamComponent->SetTemplate(beam.Object);
 	BeamStreamComponent->bAutoActivate = false;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> welderSound(TEXT("SoundWave'/Game/Sounds/SFX/welder.welder'"));
+	WelderSound = welderSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -105,13 +108,19 @@ void AWelderActor::Unequipped()
 void AWelderActor::UseWelder()
 {
 	BeamStreamComponent->ActivateSystem();
-
+	if (AudioComponent)
+		AudioComponent->SetActive(true);
+	else
+		AudioComponent = UGameplayStatics::SpawnSound2D(GetWorld(), WelderSound);
 	bUsingWelder = true;
 }
 
 void AWelderActor::EndUseWelder()
 {
 	BeamStreamComponent->DeactivateSystem();
+
+	if (AudioComponent)
+		AudioComponent->SetActive(false);
 
 	bUsingWelder = false;
 }
