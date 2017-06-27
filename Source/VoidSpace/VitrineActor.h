@@ -20,6 +20,9 @@ protected:
 	void NotifyActorBeginOverlap(AActor* OtherActor);
 
 private:	
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	USoundWave* OpenVitrineSound;
+
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* VitrineMeshComponent;
 	
