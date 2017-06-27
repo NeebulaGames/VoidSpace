@@ -6,6 +6,9 @@
 
 UDialogueManager::UDialogueManager()
 {
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("AudioComponent"));
+
+	AudioComponent->bIsUISound = true;
 }
 
 void UDialogueManager::LoadManager(const FString& name)
@@ -34,7 +37,9 @@ void UDialogueManager::PlayDialogue(const FString& name)
 		UWorld* World = GetOuter()->GetWorld();
 
 		USoundCue* wave = row->DialogueWave.LoadSynchronous();
-		UGameplayStatics::PlaySound2D(World, wave);
+		AudioComponent->SetSound(wave);
+		AudioComponent->Play(0.f);
+		//UGameplayStatics::PlaySound2D(World, wave);
 
 		if (!row->NextDialogue.IsEmpty())
 		{
