@@ -33,6 +33,10 @@ AWelderActor::AWelderActor()
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> welderSound(TEXT("SoundWave'/Game/Sounds/SFX/welder.welder'"));
 	WelderSound = welderSound.Object;
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -44,6 +48,11 @@ void AWelderActor::BeginPlay()
 	EquipableComponent->OnUnequipped.AddDynamic(this, &AWelderActor::Unequipped);
 	EquipableComponent->OnFire.AddDynamic(this, &AWelderActor::UseWelder);
 	EquipableComponent->OnEndFire.AddDynamic(this, &AWelderActor::EndUseWelder);
+
+	AudioComponent->bIsUISound = true;
+	AudioComponent->SetSound(WelderSound);
+
+	AudioComponent->SetActive(false);
 }
 
 // Called every frame
@@ -108,10 +117,9 @@ void AWelderActor::Unequipped()
 void AWelderActor::UseWelder()
 {
 	BeamStreamComponent->ActivateSystem();
-	if (AudioComponent)
-		AudioComponent->SetActive(true);
-	else
-		AudioComponent = UGameplayStatics::SpawnSound2D(GetWorld(), WelderSound);
+
+	AudioComponent->SetActive(true);
+		
 	bUsingWelder = true;
 }
 
@@ -119,8 +127,7 @@ void AWelderActor::EndUseWelder()
 {
 	BeamStreamComponent->DeactivateSystem();
 
-	if (AudioComponent)
-		AudioComponent->SetActive(false);
+	AudioComponent->SetActive(false);
 
 	bUsingWelder = false;
 }
