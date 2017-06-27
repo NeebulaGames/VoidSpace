@@ -31,7 +31,12 @@ void UDoorManagementComponent::BeginPlay()
 	else if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnOverlap)
 	{ 
 		manager->OnEventStarted.AddDynamic(this, &UDoorManagementComponent::UpdateOverlap);
-	} 
+	}
+	else if (StartTrigger == EDoorStartTriggerEnum::DSTE_OnDialogueFinished)
+	{
+		UDialogueManager* dialogueManager = ASpaceGameStateBase::Instance(GetWorld())->DialogueManager;
+		dialogueManager->OnDialogueFinished.AddDynamic(this, &UDoorManagementComponent::OnDialogueCompleted);
+	}
 }
 
 void UDoorManagementComponent::LockUnlockDoors()
@@ -64,4 +69,10 @@ void UDoorManagementComponent::UpdateOverlap()
 		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UDoorManagementComponent::OnOverlap);
 	else
 		GetOwner()->OnActorBeginOverlap.RemoveDynamic(this, &UDoorManagementComponent::OnOverlap);
+}
+
+void UDoorManagementComponent::OnDialogueCompleted(const FString& finishedDialogue)
+{
+	if (!DialogueName.Equals(TEXT("")) && finishedDialogue.Equals(DialogueName))
+		LockUnlockDoors();
 }

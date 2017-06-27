@@ -36,7 +36,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
 	class UInteractableComponent* InteractableComponent;
-	
+
+	UPROPERTY(VisibleAnywhere)
+	class UDoorAnimInstance* DoorAnimInstance;
+		
 	UFUNCTION()
 	void OnDoorEnter();
 
