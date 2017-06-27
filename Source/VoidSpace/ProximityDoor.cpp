@@ -38,18 +38,20 @@ void AProximityDoor::BeginPlay()
 
 	InteractableComponent->OnTriggerEnter.AddDynamic(this, &AProximityDoor::OnDoorEnter);
 	InteractableComponent->OnTriggerExit.AddDynamic(this, &AProximityDoor::OnDoorExit);
+
+	DoorAnimInstance = Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance());
 }
 
 void AProximityDoor::OnDoorEnter()
 {
 	if (!bLocked)
-		Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsOpening = true;
+		DoorAnimInstance->bIsOpening = true;
 }
 
 void AProximityDoor::OnDoorExit()
 {
 	if (!bLocked)
-		Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsClosing = true;
+		DoorAnimInstance->bIsClosing = true;
 }
 
 void AProximityDoor::Lock()
@@ -64,12 +66,12 @@ void AProximityDoor::UnLock()
 
 void AProximityDoor::OpenDoor() const
 {
-	if (!Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsOpened)
-		Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsOpening = true;
+	if (!DoorAnimInstance->bIsOpened)
+		DoorAnimInstance->bIsOpening = true;
 }
 
 void AProximityDoor::CloseDoor() const
 {
-	if(!Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsClosed)
-		Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsClosing = true;
+	if(!DoorAnimInstance->bIsClosed)
+		DoorAnimInstance->bIsClosing = true;
 }
