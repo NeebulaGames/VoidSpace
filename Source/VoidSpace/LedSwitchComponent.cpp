@@ -22,11 +22,12 @@ void ULedSwitchComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	UStaticMeshComponent* mesh = GetOwner()->FindComponentByClass<UStaticMeshComponent>();
+	UMeshComponent* mesh = GetOwner()->FindComponentByClass<UMeshComponent>();
 
 	if (mesh)
 	{
-		MaterialInstance = mesh->CreateAndSetMaterialInstanceDynamic(0);
+		int index = mesh->GetMaterialIndex("M_Led");
+		MaterialInstance = mesh->CreateAndSetMaterialInstanceDynamic(index);
 	}
 
 	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
