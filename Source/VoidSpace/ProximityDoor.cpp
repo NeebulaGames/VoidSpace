@@ -53,13 +53,19 @@ void AProximityDoor::BeginPlay()
 void AProximityDoor::OnDoorEnter()
 {
 	if (!bLocked)
+	{
 		DoorAnimInstance->bIsOpening = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenDoorSound, GetActorLocation());
+	}		
 }
 
 void AProximityDoor::OnDoorExit()
 {
 	if (!bLocked)
+	{
 		DoorAnimInstance->bIsClosing = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), CloseDoorSound, GetActorLocation());
+	}
 }
 
 void AProximityDoor::Lock()
