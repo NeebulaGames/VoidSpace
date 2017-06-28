@@ -43,6 +43,13 @@ ASpaceCharacter::ASpaceCharacter()
 	GetCharacterMovement()->MaxFlySpeed = EVASpeed;
 
 	physics_handle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("physicsHandle"));
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> evaSound(TEXT("SoundWave'/Game/Sounds/SFX/eva.eva'"));
+	EVASound = evaSound.Object;
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -50,12 +57,26 @@ void ASpaceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AudioComponent->bIsUISound = true;
+	AudioComponent->SetSound(EVASound);
+
+	AudioComponent->SetActive(false);
 }
 
 // Called every frame
 void ASpaceCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	if (bIsMovingForward || bIsMovingHorizontally || bIsMovingVertically)
+	{
+		if (WearsSpaceSuit() && !bGravityEnabled)
+			AudioComponent->SetActive(true);
+	}
+	else
+	{
+		AudioComponent->SetActive(false);
+	}
 
 	if (pickedObject != nullptr)
 	{
@@ -172,6 +193,8 @@ void ASpaceCharacter::MoveForward(float Val)
 	{
 		if(Val != 0.0f)
 		{
+			bIsMovingForward = true;
+
 			// find out which way is forward
 			FRotator Rotation = Controller->GetControlRotation();
 			// Limit pitch when walking or falling
@@ -200,6 +223,7 @@ void ASpaceCharacter::MoveForward(float Val)
 		}
 		else
 		{
+			bIsMovingForward = false;
 			LeftJetpackSmokeComponent->Deactivate();
 			RightJetpackSmokeComponent->Deactivate();
 		}
@@ -210,6 +234,8 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 {
 	if (Controller != nullptr && Val != 0.0f)
 	{
+		bIsMovingHorizontally = true;
+
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
@@ -231,17 +257,27 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		}
 		ForwardAxisVal = 0.f;
 	}
+	else if(Val == 0.0f)
+	{
+		bIsMovingHorizontally = false;
+	}
 }
 
 void ASpaceCharacter::MoveVertical(float Val)
 {
 	if (GetCharacterMovement()->IsFlying() && (Controller != nullptr) && (Val != 0.0f))
 	{
+		bIsMovingVertically = true;
+
 		// find out which way is up
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Z);
 		// add movement in that direction
 		AddMovementInput(Direction, Val);
+	}
+	else if(Val == 0.0f)
+	{
+		bIsMovingVertically = false;
 	}
 }
 
