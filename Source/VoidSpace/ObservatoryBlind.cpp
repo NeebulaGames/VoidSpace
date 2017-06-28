@@ -20,11 +20,6 @@ AObservatoryBlind::AObservatoryBlind()
 	BlindMeshComponent->SetupAttachment(RootComponent);
 	BlindMeshComponent->SetSkeletalMesh(Smallblinds.Object);
 	BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
-
-
-	static ConstructorHelpers::FObjectFinder<USoundWave> blindSound(TEXT("SoundWave'/Game/Sounds/SFX/blinds.blinds'"));
-
-	BlindSound = blindSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -36,7 +31,5 @@ void AObservatoryBlind::BeginPlay()
 	{
 		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
 		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->MeteorStorm = MeteorStorm;
-		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->BlindSound = BlindSound;
-	}
-		
+	}	
 }

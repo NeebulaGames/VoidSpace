@@ -27,10 +27,5 @@ public:
 
 	//TODO: move to sequence instead of matinee
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
-	class ULevelSequence* MeteorStorm;
-
-private:
-	UPROPERTY(VisibleAnywhere, Category = Audio)
-	USoundWave* BlindSound;
-	
+	class ULevelSequence* MeteorStorm;	
 };
