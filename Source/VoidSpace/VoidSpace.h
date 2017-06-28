@@ -4,3 +4,8 @@
 
 #include "Engine.h"
 
+DECLARE_LOG_CATEGORY_EXTERN(EventSM, Log, All);
+
+DECLARE_LOG_CATEGORY_EXTERN(DialogueManager, Log, All);
+
+#define STENCIL_ITEMHIGHLIGHT 255;

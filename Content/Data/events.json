@@ -1,0 +1,53 @@
+{
+  "FirstEvent": "Beginning",
+  "EventList": [
+    {
+      "Name": "Beginning",
+      "LevelName": "Beginning",
+      "CountDown": false,
+      "KillAtEnd":  true,
+      "SkipAfterDeath": true,
+      "Time": 0.0,
+      "DeathReason": 1,
+      "LedsState": 0,
+      "LighstsState": 0,
+      "NextEvent": "The Meteor"
+    },
+    {
+      "Name": "The Meteor",
+      "LevelName": "Meteor",
+      "CountDown": true,
+      "KillAtEnd": false,
+      "SkipAfterDeath": false,
+      "Time": 120.0,
+      "DeathReason": 1,
+      "LedsState": 1,
+      "LighstsState": 2,
+      "NextEvent": "Breathless"
+    },
+    {
+      "Name": "Breathless",
+      "LevelName": "Breathless",
+      "CountDown": true,
+      "KillAtEnd": false,
+      "SkipAfterDeath": false,
+      "Time": 120.0,
+      "DeathReason": 2,
+      "LedsState": 0,
+      "LighstsState": 0,
+      "NextEvent": "End"
+    },
+    {
+      "Name": "End",
+      "LevelName": "End",
+      "CountDown": false,
+      "KillAtEnd": false,
+      "SkipAfterDeath": false,
+      "Time": 0.0,
+      "DeathReason": 0,
+      "LedsState": 0,
+      "LighstsState": 0,
+      "NextEvent": ""
+    }
+  ]
+}
