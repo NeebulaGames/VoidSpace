@@ -19,7 +19,6 @@ protected:
 	virtual void BeginPlay() override;
 
 public:	
-
 	UPROPERTY(VisibleAnywhere, Category = BlindMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* BlindMeshComponent;
 
@@ -28,6 +27,5 @@ public:
 
 	//TODO: move to sequence instead of matinee
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
-	class ULevelSequence* MeteorStorm;
-	
+	class ULevelSequence* MeteorStorm;	
 };

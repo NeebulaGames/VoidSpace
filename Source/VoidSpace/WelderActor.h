@@ -24,6 +24,12 @@ public:
 
 private:
 
+	UPROPERTY(EditAnywhere, Category = Audio)
+	class UAudioComponent* AudioComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	class USoundWave* WelderSound;
+
 	UPROPERTY(VisibleAnywhere)
 	class UEquipableComponent* EquipableComponent = nullptr;
 

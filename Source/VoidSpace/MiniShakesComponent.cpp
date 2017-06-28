@@ -10,6 +10,9 @@
 UMiniShakesComponent::UMiniShakesComponent() : bIsPlayingMiniShakes(false)
 {
 	PrimaryComponentTick.bCanEverTick = false;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> shakeSound(TEXT("SoundWave'/Game/Sounds/SFX/shaking.shaking'"));
+	ShakeSound = shakeSound.Object;
 }
 
 // Called when the game starts
@@ -45,8 +48,10 @@ void UMiniShakesComponent::OnOverlap(AActor* actor1, AActor* actor2)
 
 void UMiniShakesComponent::TriggerMiniShake()
 {
-	if(CameraMiniShakes)
+	if (CameraMiniShakes) {
 		playerController->ClientPlayCameraShake(CameraMiniShakes, FMath::RandRange(MIN_SHAKE_SCALE, MAX_SHAKE_SCALE));
+		UGameplayStatics::PlaySound2D(GetWorld(), ShakeSound);
+	}
 	
 	if(bIsPlayingMiniShakes)
 		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));

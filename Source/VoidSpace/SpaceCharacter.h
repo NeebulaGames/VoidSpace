@@ -123,4 +123,11 @@ private:
 	class UParticleSystemComponent* RightJetpackSmokeComponent = nullptr;
 
 	float ForwardAxisVal;
+
+	UPROPERTY(EditAnywhere, Category = Audio)
+	class UAudioComponent* AudioComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	class USoundWave* EVASound;
+
 };

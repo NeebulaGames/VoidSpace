@@ -30,6 +30,9 @@ AVitrineActor::AVitrineActor()
 	BoxComponent->SetBoxExtent(FVector(20.f, 19.f, 14.f));
 	BoxComponent->SetRelativeRotation(FRotator(0.f, 151.f, 0.f));
 	BoxComponent->bGenerateOverlapEvents = true;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> vitrineSound(TEXT("SoundWave'/Game/Sounds/SFX/vitrine.vitrine'"));
+	OpenVitrineSound = vitrineSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -46,6 +49,7 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	{
 		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		Cast<UVitrineAnimInstance>(VitrineMeshComponent->GetAnimInstance())->bIsOpening = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenVitrineSound, GetActorLocation());
 		if(character)
 		{
 			character->pickedObject->Destroy();

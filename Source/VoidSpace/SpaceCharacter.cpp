@@ -43,6 +43,13 @@ ASpaceCharacter::ASpaceCharacter()
 	GetCharacterMovement()->MaxFlySpeed = EVASpeed;
 
 	physics_handle = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("physicsHandle"));
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> evaSound(TEXT("SoundWave'/Game/Sounds/SFX/eva.eva'"));
+	EVASound = evaSound.Object;
+
+	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
+	AudioComponent->SetupAttachment(RootComponent);
+	AudioComponent->bAutoActivate = false;
 }
 
 // Called when the game starts or when spawned
@@ -50,12 +57,26 @@ void ASpaceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	AudioComponent->bIsUISound = true;
+	AudioComponent->SetSound(EVASound);
+
+	AudioComponent->SetActive(false);
 }
 
 // Called every frame
 void ASpaceCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	
+	if (WearsSpaceSuit() && !bGravityEnabled && GetCharacterMovement()->GetCurrentAcceleration().GetAbsMax() > 0.0f)
+	{
+		AudioComponent->SetActive(true);
+	}
+	else
+	{
+		AudioComponent->SetActive(false);
+	}
 
 	if (pickedObject != nullptr)
 	{

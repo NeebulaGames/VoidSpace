@@ -24,6 +24,8 @@ protected:
 	virtual void EndPlay(const EEndPlayReason::Type EndPlayReason) override;
 
 private:
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	USoundWave* ShakeSound;
 
 	UFUNCTION()
 	void OnOverlap(AActor* actor1, AActor* actor2);

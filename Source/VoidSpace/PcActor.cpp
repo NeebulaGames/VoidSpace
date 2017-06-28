@@ -33,6 +33,9 @@ APcActor::APcActor()
 	PcMeshComponent->SetSkeletalMesh(pc.Object);
 	PcMeshComponent->SetAnimInstanceClass(pcBlueprint.Object);
 	PcMeshComponent->SetCollisionProfileName(FName("BlockAll"));
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> cdSound(TEXT("SoundWave'/Game/Sounds/SFX/disk.disk'"));
+	InsertCDSound = cdSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -54,6 +57,7 @@ void APcActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		Cast<UPcAnimInstance>(PcMeshComponent->GetAnimInstance())->bIsInserting = true;
 		if(character)
 		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), InsertCDSound, GetActorLocation());
 			character->pickedObject->Destroy();
 			character->ReleaseObject();
 		}

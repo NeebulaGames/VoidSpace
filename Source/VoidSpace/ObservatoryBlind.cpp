@@ -20,7 +20,6 @@ AObservatoryBlind::AObservatoryBlind()
 	BlindMeshComponent->SetupAttachment(RootComponent);
 	BlindMeshComponent->SetSkeletalMesh(Smallblinds.Object);
 	BlindMeshComponent->SetAnimInstanceClass(blindBlueprint.Object);
-
 }
 
 // Called when the game starts or when spawned
@@ -32,6 +31,5 @@ void AObservatoryBlind::BeginPlay()
 	{
 		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
 		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->MeteorStorm = MeteorStorm;
-	}
-		
+	}	
 }

@@ -29,6 +29,14 @@ AProximityDoor::AProximityDoor()
 	InteractableComponent->bRequireUseButton = false;
 	InteractableComponent->bHighlight = false;
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(200.f, 200.f, 120.f));
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> doorOpenSound(TEXT("SoundWave'/Game/Sounds/SFX/door_opening.door_opening'"));
+
+	OpenDoorSound = doorOpenSound.Object;
+	
+	static ConstructorHelpers::FObjectFinder<USoundWave> doorCloseSound(TEXT("SoundWave'/Game/Sounds/SFX/door_closing.door_closing'"));
+
+	CloseDoorSound = doorCloseSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -45,13 +53,19 @@ void AProximityDoor::BeginPlay()
 void AProximityDoor::OnDoorEnter()
 {
 	if (!bLocked)
+	{
 		DoorAnimInstance->bIsOpening = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenDoorSound, GetActorLocation());
+	}		
 }
 
 void AProximityDoor::OnDoorExit()
 {
 	if (!bLocked)
+	{
 		DoorAnimInstance->bIsClosing = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), CloseDoorSound, GetActorLocation());
+	}
 }
 
 void AProximityDoor::Lock()
@@ -67,11 +81,17 @@ void AProximityDoor::UnLock()
 void AProximityDoor::OpenDoor() const
 {
 	if (!DoorAnimInstance->bIsOpened)
+	{
 		DoorAnimInstance->bIsOpening = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenDoorSound, GetActorLocation());
+	}
 }
 
 void AProximityDoor::CloseDoor() const
 {
-	if(!DoorAnimInstance->bIsClosed)
+	if (!DoorAnimInstance->bIsClosed)
+	{
 		DoorAnimInstance->bIsClosing = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), CloseDoorSound, GetActorLocation());
+	}
 }
