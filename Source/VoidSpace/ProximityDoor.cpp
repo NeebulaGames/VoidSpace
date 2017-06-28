@@ -74,12 +74,18 @@ void AProximityDoor::UnLock()
 
 void AProximityDoor::OpenDoor() const
 {
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenDoorSound, GetActorLocation());
-	Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsOpening = true;
+	if (!DoorAnimInstance->bIsOpened)
+	{
+		DoorAnimInstance->bIsOpening = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenDoorSound, GetActorLocation());
+	}
 }
 
 void AProximityDoor::CloseDoor() const
 {
-	UGameplayStatics::PlaySoundAtLocation(GetWorld(), CloseDoorSound, GetActorLocation());
-	Cast<UDoorAnimInstance>(DoorMeshComponent->GetAnimInstance())->bIsClosing = true;
+	if (!DoorAnimInstance->bIsClosed)
+	{
+		DoorAnimInstance->bIsClosing = true;
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), CloseDoorSound, GetActorLocation());
+	}
 }
