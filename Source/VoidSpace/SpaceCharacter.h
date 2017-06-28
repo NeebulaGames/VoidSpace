@@ -130,7 +130,4 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;
 
-	bool bIsMovingHorizontally = false;
-	bool bIsMovingVertically = false;
-	bool bIsMovingForward = false;
 };

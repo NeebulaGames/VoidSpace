@@ -68,10 +68,10 @@ void ASpaceCharacter::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (bIsMovingForward || bIsMovingHorizontally || bIsMovingVertically)
+	
+	if (WearsSpaceSuit() && !bGravityEnabled && GetCharacterMovement()->GetCurrentAcceleration().GetAbsMax() > 0.0f)
 	{
-		if (WearsSpaceSuit() && !bGravityEnabled)
-			AudioComponent->SetActive(true);
+		AudioComponent->SetActive(true);
 	}
 	else
 	{
@@ -193,8 +193,6 @@ void ASpaceCharacter::MoveForward(float Val)
 	{
 		if(Val != 0.0f)
 		{
-			bIsMovingForward = true;
-
 			// find out which way is forward
 			FRotator Rotation = Controller->GetControlRotation();
 			// Limit pitch when walking or falling
@@ -223,7 +221,6 @@ void ASpaceCharacter::MoveForward(float Val)
 		}
 		else
 		{
-			bIsMovingForward = false;
 			LeftJetpackSmokeComponent->Deactivate();
 			RightJetpackSmokeComponent->Deactivate();
 		}
@@ -234,8 +231,6 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 {
 	if (Controller != nullptr && Val != 0.0f)
 	{
-		bIsMovingHorizontally = true;
-
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
@@ -257,27 +252,17 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		}
 		ForwardAxisVal = 0.f;
 	}
-	else if(Val == 0.0f)
-	{
-		bIsMovingHorizontally = false;
-	}
 }
 
 void ASpaceCharacter::MoveVertical(float Val)
 {
 	if (GetCharacterMovement()->IsFlying() && (Controller != nullptr) && (Val != 0.0f))
 	{
-		bIsMovingVertically = true;
-
 		// find out which way is up
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Z);
 		// add movement in that direction
 		AddMovementInput(Direction, Val);
-	}
-	else if(Val == 0.0f)
-	{
-		bIsMovingVertically = false;
 	}
 }
 
