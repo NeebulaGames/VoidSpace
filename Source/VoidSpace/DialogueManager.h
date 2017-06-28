@@ -31,7 +31,11 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = DialogueProperties)
 	UDataTable* DialogueLookupTable;
+
+	UPROPERTY(VisibleAnywhere, Category = DialogueManager)
+	UAudioComponent* AudioComponent;
 	
 	UPROPERTY(BlueprintAssignable, Category = DialogueEvents)
 	FOnDialogueFinished OnDialogueFinished;
+
 };
