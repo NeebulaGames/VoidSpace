@@ -45,8 +45,8 @@ private:
 
 	bool bIsPlayingMiniShakes;
 
-	const float MIN_SHAKE_DELAY = 1.f;
-	const float MAX_SHAKE_DELAY = 4.f;
+	const float MIN_SHAKE_DELAY = 3.f;
+	const float MAX_SHAKE_DELAY = 6.f;
 	const float MIN_SHAKE_SCALE = 0.f;
 	const float MAX_SHAKE_SCALE = 1.f;
 };
