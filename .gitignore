@@ -69,4 +69,7 @@ Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
+# Map build data
+*_BuiltData.uasset
+
 # End of https://www.gitignore.io/api/unrealengine
