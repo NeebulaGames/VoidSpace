@@ -8,11 +8,8 @@
 
 SMainLoadingScreen::SMainLoadingScreen()
 {
-	//static ConstructorHelpers::FObjectFinder<UTexture2D> myImage(TEXT("Texture2D'/Game/Textures/MainLoadingScreen.MainLoadingScreen'"));
 	NewTexture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, TEXT("Texture2D'/Game/Textures/MainLoadingScreen.MainLoadingScreen'")));
-
 	Font = Cast<UFont>(StaticLoadObject(UFont::StaticClass(), NULL, TEXT("Font'/Game/Fonts/Proxima_Nova_Alt_Regular_Font.Proxima_Nova_Alt_Regular_Font'")));
-	//NewTexture = myImage.Object;
 }
 
 void SMainLoadingScreen::Construct(const FArguments& InArgs)
