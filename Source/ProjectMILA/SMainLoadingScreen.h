@@ -23,4 +23,5 @@ public:
 	EVisibility GetMessageIndicatorVisibility() const;
 
 	UTexture2D* NewTexture;
+	UFont* Font;
 };

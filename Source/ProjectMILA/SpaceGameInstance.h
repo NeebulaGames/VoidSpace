@@ -25,5 +25,5 @@ public:
 
 	int LastDeathReason = -1;
 	
-	FString CurrentMapName;
+	FString CurrentMapName = "";
 };

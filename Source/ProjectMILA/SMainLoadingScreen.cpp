@@ -10,6 +10,8 @@ SMainLoadingScreen::SMainLoadingScreen()
 {
 	//static ConstructorHelpers::FObjectFinder<UTexture2D> myImage(TEXT("Texture2D'/Game/Textures/MainLoadingScreen.MainLoadingScreen'"));
 	NewTexture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, TEXT("Texture2D'/Game/Textures/MainLoadingScreen.MainLoadingScreen'")));
+
+	Font = Cast<UFont>(StaticLoadObject(UFont::StaticClass(), NULL, TEXT("Font'/Game/Fonts/Proxima_Nova_Alt_Regular_Font.Proxima_Nova_Alt_Regular_Font'")));
 	//NewTexture = myImage.Object;
 }
 
@@ -29,7 +31,7 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 			+ SOverlay::Slot()
 				.VAlign(VAlign_Bottom)
 				.HAlign(HAlign_Right)
-				.Padding(80.0f)
+				.Padding(70.0f)
 			[
 				SNew(SThrobber)
 					.Visibility(this, &SMainLoadingScreen::GetLoadIndicatorVisibility)
@@ -37,10 +39,11 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 			+ SOverlay::Slot()
 				.VAlign(VAlign_Bottom)
 				.HAlign(HAlign_Right)
-				.Padding(80.0f)
+				.Padding(70.0f)
 			[
 				SNew(STextBlock)
-					.Text(NSLOCTEXT("MoviePlayerTestLoadingScreen", "LoadingComplete", "Loading complete!"))
+					.Text(NSLOCTEXT("MoviePlayerTestLoadingScreen", "LoadingComplete", "Press any key to continue..."))
+					.Font(FSlateFontInfo(Font, 18))
 					.Visibility(this, &SMainLoadingScreen::GetMessageIndicatorVisibility)
 			]
 		];

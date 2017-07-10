@@ -20,17 +20,20 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 	if (!IsRunningDedicatedServer())
 	{
 		FLoadingScreenAttributes LoadingScreen;
-		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
-		LoadingScreen.bWaitForManualStop = true;
 
 		//DeadLoadingScreen
-		if (CurrentMapName == MapName && MapName == "/Game/Maps/SpaceStation")
+		if (CurrentMapName == "" || CurrentMapName == MapName && MapName == "/Game/Maps/SpaceStation")
 		{
+			// replace this with a new dead Slate in the future.
+			LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+			LoadingScreen.bWaitForManualStop = false;
 			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 		}
 		//MenuLoadingScreen
 		else
 		{
+			LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
+			LoadingScreen.bWaitForManualStop = true;
 			LoadingScreen.WidgetLoadingScreen = SNew(SMainLoadingScreen);
 		}
 
