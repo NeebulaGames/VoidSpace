@@ -3,7 +3,6 @@
 #include "ProjectMILA.h"
 #include "SMainLoadingScreen.h"
 #include "MoviePlayer.h"
-#include "Widgets/SBoxPanel.h"
 #include "Widgets/Text/STextBlock.h"
 #include "Widgets/Images/SThrobber.h"
 
@@ -17,17 +16,28 @@ SMainLoadingScreen::SMainLoadingScreen()
 void SMainLoadingScreen::Construct(const FArguments& InArgs)
 {
 	ChildSlot
+	.VAlign(VAlign_Fill)
+	.HAlign(HAlign_Fill)
 		[
-			SNew(SVerticalBox)
-				+ SVerticalBox::Slot()
-					.VAlign(VAlign_Center)
-					.HAlign(HAlign_Center)
+			SNew(SOverlay)
+			+ SOverlay::Slot()
+				.VAlign(VAlign_Top)
+				.HAlign(HAlign_Left)
 			[
-				SNew(SImage).Image(new FSlateDynamicImageBrush(NewTexture, FVector2D(1920, 1080), FName("LoadingScreen")))				
+				SNew(SImage).Image(new FSlateDynamicImageBrush(NewTexture, FVector2D(1920, 1080), FName("LoadingScreen")))	
 			]
-				+ SVerticalBox::Slot()
-					.VAlign(VAlign_Center)
-					.HAlign(HAlign_Center)
+			+ SOverlay::Slot()
+				.VAlign(VAlign_Bottom)
+				.HAlign(HAlign_Right)
+				.Padding(80.0f)
+			[
+				SNew(SThrobber)
+					.Visibility(this, &SMainLoadingScreen::GetLoadIndicatorVisibility)
+			]
+			+ SOverlay::Slot()
+				.VAlign(VAlign_Bottom)
+				.HAlign(HAlign_Right)
+				.Padding(80.0f)
 			[
 				SNew(STextBlock)
 					.Text(NSLOCTEXT("MoviePlayerTestLoadingScreen", "LoadingComplete", "Loading complete!"))

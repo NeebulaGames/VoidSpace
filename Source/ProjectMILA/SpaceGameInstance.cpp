@@ -26,7 +26,7 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 		//DeadLoadingScreen
 		if (CurrentMapName == MapName && MapName == "/Game/Maps/SpaceStation")
 		{
-			LoadingScreen.WidgetLoadingScreen = SNew(SMainLoadingScreen);
+			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 		}
 		//MenuLoadingScreen
 		else
