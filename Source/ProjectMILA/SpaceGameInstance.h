@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Engine/GameInstance.h"
+#include "MoviePlayer.h"
 #include "SpaceGameInstance.generated.h"
 
 /**
@@ -24,5 +25,5 @@ public:
 
 	int LastDeathReason = -1;
 	
-	
+	FString CurrentMapName;
 };

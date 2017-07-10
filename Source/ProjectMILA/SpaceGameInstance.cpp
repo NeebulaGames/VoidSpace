@@ -4,6 +4,8 @@
 #include "SpaceGameInstance.h"
 #include "MoviePlayer.h"
 
+#include "SMainLoadingScreen.h"
+
 
 void USpaceGameInstance::Init()
 {
@@ -19,8 +21,21 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 	{
 		FLoadingScreenAttributes LoadingScreen;
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
-		LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+		LoadingScreen.bWaitForManualStop = true;
 
+		//DeadLoadingScreen
+		if (CurrentMapName == MapName && MapName == "/Game/Maps/SpaceStation")
+		{
+			LoadingScreen.WidgetLoadingScreen = SNew(SMainLoadingScreen);
+		}
+		//MenuLoadingScreen
+		else
+		{
+			LoadingScreen.WidgetLoadingScreen = SNew(SMainLoadingScreen);
+		}
+
+		CurrentMapName = MapName;
+	
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
 	}
 }
