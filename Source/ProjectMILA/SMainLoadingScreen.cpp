@@ -8,7 +8,7 @@
 
 SMainLoadingScreen::SMainLoadingScreen()
 {
-	NewTexture = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, TEXT("Texture2D'/Game/Textures/MainLoadingScreen.MainLoadingScreen'")));
+	ScreenImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), NULL, TEXT("Texture2D'/Game/Textures/MainLoadingScreen.MainLoadingScreen'")));
 	Font = Cast<UFont>(StaticLoadObject(UFont::StaticClass(), NULL, TEXT("Font'/Game/Fonts/Proxima_Nova_Alt_Regular_Font.Proxima_Nova_Alt_Regular_Font'")));
 }
 
@@ -23,7 +23,7 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 				.VAlign(VAlign_Top)
 				.HAlign(HAlign_Left)
 			[
-				SNew(SImage).Image(new FSlateDynamicImageBrush(NewTexture, FVector2D(1920, 1080), FName("LoadingScreen")))	
+				SNew(SImage).Image(new FSlateDynamicImageBrush(ScreenImage, FVector2D(1920, 1080), FName("LoadingScreen")))
 			]
 			+ SOverlay::Slot()
 				.VAlign(VAlign_Bottom)

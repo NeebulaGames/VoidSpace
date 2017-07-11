@@ -22,6 +22,6 @@ public:
 	EVisibility GetLoadIndicatorVisibility() const;
 	EVisibility GetMessageIndicatorVisibility() const;
 
-	UTexture2D* NewTexture;
+	UTexture2D* ScreenImage;
 	UFont* Font;
 };
