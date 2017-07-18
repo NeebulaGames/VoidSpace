@@ -18,6 +18,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects)
 	TSubclassOf<UCameraShake> CameraMiniShakes;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects)
+	TArray<AMeteoritesActor*> meteoriteParticleSystems;
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;

@@ -17,22 +17,26 @@ AMeteoritesActor::AMeteoritesActor()
 	ParticlesComponent->SetTemplate(particles.Object);
 
 	RootComponent = ParticlesComponent;
-
 }
 
 // Called when the game starts or when spawned
 void AMeteoritesActor::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if(ParticlesComponent)
+		ParticlesComponent->DeactivateSystem();
 	
-	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &AMeteoritesActor::StopEmission);
+	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &AMeteoritesActor::StopEmissionOnMeteor);
 }
 
-void AMeteoritesActor::StopEmission()
+void AMeteoritesActor::StopEmissionOnMeteor()
 {
 	if (ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
-		ParticlesComponent->bSuppressSpawning = true;
+		ParticlesComponent->DestroyComponent();
 }
 
-
-
+void AMeteoritesActor::StartEmission()
+{
+	ParticlesComponent->ActivateSystem(true);
+}

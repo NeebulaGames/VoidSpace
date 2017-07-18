@@ -15,6 +15,9 @@ public:
 	// Sets default values for this actor's properties
 	AMeteoritesActor();
 
+	UFUNCTION()
+	void StartEmission();
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -25,6 +28,6 @@ private:
 	class UParticleSystemComponent* ParticlesComponent = nullptr;
 	
 	UFUNCTION()
-	void StopEmission();
+	void StopEmissionOnMeteor();
 	
 };
