@@ -10,6 +10,9 @@
 #include "SpaceSuitActor.h"
 #include "SpacestationManagementActor.h"
 #include "GameEventManager.h"
+#include "LevelSequence.h"
+#include "MovieScene.h"
+#include "LevelSequencePlayer.h"
 
 
 // Sets default values
@@ -29,13 +32,13 @@ ASpaceCharacter::ASpaceCharacter()
 	LeftJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
 	LeftJetpackSmokeComponent->Template = SmokeJetpack.Object;
 	LeftJetpackSmokeComponent->RelativeLocation = FVector(0.f, -50.f, 0.f);
-	LeftJetpackSmokeComponent->Deactivate();
+	LeftJetpackSmokeComponent->bAutoActivate = false;
 
 	RightJetpackSmokeComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
 	RightJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
 	RightJetpackSmokeComponent->Template = SmokeJetpack.Object;
 	RightJetpackSmokeComponent->RelativeLocation = FVector(0.f, 50.f, 0.f);
-	RightJetpackSmokeComponent->Deactivate();
+	RightJetpackSmokeComponent->bAutoActivate = false;
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -50,6 +53,9 @@ ASpaceCharacter::ASpaceCharacter()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
+
+	ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
+	ChokeDeathSequence = ChokeSequence.Object;
 }
 
 // Called when the game starts or when spawned
@@ -278,7 +284,11 @@ void ASpaceCharacter::OnStopJump()
 
 void ASpaceCharacter::KillPlayer(int mode) const
 {
-	// TODO: Run death animation and trigger event when finished
+	FMovieSceneSequencePlaybackSettings settings;
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), ChokeDeathSequence, settings);
+	player->Play();
+
+	// TODO: Return play finished event
 }
 
 void ASpaceCharacter::Use()

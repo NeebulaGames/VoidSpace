@@ -127,6 +127,9 @@ private:
 	UPROPERTY(EditAnywhere, Category = Audio)
 	class UAudioComponent* AudioComponent;
 
+	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
+	class ULevelSequence* ChokeDeathSequence = nullptr;
+
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;
 

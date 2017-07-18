@@ -80,7 +80,7 @@ void ASpaceGameStateBase::Die(int reason)
 			static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
 
 			// TODO: Wait for player animation trigger if necessary
-			UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+			//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
 		}
 	}
 }
