@@ -19,11 +19,11 @@
 ASpaceCharacter::ASpaceCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(40.f, 96.0f);
 
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
+	FirstPersonCameraComponent->RelativeLocation = FVector(0.f, 0.f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
@@ -282,8 +282,11 @@ void ASpaceCharacter::OnStopJump()
 	bPressedJump = false;
 }
 
-void ASpaceCharacter::KillPlayer(int mode) const
+void ASpaceCharacter::KillPlayer(int mode)
 {
+	FirstPersonCameraComponent->bUsePawnControlRotation = false;
+	ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = false;
+	DisableInput(Cast<APlayerController>(GetController()));
 	FMovieSceneSequencePlaybackSettings settings;
 	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), ChokeDeathSequence, settings);
 	player->Play();

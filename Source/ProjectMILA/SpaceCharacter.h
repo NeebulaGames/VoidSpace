@@ -32,7 +32,7 @@ public:
 	ASpaceSuitActor* GetEquippedSuit() const;
 	
 	UFUNCTION(Exec, Category = ExecFunctions)
-	void KillPlayer(int mode) const;
+	void KillPlayer(int mode);
 
 	UPhysicsHandleComponent* physics_handle;
 	AActor* pickedObject = nullptr;
