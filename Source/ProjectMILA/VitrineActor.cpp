@@ -38,6 +38,7 @@ AVitrineActor::AVitrineActor()
 void AVitrineActor::BeginPlay()
 {
 	Super::BeginPlay();
+	ScreenMaterial = VitrineMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
 }
 
 void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -49,6 +50,10 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		Cast<UVitrineAnimInstance>(VitrineMeshComponent->GetAnimInstance())->bIsOpening = true;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenVitrineSound, GetActorLocation());
+
+		ScreenMaterial->SetScalarParameterValue("DisplayRequired", 0.f);
+		ScreenMaterial->SetScalarParameterValue("DisplaySuccess", 1.f);
+
 		if(character)
 		{
 			character->pickedObject->Destroy();

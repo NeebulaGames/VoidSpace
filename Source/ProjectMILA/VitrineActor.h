@@ -31,5 +31,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = SpaceSuitInside, meta = (AllowPrivateAccess = "true"))
 	class ASpaceSuitActor* SpaceSuitActor;
-	
+
+	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
 };
