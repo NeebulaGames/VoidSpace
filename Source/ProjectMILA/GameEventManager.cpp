@@ -86,7 +86,7 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 			ev->bKillAtEnd = obj->GetBoolField("KillAtEnd");
 			ev->bSkipAfterDeath = obj->GetBoolField("SkipAfterDeath");
 			ev->Time = obj->GetNumberField("Time");
-			ev->DeathReason = obj->GetIntegerField("DeathReason");
+			ev->DeathReason = static_cast<EDeathReason>(obj->GetIntegerField("DeathReason"));
 			ev->LightsState = static_cast<ELightState>(obj->GetIntegerField("LighstsState"));
 			ev->LedsState = static_cast<ELedState>(obj->GetIntegerField("LedsState"));
 			ev->NextEventName = obj->GetStringField("NextEvent");

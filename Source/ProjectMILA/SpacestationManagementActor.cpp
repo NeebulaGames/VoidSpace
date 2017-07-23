@@ -37,7 +37,7 @@ void ASpacestationManagementActor::Tick(float DeltaSeconds)
 	if (EventManager->IsCounting())
 	{
 		float time = bReduceLifeTime ? LifeTime : EventManager->GetTime();
-		if (current->DeathReason == 2)
+		if (current->DeathReason == EDeathReason::Choke)
 		{
 			ScreensState = EScreenState::SCREEN_WARNING_OXYGEN;
 			ScreenMessage = FString::Printf(TEXT("%02d%%"), FMath::Floor(time * ReduceFactor));
@@ -50,7 +50,7 @@ void ASpacestationManagementActor::Tick(float DeltaSeconds)
 	}
 	else
 	{
-		if (current->DeathReason == 1)
+		if (current->DeathReason == EDeathReason::Meteor)
 			ScreensState = EScreenState::SCREEN_NOSIGNAL;
 		else
 			ScreensState = EScreenState::SCREEN_OK;
@@ -65,7 +65,7 @@ void ASpacestationManagementActor::OnEventStarted()
 	LightsState = current->LightsState;
 	LedsState = current->LedsState;
 	
-	if (current->DeathReason == 1)
+	if (current->DeathReason == EDeathReason::Meteor)
 	{
 		ReduceFactor = 100.f / current->Time;
 	}

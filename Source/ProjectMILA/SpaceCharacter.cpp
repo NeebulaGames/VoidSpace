@@ -134,7 +134,7 @@ void ASpaceCharacter::ToggleGravity()
 	if (!EquippedSuit)
 	{
 		if (state)
-			state->Die(0);
+			state->Die(EDeathReason::Choke);
 	}
 	else
 	{
@@ -282,7 +282,7 @@ void ASpaceCharacter::OnStopJump()
 	bPressedJump = false;
 }
 
-void ASpaceCharacter::KillPlayer(int mode)
+void ASpaceCharacter::KillPlayer(EDeathReason mode)
 {
 	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 	ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = false;

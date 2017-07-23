@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/GameStateBase.h"
+#include "GameEventManager.h"
 #include "SpaceGameStateBase.generated.h"
 
 /**
@@ -31,7 +32,7 @@ public:
 	void ToggleSpaceSuit(bool activate) const;
 
 	UFUNCTION(Exec)
-	void Die(int reason);
+	void Die(EDeathReason reason);
 
 	void EndGame();
 

@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "SpaceCharacter.generated.h"
 
+enum class EDeathReason : uint8;
 class ASpaceSuitActor;
 
 UCLASS()
@@ -32,7 +33,7 @@ public:
 	ASpaceSuitActor* GetEquippedSuit() const;
 	
 	UFUNCTION(Exec, Category = ExecFunctions)
-	void KillPlayer(int mode);
+	void KillPlayer(EDeathReason mode);
 
 	UPhysicsHandleComponent* physics_handle;
 	AActor* pickedObject = nullptr;
