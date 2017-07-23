@@ -5,6 +5,7 @@
 #include "GameFramework/Character.h"
 #include "SpaceCharacter.generated.h"
 
+enum class EDeathReason : uint8;
 class ASpaceSuitActor;
 
 UCLASS()
@@ -32,7 +33,7 @@ public:
 	ASpaceSuitActor* GetEquippedSuit() const;
 	
 	UFUNCTION(Exec, Category = ExecFunctions)
-	void KillPlayer(int mode) const;
+	float KillPlayer(EDeathReason mode);
 
 	UPhysicsHandleComponent* physics_handle;
 	AActor* pickedObject = nullptr;
@@ -126,6 +127,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = Audio)
 	class UAudioComponent* AudioComponent;
+
+	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
+	class ULevelSequence* ChokeDeathSequence = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;

@@ -6,6 +6,7 @@
 #include "MoviePlayer.h"
 #include "SpaceGameInstance.generated.h"
 
+enum class EDeathReason : uint8;
 /**
  * 
  */
@@ -23,7 +24,7 @@ public:
 	UFUNCTION()
 	virtual void EndLoadingScreen(UWorld* LoadedWorld);
 
-	int LastDeathReason = -1;
+	EDeathReason LastDeathReason = EDeathReason::None;
 	
 	FString CurrentMapName = "";
 };

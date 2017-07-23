@@ -10,17 +10,20 @@
 #include "SpaceSuitActor.h"
 #include "SpacestationManagementActor.h"
 #include "GameEventManager.h"
+#include "LevelSequence.h"
+#include "MovieScene.h"
+#include "LevelSequencePlayer.h"
 
 
 // Sets default values
 ASpaceCharacter::ASpaceCharacter()
 {
 	// Set size for collision capsule
-	GetCapsuleComponent()->InitCapsuleSize(55.f, 96.0f);
+	GetCapsuleComponent()->InitCapsuleSize(40.f, 96.0f);
 
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->RelativeLocation = FVector(-39.56f, 1.75f, 64.f); // Position the camera
+	FirstPersonCameraComponent->RelativeLocation = FVector(0.f, 0.f, 64.f); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
@@ -29,13 +32,13 @@ ASpaceCharacter::ASpaceCharacter()
 	LeftJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
 	LeftJetpackSmokeComponent->Template = SmokeJetpack.Object;
 	LeftJetpackSmokeComponent->RelativeLocation = FVector(0.f, -50.f, 0.f);
-	LeftJetpackSmokeComponent->Deactivate();
+	LeftJetpackSmokeComponent->bAutoActivate = false;
 
 	RightJetpackSmokeComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
 	RightJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
 	RightJetpackSmokeComponent->Template = SmokeJetpack.Object;
 	RightJetpackSmokeComponent->RelativeLocation = FVector(0.f, 50.f, 0.f);
-	RightJetpackSmokeComponent->Deactivate();
+	RightJetpackSmokeComponent->bAutoActivate = false;
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
@@ -50,6 +53,9 @@ ASpaceCharacter::ASpaceCharacter()
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
+
+	ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
+	ChokeDeathSequence = ChokeSequence.Object;
 }
 
 // Called when the game starts or when spawned
@@ -128,7 +134,7 @@ void ASpaceCharacter::ToggleGravity()
 	if (!EquippedSuit)
 	{
 		if (state)
-			state->Die(0);
+			state->Die(EDeathReason::Choke);
 	}
 	else
 	{
@@ -276,9 +282,29 @@ void ASpaceCharacter::OnStopJump()
 	bPressedJump = false;
 }
 
-void ASpaceCharacter::KillPlayer(int mode) const
+float ASpaceCharacter::KillPlayer(EDeathReason mode)
 {
-	// TODO: Run death animation and trigger event when finished
+	FirstPersonCameraComponent->bUsePawnControlRotation = false;
+	ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = false;
+	DisableInput(Cast<APlayerController>(GetController()));
+	FMovieSceneSequencePlaybackSettings settings;
+	ULevelSequence* sequence;
+	
+	switch (mode)
+	{
+	case EDeathReason::Meteor:
+		// TODO
+		return -1;
+	case EDeathReason::Choke:
+		sequence = ChokeDeathSequence;
+		break;
+	default:
+		return -1;
+	}
+
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
+	player->Play();
+	return player->GetLength();
 }
 
 void ASpaceCharacter::Use()

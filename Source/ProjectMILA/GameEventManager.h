@@ -24,7 +24,7 @@ public:
 		bool bKillAtEnd = false;
 		bool bSkipAfterDeath = false;
 		float Time = 0.f;
-		int DeathReason = 0;
+		EDeathReason DeathReason = EDeathReason::None;
 		ELightState LightsState = ELightState::LIGHT_ON;
 		ELedState LedsState = ELedState::LED_ON;
 		FEvent* NextEvent = nullptr;

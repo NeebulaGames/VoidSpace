@@ -3,6 +3,15 @@
 #pragma once
 
 UENUM(BlueprintType)
+enum class EDeathReason : uint8
+{
+	None,
+	Meteor,
+	Choke,
+	Unknown
+};
+
+UENUM(BlueprintType)
 enum class ELightState : uint8
 {
 	LIGHT_ON,

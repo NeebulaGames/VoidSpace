@@ -34,12 +34,12 @@ void ASpaceGameStateBase::StartEventSM()
 	FString eventsFile(TEXT("events.json"));
 	GameEventManager->LoadEventsFromFile(eventsFile);
 
-	int lastDeathReason = static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason;
+	EDeathReason lastDeathReason = static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason;
 
 	if (bLoadEventSM)
-		GameEventManager->StartEvents(lastDeathReason != -1);
+		GameEventManager->StartEvents(lastDeathReason != EDeathReason::None);
 
-	UE_LOG(LogGameState, Log, TEXT("Last death reason %d"), lastDeathReason);
+	UE_LOG(LogGameState, Log, TEXT("Last death reason %d"), static_cast<uint8>(lastDeathReason));
 }
 
 void ASpaceGameStateBase::TogglePlayerGravity() const
@@ -65,22 +65,31 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 	}
 }
 
-void ASpaceGameStateBase::Die(int reason)
+void ASpaceGameStateBase::Die(EDeathReason reason)
 {
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	if (character)
 	{
-		if (reason == 2 && character->WearsSpaceSuit() && !character->GetEquippedSuit()->IsConsumingOxygen())
+		if (reason == EDeathReason::Choke && character->WearsSpaceSuit() && !character->GetEquippedSuit()->IsConsumingOxygen())
 			character->GetEquippedSuit()->StartConsumingOxygen();
 		else
 		{
-			character->KillPlayer(reason);
-
 			static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
 
-			// TODO: Wait for player animation trigger if necessary
-			UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+			float length = character->KillPlayer(reason);
+
+			if (length > 0)
+			{
+				FTimerHandle unused;
+				FTimerDelegate callback;
+				callback.BindLambda([this]() -> void {UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false); });
+				GetWorldTimerManager().SetTimer(unused, callback, length, false);
+			}
+			else
+			{
+				UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+			}
 		}
 	}
 }
@@ -88,7 +97,7 @@ void ASpaceGameStateBase::Die(int reason)
 void ASpaceGameStateBase::EndGame()
 {
 	// TODO: Transition to credits?
-	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = -1;
+	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = EDeathReason::None;
 	UGameplayStatics::OpenLevel(this, TEXT("MainMenu"), false);
 }
 

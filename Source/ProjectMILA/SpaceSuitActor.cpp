@@ -37,7 +37,7 @@ void ASpaceSuitActor::Tick(float DeltaSeconds)
 	{
 		TimeRemaining -= DeltaSeconds;
 
-		if (TimeRemaining <= 0.f && GameEventManager->GetCurrentEvent()->DeathReason != 2)
+		if (TimeRemaining <= 0.f && GameEventManager->GetCurrentEvent()->DeathReason != EDeathReason::Choke)
 			ASpaceGameStateBase::Instance(GetWorld())->Die(GameEventManager->GetCurrentEvent()->DeathReason);
 	}
 }
