@@ -282,16 +282,29 @@ void ASpaceCharacter::OnStopJump()
 	bPressedJump = false;
 }
 
-void ASpaceCharacter::KillPlayer(EDeathReason mode)
+float ASpaceCharacter::KillPlayer(EDeathReason mode)
 {
 	FirstPersonCameraComponent->bUsePawnControlRotation = false;
 	ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = false;
 	DisableInput(Cast<APlayerController>(GetController()));
 	FMovieSceneSequencePlaybackSettings settings;
-	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), ChokeDeathSequence, settings);
-	player->Play();
+	ULevelSequence* sequence;
+	
+	switch (mode)
+	{
+	case EDeathReason::Meteor:
+		// TODO
+		return -1;
+	case EDeathReason::Choke:
+		sequence = ChokeDeathSequence;
+		break;
+	default:
+		return -1;
+	}
 
-	// TODO: Return play finished event
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
+	player->Play();
+	return player->GetLength();
 }
 
 void ASpaceCharacter::Use()

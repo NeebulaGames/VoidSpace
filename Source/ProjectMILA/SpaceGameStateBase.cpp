@@ -75,12 +75,21 @@ void ASpaceGameStateBase::Die(EDeathReason reason)
 			character->GetEquippedSuit()->StartConsumingOxygen();
 		else
 		{
-			character->KillPlayer(reason);
-
 			static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
 
-			// TODO: Wait for player animation trigger if necessary
-			//UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+			float length = character->KillPlayer(reason);
+
+			if (length > 0)
+			{
+				FTimerHandle unused;
+				FTimerDelegate callback;
+				callback.BindLambda([this]() -> void {UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false); });
+				GetWorldTimerManager().SetTimer(unused, callback, length, false);
+			}
+			else
+			{
+				UGameplayStatics::OpenLevel(this, FName(*GetWorld()->GetName()), false);
+			}
 		}
 	}
 }

@@ -33,7 +33,7 @@ public:
 	ASpaceSuitActor* GetEquippedSuit() const;
 	
 	UFUNCTION(Exec, Category = ExecFunctions)
-	void KillPlayer(EDeathReason mode);
+	float KillPlayer(EDeathReason mode);
 
 	UPhysicsHandleComponent* physics_handle;
 	AActor* pickedObject = nullptr;
