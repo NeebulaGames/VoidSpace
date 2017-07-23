@@ -42,6 +42,10 @@ void UMiniShakesComponent::OnOverlap(AActor* actor1, AActor* actor2)
 	{
 		bIsPlayingMiniShakes = true;
 		TriggerMiniShakeWithDelay(0.1f);
+
+		for (int32 i = 0; i < meteoriteParticleSystems.Num(); ++i)
+			meteoriteParticleSystems[i]->StartEmission();
+
 		GetOwner()->FindComponentByClass<UBoxComponent>()->DestroyComponent();
 	}
 }
@@ -67,6 +71,10 @@ void UMiniShakesComponent::StartMiniShakes()
 	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name.Contains("The Meteor") && !bIsPlayingMiniShakes)
 	{
 		TriggerMiniShakeWithDelay(FMath::RandRange(MIN_SHAKE_DELAY, MAX_SHAKE_DELAY));
+
+		for (int32 i = 0; i < meteoriteParticleSystems.Num(); ++i)
+			meteoriteParticleSystems[i]->StartEmission();
+
 		bIsPlayingMiniShakes = true;
 	}
 	else
