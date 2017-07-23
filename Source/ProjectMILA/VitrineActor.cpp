@@ -51,8 +51,7 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		Cast<UVitrineAnimInstance>(VitrineMeshComponent->GetAnimInstance())->bIsOpening = true;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenVitrineSound, GetActorLocation());
 
-		ScreenMaterial->SetScalarParameterValue("DisplayRequired", 0.f);
-		ScreenMaterial->SetScalarParameterValue("DisplaySuccess", 1.f);
+		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
 
 		if(character)
 		{
