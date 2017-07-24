@@ -135,3 +135,15 @@ ASpaceGameStateBase* ASpaceGameStateBase::Instance(UObject* world)
 {
 	return Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(world));
 }
+
+bool ASpaceGameStateBase::IsGravityEnable()
+{
+	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	if (character)
+	{
+		return character->IsGravityEnable();
+	}
+
+	return false;
+}
