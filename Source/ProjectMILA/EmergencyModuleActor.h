@@ -25,6 +25,12 @@ public:
 
 private: 
 
+	UFUNCTION()
+	void OnEmergencyStart();
+
+	UFUNCTION()
+	void OnEmergencyFinish();
+
 	UPROPERTY(VisibleAnywhere, Category = EmergencyModule, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* StaticMeshComponent;
 	
@@ -32,5 +38,8 @@ private:
 	class ULedSwitchComponent* LedSwitchComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = EmergencyModule, meta = (AllowPrivateAccess = "true"))
-	class USpotlightComponent* SpotlightComponent;
+	class USpotLightComponent* SpotlightComponent;
+
+	float pitchRotation = 0.f;
+	bool isLightOn = false;
 };
