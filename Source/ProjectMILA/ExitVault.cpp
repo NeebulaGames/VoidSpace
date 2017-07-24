@@ -4,6 +4,7 @@
 #include "ExitVault.h"
 #include "InteractableComponent.h"
 #include "ExitVaultDoorAnimInstance.h"
+#include "ExitVaultLever.h"
 #include "SpaceGameStateBase.h"
 
 
@@ -11,7 +12,7 @@
 AExitVault::AExitVault()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
-	PrimaryActorTick.bCanEverTick = true;
+	PrimaryActorTick.bCanEverTick = false;
 
 	USceneComponent* root = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
 	RootComponent = root;
@@ -31,13 +32,6 @@ AExitVault::AExitVault()
 	ExitExternalDoorMeshComponent->SetSkeletalMesh(externalDoor.Object);
 	ExitExternalDoorMeshComponent->SetAnimInstanceClass(exitVaultDoorBlueprint.Object);
 	ExitExternalDoorMeshComponent->SetCollisionProfileName(FName("BlockAll"));
-
-	InteractableComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("Interactable"));
-	InteractableComponent->SetupAttachment(RootComponent);
-	InteractableComponent->bRequireUseButton = false;
-
-	// Recalculate Box extension
-	InteractableComponent->BoxComponent->SetBoxExtent(FVector(130.f, 200.f, 120.f));
 
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/Particles/P_Smoke.P_Smoke'"));
 	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SmokeParticle"));
@@ -77,7 +71,9 @@ void AExitVault::doDepressurising() const
 	ParticleSystem->Activate();
 	UGameplayStatics::PlaySound2D(GetWorld(), Smoke);
 
-	if (!isOutside)
+	ASpaceGameStateBase* State = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+
+	if (State && State->IsGravityEnable())
 		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenExternalDoor, 5.f, false);
 	else
 		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenInnerDoor, 5.f, false);
@@ -87,11 +83,14 @@ void AExitVault::doDepressurising() const
 
 void AExitVault::ToogleGravity() const
 {
-	ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-	if (state)
+	ASpaceGameStateBase* State = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+
+	if (State)
 	{
 		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggling gravity"));
-		state->TogglePlayerGravity();
+		State->TogglePlayerGravity();
+
+		Lever->bCanBTriggered = true;
 	}
 }
 
@@ -99,34 +98,29 @@ void AExitVault::ToogleGravity() const
 void AExitVault::BeginPlay()
 {
 	Super::BeginPlay();
+		
+	Lever->InteractableComponent->OnTriggerAction.AddDynamic(this, &AExitVault::OnLeverUse);
 	
-	InteractableComponent->OnTriggerEnter.AddDynamic(this, &AExitVault::OnVaultEnter);
-	InteractableComponent->OnTriggerExit.AddDynamic(this, &AExitVault::OnVaultExit);
-
 	OpenInnerDoor();
 }
 
-// Called every frame
-void AExitVault::Tick(float DeltaTime)
+void AExitVault::OnLeverUse()
 {
-	Super::Tick(DeltaTime);
+	ASpaceGameStateBase* State = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 
-}
+	if (!Lever->IsTriggering() && Lever->bCanBTriggered)
+	{
+		Lever->SetbIsNotTriggered(false);
+		Lever->SetbIsTriggering(true);
 
-void AExitVault::OnVaultEnter()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Entering ExitVault"));
-	FTimerHandle UnusedHandle;
+		Lever->bCanBTriggered = false;
 
-	if (!isOutside)
-		CloseInnerDoor();
-	else
-		CloseExternalDoor();
-	GetWorldTimerManager().SetTimer(UnusedHandle, this, &AExitVault::doDepressurising, 1.8f, false);
-}
+		FTimerHandle UnusedHandle;
 
-void AExitVault::OnVaultExit()
-{
-	isOutside = !isOutside;
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Exiting ExitVault"));
+		if (State && State->IsGravityEnable())
+			CloseInnerDoor();
+		else
+			CloseExternalDoor();
+		GetWorldTimerManager().SetTimer(UnusedHandle, this, &AExitVault::doDepressurising, 1.8f, false);
+	}
 }

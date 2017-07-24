@@ -3,6 +3,7 @@
 #include "ProjectMILA.h"
 #include "InteractableComponent.h"
 #include "ExitVaultLever.h"
+#include "LeverAnimInstance.h"
 
 
 // Sets default values
@@ -11,7 +12,7 @@ AExitVaultLever::AExitVaultLever()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = false;
 
-	static ConstructorHelpers::FObjectFinder<UClass> leverBlueprint(TEXT("Class'/Game/Animations/Locker/LockerBlueprint.LockerBlueprint_C'"));
+	static ConstructorHelpers::FObjectFinder<UClass> leverBlueprint(TEXT("AnimBlueprint'/Game/Animations/Lever/LeverBlueprint.LeverBlueprint_C'"));
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> lever(TEXT("SkeletalMesh'/Game/Meshes/Props/Lever/ExitVaultLever.ExitVaultLever'"));
 	LeverMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Lever"));
@@ -33,14 +34,25 @@ AExitVaultLever::AExitVaultLever()
 void AExitVaultLever::BeginPlay()
 {
 	Super::BeginPlay();
-	InteractableComponent->OnTriggerAction.AddDynamic(this, &AExitVaultLever::OnLeverUse);
 }
 
-void AExitVaultLever::OnLeverUse()
+bool AExitVaultLever::IsTriggering()
 {
-	//if is not in triggered animation and triggerAvailability is true
-	//do stuff
+	return Cast<ULeverAnimInstance>(LeverMeshComponent->GetAnimInstance())->bIsTriggering;
+}
 
+bool AExitVaultLever::IsNotTriggered()
+{
+	return Cast<ULeverAnimInstance>(LeverMeshComponent->GetAnimInstance())->bIsNotTriggered;
+}
 
+void AExitVaultLever::SetbIsTriggering(bool value)
+{
+	Cast<ULeverAnimInstance>(LeverMeshComponent->GetAnimInstance())->bIsTriggering = value;
+}
+
+void AExitVaultLever::SetbIsNotTriggered(bool value)
+{
+	Cast<ULeverAnimInstance>(LeverMeshComponent->GetAnimInstance())->bIsNotTriggered = value;
 }
 

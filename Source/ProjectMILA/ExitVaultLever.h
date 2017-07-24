@@ -14,6 +14,24 @@ public:
 	// Sets default values for this actor's properties
 	AExitVaultLever();
 
+	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
+	class UInteractableComponent* InteractableComponent;
+
+	UPROPERTY(EditAnywhere)
+	bool bCanBTriggered = true;
+
+	UFUNCTION()
+	bool IsTriggering();
+
+	UFUNCTION()
+	bool IsNotTriggered();
+
+	UFUNCTION()
+	void SetbIsTriggering(bool value);
+
+	UFUNCTION()
+	void SetbIsNotTriggered(bool value);
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -21,14 +39,5 @@ protected:
 private:	
 
 	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableComponent;
-
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class USkeletalMeshComponent* LeverMeshComponent;
-
-	UFUNCTION()
-	void OnLeverUse();
-
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	bool bCanBeTriggered;
+	class USkeletalMeshComponent* LeverMeshComponent;	
 };
