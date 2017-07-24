@@ -440,8 +440,3 @@ void ASpaceCharacter::OnEndFire()
 		EquippedObject->EndFire();
 	}
 }
-
-bool ASpaceCharacter::IsGravityEnable()
-{
-	return bGravityEnabled;
-}

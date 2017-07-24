@@ -72,7 +72,4 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SpacestationManagement)
 	class ASpacestationManagementActor* SpacestationManager;
-
-	UFUNCTION()
-	bool IsGravityEnable();
 };

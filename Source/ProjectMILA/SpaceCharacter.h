@@ -43,9 +43,6 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
 	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
-	UFUNCTION()
-	bool IsGravityEnable();
-
 protected:
 
 	FVector offset = FVector(0.f, 0.f, 50.f);
