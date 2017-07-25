@@ -38,6 +38,9 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UParticleSystemComponent* ParticleSystem;
 
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* BottomSmokeSystem;
+
 	UPROPERTY(VisibleAnywhere, Category = DoorMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* ExitInnerDoorMeshComponent;
 

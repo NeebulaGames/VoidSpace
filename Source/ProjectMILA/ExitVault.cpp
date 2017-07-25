@@ -37,6 +37,10 @@ AExitVault::AExitVault()
 	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SmokeParticle"));
 	ParticleSystem->SetTemplate(PS.Object);
 
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> SS(TEXT("ParticleSystem'/Game/Effects/Steam/P_SteamVolume_Massive.P_SteamVolume_Massive'"));
+	BottomSmokeSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("BottomSmokeSystem"));
+	BottomSmokeSystem->SetTemplate(SS.Object);
+
 	static ConstructorHelpers::FObjectFinder<USoundWave> zipperSound(TEXT("SoundWave'/Game/Sounds/ChamberDecompressing.ChamberDecompressing'"));
 	Smoke = zipperSound.Object;
 }
@@ -69,6 +73,8 @@ void AExitVault::doDepressurising() const
 	FTimerHandle WaitToChangeDoorHandler;
 
 	ParticleSystem->Activate();
+	BottomSmokeSystem->Activate(true);
+
 	UGameplayStatics::PlaySound2D(GetWorld(), Smoke);
 
 	if (!bExternalDoorOpen)
