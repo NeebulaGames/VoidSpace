@@ -26,9 +26,8 @@ AVitrineActor::AVitrineActor()
 
 	BoxComponent = CreateDefaultSubobject<UBoxComponent>("TriggerBox");
 	BoxComponent->SetupAttachment(VitrineMeshComponent);
-	BoxComponent->SetRelativeLocation(FVector(-60.f, 28.f, 95.f));
+	BoxComponent->SetRelativeLocation(FVector(-65.f, 50.f, -35.f));
 	BoxComponent->SetBoxExtent(FVector(20.f, 19.f, 14.f));
-	BoxComponent->SetRelativeRotation(FRotator(0.f, 151.f, 0.f));
 	BoxComponent->bGenerateOverlapEvents = true;
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> vitrineSound(TEXT("SoundWave'/Game/Sounds/SFX/vitrine.vitrine'"));
@@ -39,6 +38,7 @@ AVitrineActor::AVitrineActor()
 void AVitrineActor::BeginPlay()
 {
 	Super::BeginPlay();
+	ScreenMaterial = VitrineMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
 }
 
 void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -50,6 +50,9 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 		Cast<UVitrineAnimInstance>(VitrineMeshComponent->GetAnimInstance())->bIsOpening = true;
 		UGameplayStatics::PlaySoundAtLocation(GetWorld(), OpenVitrineSound, GetActorLocation());
+
+		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
+
 		if(character)
 		{
 			character->pickedObject->Destroy();
