@@ -78,7 +78,7 @@ void AExitVault::doDepressurising() const
 
 	GetWorldTimerManager().SetTimer(GravityHandler, this, &AExitVault::ToogleGravity, 4.5f, false);
 
-	GetWorldTimerManager().SetTimer(WaitToChangeDoorHandler, this, &AExitVault::ChangeDoor, 6.0f, false);
+	GetWorldTimerManager().SetTimer(WaitToChangeDoorHandler, this, &AExitVault::ChangeDoor, 7.0f, false);
 }
 
 void AExitVault::ToogleGravity() const 
