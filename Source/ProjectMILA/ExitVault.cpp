@@ -66,32 +66,36 @@ void AExitVault::doDepressurising() const
 {
 	FTimerHandle DoorHandler;
 	FTimerHandle GravityHandler;
+	FTimerHandle WaitToChangeDoorHandler;
 
-	//do particle and sounds effects
 	ParticleSystem->Activate();
 	UGameplayStatics::PlaySound2D(GetWorld(), Smoke);
 
-	ASpaceGameStateBase* State = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-
-	if (State && State->IsGravityEnable())
+	if (!bExternalDoorOpen)
 		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenExternalDoor, 5.f, false);
 	else
 		GetWorldTimerManager().SetTimer(DoorHandler, this, &AExitVault::OpenInnerDoor, 5.f, false);
 
 	GetWorldTimerManager().SetTimer(GravityHandler, this, &AExitVault::ToogleGravity, 4.5f, false);
+
+	GetWorldTimerManager().SetTimer(WaitToChangeDoorHandler, this, &AExitVault::ChangeDoor, 6.0f, false);
 }
 
-void AExitVault::ToogleGravity() const
+void AExitVault::ToogleGravity() const 
 {
 	ASpaceGameStateBase* State = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
 
 	if (State)
 	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Green, TEXT("Toggling gravity"));
 		State->TogglePlayerGravity();
-
-		Lever->bCanBTriggered = true;
 	}
+}
+
+void AExitVault::ChangeDoor()
+{
+	bExternalDoorOpen = !bExternalDoorOpen;
+	Lever->bCanBTriggered = true;
+	Lever->InteractableComponent->bHighlight = true;
 }
 
 // Called when the game starts or when spawned
@@ -106,18 +110,17 @@ void AExitVault::BeginPlay()
 
 void AExitVault::OnLeverUse()
 {
-	ASpaceGameStateBase* State = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
-
 	if (!Lever->IsTriggering() && Lever->bCanBTriggered)
 	{
 		Lever->SetbIsNotTriggered(false);
 		Lever->SetbIsTriggering(true);
 
 		Lever->bCanBTriggered = false;
+		Lever->InteractableComponent->bHighlight = false;
 
 		FTimerHandle UnusedHandle;
 
-		if (State && State->IsGravityEnable())
+		if (!bExternalDoorOpen)
 			CloseInnerDoor();
 		else
 			CloseExternalDoor();

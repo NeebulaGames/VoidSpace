@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = SmokeSound)
 	USoundWave* Smoke;
 
+	UPROPERTY(EditAnywhere)
+	bool bExternalDoorOpen = false;
+
 	UPROPERTY(EditAnywhere, Category = Lever, meta = (AllowPrivateAccess = "true"))
 	class AExitVaultLever* Lever;
 
@@ -48,6 +51,8 @@ private:
 	void doDepressurising() const;
 
 	void ToogleGravity() const;
+
+	void ChangeDoor();
 
 protected:
 	// Called when the game starts or when spawned
