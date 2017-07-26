@@ -44,7 +44,7 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 		{
 			// replace this with a new dead Slate in the future.
 			LoadingScreen.bWaitForManualStop = true;
-			LoadingScreen.WidgetLoadingScreen = SNew(SDeathLoadingScreen);
+			LoadingScreen.WidgetLoadingScreen = SNew(SDeathLoadingScreen).DeathReason(LastDeathReason);
 		}
 		//MenuLoadingScreen
 		else

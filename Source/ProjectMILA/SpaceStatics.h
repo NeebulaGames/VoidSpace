@@ -8,6 +8,7 @@ enum class EDeathReason : uint8
 	None,
 	Meteor,
 	Choke,
+	ChokeSpacesuit,
 	Unknown
 };
 
