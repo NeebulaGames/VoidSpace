@@ -13,7 +13,7 @@ SDeathLoadingScreen::SDeathLoadingScreen()
 {
 	Font = Cast<UFont>(StaticLoadObject(UFont::StaticClass(), nullptr, TEXT("Font'/Game/Fonts/Proxima_Nova_Alt_Regular_Font.Proxima_Nova_Alt_Regular_Font'")));
 
-	Logo = nullptr;
+	Logo = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Textures/HUD/LogoLoadingScreen.LogoLoadingScreen'")));
 }
 
 void SDeathLoadingScreen::Construct(const FArguments& InArgs)
@@ -25,11 +25,10 @@ void SDeathLoadingScreen::Construct(const FArguments& InArgs)
 		[
 			SNew(SVerticalBox)
 			+ SVerticalBox::Slot()
-			.VAlign(VAlign_Top)
+			.VAlign(VAlign_Fill)
 			.HAlign(HAlign_Center)
-			.Padding(0, 100.f)
 			[
-				SNew(SImage).Image(new FSlateDynamicImageBrush(Logo, FVector2D(500, 100), FName("ProjectMILA_Logo")))
+				SNew(SImage).Image(new FSlateDynamicImageBrush(Logo, FVector2D(718.f, 403.f), FName("ProjectMILA_Logo")))
 			]
 			+ SVerticalBox::Slot()
 			.VAlign(VAlign_Center)
