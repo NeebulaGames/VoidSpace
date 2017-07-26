@@ -23,46 +23,49 @@ void SDeathLoadingScreen::Construct(const FArguments& InArgs)
 		.VAlign(VAlign_Fill)
 		.HAlign(HAlign_Fill)
 		[
+			SNew(SOverlay)
+			+ SOverlay::Slot()
+		.VAlign(VAlign_Center)
+		.HAlign(HAlign_Center)
+		[
 			SNew(SVerticalBox)
 			+ SVerticalBox::Slot()
-			.VAlign(VAlign_Fill)
-			.HAlign(HAlign_Center)
-			[
-				SNew(SImage).Image(new FSlateDynamicImageBrush(Logo, FVector2D(718.f, 403.f), FName("ProjectMILA_Logo")))
-			]
-			+ SVerticalBox::Slot()
-			.VAlign(VAlign_Center)
-			.HAlign(HAlign_Center)
-			[
-				SNew(SBox)
-				.MinDesiredWidth(700)
-				.MaxDesiredWidth(700)
-				.VAlign(VAlign_Center)
+			.Padding(0, 70)
 				[
-					SNew(SBorder)
+					SNew(SImage).Image(new FSlateDynamicImageBrush(Logo, FVector2D(689, 220), FName("ProjectMILA_Logo")))
+				]
+				+ SVerticalBox::Slot()
+				[
+					SNew(SBox)
+					.MinDesiredWidth(700)
+					.MaxDesiredWidth(700)
 					.VAlign(VAlign_Center)
-					.HAlign(HAlign_Fill)
-					.BorderBackgroundColor(FColor::White)
 					[
-						SNew(SVerticalBox)
-						+ SVerticalBox::Slot()
-						.Padding(20.f)
+						SNew(SBorder)
+						.VAlign(VAlign_Center)
+						.HAlign(HAlign_Fill)
+						.BorderBackgroundColor(FColor::White)
 						[
-							SNew(STextBlock)
-							.Text(LOCTEXT("Diagnostic", "Diagnostic:"))
-							.Font(FSlateFontInfo(Font, 18))
-						]
-						+ SVerticalBox::Slot()
-						.Padding(20.f, 0.f, 20.f, 20.f)
-						[
-							SNew(STextBlock)
-							.Text(this, &SDeathLoadingScreen::GetDeathText)
-							.Font(FSlateFontInfo(Font, 18))
+							SNew(SVerticalBox)
+							+ SVerticalBox::Slot()
+							.Padding(20.f)
+							[
+								SNew(STextBlock)
+								.Text(LOCTEXT("Diagnostic", "Diagnostic:"))
+								.Font(FSlateFontInfo(Font, 18))
+							]
+							+ SVerticalBox::Slot()
+							.Padding(20.f, 0.f, 20.f, 20.f)
+							[
+								SNew(STextBlock)
+								.Text(this, &SDeathLoadingScreen::GetDeathText)
+								.Font(FSlateFontInfo(Font, 18))
+							]
 						]
 					]
 				]
 			]
-			+ SVerticalBox::Slot()
+			+ SOverlay::Slot()
 			.VAlign(VAlign_Bottom)
 			.HAlign(HAlign_Right)
 			.Padding(70.0f)
@@ -70,15 +73,15 @@ void SDeathLoadingScreen::Construct(const FArguments& InArgs)
 				SNew(SThrobber)
 				.Visibility(this, &SDeathLoadingScreen::GetLoadIndicatorVisibility)
 			]
-			+ SVerticalBox::Slot()
+			+ SOverlay::Slot()
 			.VAlign(VAlign_Bottom)
 			.HAlign(HAlign_Right)
 			.Padding(70.0f)
 			[
 				SNew(STextBlock)
 				.Text(NSLOCTEXT("MoviePlayerTestLoadingScreen", "LoadingComplete", "Press any key to continue..."))
-				.Font(FSlateFontInfo(Font, 18))
-				.Visibility(this, &SDeathLoadingScreen::GetMessageIndicatorVisibility)
+			.Font(FSlateFontInfo(Font, 18))
+			.Visibility(this, &SDeathLoadingScreen::GetMessageIndicatorVisibility)
 			]
 		];
 }
