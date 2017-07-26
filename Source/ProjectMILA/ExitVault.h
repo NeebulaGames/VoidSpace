@@ -36,7 +36,16 @@ public:
 	class AExitVaultLever* Lever;
 
 	UPROPERTY(VisibleAnywhere)
-	class UParticleSystemComponent* ParticleSystem;
+	class UParticleSystemComponent* DepressuringSystem01;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* DepressuringSystem02;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* DepressuringSystem03;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* DepressuringSystem04;
 
 	UPROPERTY(VisibleAnywhere)
 	class UParticleSystemComponent* BottomSmokeSystem;

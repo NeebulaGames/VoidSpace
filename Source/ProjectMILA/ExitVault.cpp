@@ -33,9 +33,19 @@ AExitVault::AExitVault()
 	ExitExternalDoorMeshComponent->SetAnimInstanceClass(exitVaultDoorBlueprint.Object);
 	ExitExternalDoorMeshComponent->SetCollisionProfileName(FName("BlockAll"));
 
-	static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/Particles/P_Smoke.P_Smoke'"));
-	ParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SmokeParticle"));
-	ParticleSystem->SetTemplate(PS.Object);
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> PS(TEXT("ParticleSystem'/Game/Effects/Steam/P_Steam_Jet_Emissive.P_Steam_Jet_Emissive'"));
+
+	DepressuringSystem01 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DepressuringSystem01"));
+	DepressuringSystem01->SetTemplate(PS.Object);
+
+	DepressuringSystem02 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DepressuringSystem02"));
+	DepressuringSystem02->SetTemplate(PS.Object);
+
+	DepressuringSystem03 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DepressuringSystem03"));
+	DepressuringSystem03->SetTemplate(PS.Object);
+
+	DepressuringSystem04 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DepressuringSystem04"));
+	DepressuringSystem04->SetTemplate(PS.Object);
 
 	static ConstructorHelpers::FObjectFinder<UParticleSystem> SS(TEXT("ParticleSystem'/Game/Effects/Steam/P_SteamVolume_Massive.P_SteamVolume_Massive'"));
 	BottomSmokeSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("BottomSmokeSystem"));
@@ -72,7 +82,11 @@ void AExitVault::doDepressurising() const
 	FTimerHandle GravityHandler;
 	FTimerHandle WaitToChangeDoorHandler;
 
-	ParticleSystem->Activate();
+	DepressuringSystem01->Activate(true);
+	DepressuringSystem02->Activate(true);
+	DepressuringSystem03->Activate(true);
+	DepressuringSystem04->Activate(true);
+
 	BottomSmokeSystem->Activate(true);
 
 	UGameplayStatics::PlaySound2D(GetWorld(), Smoke);
