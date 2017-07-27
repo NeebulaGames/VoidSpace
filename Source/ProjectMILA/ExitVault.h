@@ -26,26 +26,29 @@ public:
 	UFUNCTION()
 	void CloseExternalDoor() const;
 
-private:
-	bool isOutside = false;
-
-	void doDepressurising() const;
-
-	void ToogleGravity() const;
-
-protected:
-	// Called when the game starts or when spawned
-	virtual void BeginPlay() override;
-
-public:	
-	// Called every frame
-	virtual void Tick(float DeltaTime) override;
-
 	UPROPERTY(EditAnywhere, Category = SmokeSound)
 	USoundWave* Smoke;
 
+	UPROPERTY(EditAnywhere)
+	bool bExternalDoorOpen = false;
+
+	UPROPERTY(EditAnywhere, Category = Lever, meta = (AllowPrivateAccess = "true"))
+	class AExitVaultLever* Lever;
+
 	UPROPERTY(VisibleAnywhere)
-	class UParticleSystemComponent* ParticleSystem;
+	class UParticleSystemComponent* DepressuringSystem01;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* DepressuringSystem02;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* DepressuringSystem03;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* DepressuringSystem04;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* BottomSmokeSystem;
 
 	UPROPERTY(VisibleAnywhere, Category = DoorMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* ExitInnerDoorMeshComponent;
@@ -53,12 +56,17 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = DoorMesh, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* ExitExternalDoorMeshComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableComponent;
-	
 	UFUNCTION()
-	void OnVaultEnter();
+	void OnLeverUse();
 
-	UFUNCTION()
-	void OnVaultExit();
+private:
+	void doDepressurising() const;
+
+	void ToogleGravity() const;
+
+	void ChangeDoor();
+
+protected:
+	// Called when the game starts or when spawned
+	virtual void BeginPlay() override;	
 };
