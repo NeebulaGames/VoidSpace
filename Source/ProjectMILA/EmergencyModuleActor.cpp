@@ -21,7 +21,7 @@ AEmergencyModuleActor::AEmergencyModuleActor()
 
 	SpotlightComponent = CreateDefaultSubobject<USpotLightComponent>(TEXT("SpotLight"));
 	SpotlightComponent->SetupAttachment(RootComponent);
-	SpotlightComponent->SetRelativeLocation(FVector(0.f, 10.f, -20.f));
+	SpotlightComponent->SetRelativeLocation(FVector(0.f, 20.f, -20.f));
 	SpotlightComponent->SetLightColor(FLinearColor(FColor().FromHex(FString("450600FF"))));
 	SpotlightComponent->SetIntensity(100000.f);
 	SpotlightComponent->SetVisibility(false);
