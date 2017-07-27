@@ -25,16 +25,17 @@ void SDeathLoadingScreen::Construct(const FArguments& InArgs)
 		[
 			SNew(SOverlay)
 			+ SOverlay::Slot()
-		.VAlign(VAlign_Center)
-		.HAlign(HAlign_Center)
-		[
-			SNew(SVerticalBox)
-			+ SVerticalBox::Slot()
-			.Padding(0, 70)
+			.VAlign(VAlign_Center)
+			.HAlign(HAlign_Center)
+			[
+				SNew(SVerticalBox)
+				+ SVerticalBox::Slot()
+				.AutoHeight()
 				[
-					SNew(SImage).Image(new FSlateDynamicImageBrush(Logo, FVector2D(689, 220), FName("ProjectMILA_Logo")))
+					SNew(SImage).Image(new FSlateDynamicImageBrush(Logo, FVector2D(689, 230), FName("ProjectMILA_Logo")))
 				]
 				+ SVerticalBox::Slot()
+				.Padding(0.f, 70.f)
 				[
 					SNew(SBox)
 					.MinDesiredWidth(700)
