@@ -109,7 +109,7 @@ FText SDeathLoadingScreen::GetDeathText() const
 	case EDeathReason::ChokeSpacesuit:
 		return LOCTEXT("NoMoreOxygen", "There wasn't any oxygen left in the spacesuit");
 	default: 
-		return LOCTEXT("UnknownReason", "Unkown reason...");
+		return LOCTEXT("UnknownReason", "Unknown reason...");
 	}
 }
 
