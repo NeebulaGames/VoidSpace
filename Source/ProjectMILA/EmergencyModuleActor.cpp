@@ -11,7 +11,7 @@ AEmergencyModuleActor::AEmergencyModuleActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> emergencyModule(TEXT("StaticMesh'/Game/Meshes/EmergencyLightModule.EmergencyLightModule'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> emergencyModule(TEXT("StaticMesh'/Game/Meshes/Props/EmergencyModule/EmergencyLightModule.EmergencyLightModule'"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("EmergencyLightModule"));
 	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetStaticMesh(emergencyModule.Object);
