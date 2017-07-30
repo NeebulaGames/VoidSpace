@@ -4,6 +4,7 @@
 #include "EmergencyModuleActor.h"
 #include "LedSwitchComponent.h"
 #include "SpaceGameStateBase.h"
+#include "SpacestationManagementActor.h"
 
 // Sets default values
 AEmergencyModuleActor::AEmergencyModuleActor()
@@ -31,9 +32,8 @@ AEmergencyModuleActor::AEmergencyModuleActor()
 void AEmergencyModuleActor::BeginPlay()
 {
 	Super::BeginPlay();
-	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &AEmergencyModuleActor::OnEmergencyStart);
-	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &AEmergencyModuleActor::OnEmergencyFinish);
 	SpotlightComponent->SetVisibility(false);
+	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
 }
 
 // Called every frame
@@ -41,29 +41,13 @@ void AEmergencyModuleActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(isLightOn)
+	if(ELightState::LIGHT_EMERGENCY == StationManager->LightsState)
 	{
+		SpotlightComponent->SetVisibility(true);
 		SpotlightComponent->SetRelativeRotation(FRotator(pitchRotation, 0.f, 0.f));
 		pitchRotation += fmod(DeltaTime * 530.f, 360.f);
-	}
-}
-
-void AEmergencyModuleActor::OnEmergencyStart()
-{
-	if (ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
+	}else
 	{
-		SpotlightComponent->ToggleVisibility();
-		isLightOn = true;
+		SpotlightComponent->SetVisibility(false);
 	}
 }
-
-void AEmergencyModuleActor::OnEmergencyFinish()
-{
-	if (isLightOn)
-	{
-		SpotlightComponent->ToggleVisibility();
-		isLightOn = false;
-	}
-}
-
-

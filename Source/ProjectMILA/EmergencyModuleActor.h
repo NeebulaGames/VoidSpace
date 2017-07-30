@@ -25,12 +25,6 @@ public:
 
 private: 
 
-	UFUNCTION()
-	void OnEmergencyStart();
-
-	UFUNCTION()
-	void OnEmergencyFinish();
-
 	UPROPERTY(VisibleAnywhere, Category = EmergencyModule, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* StaticMeshComponent;
 	
@@ -40,6 +34,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = EmergencyModule, meta = (AllowPrivateAccess = "true"))
 	class USpotLightComponent* SpotlightComponent;
 
+	class ASpacestationManagementActor* StationManager;
 	float pitchRotation = 0.f;
-	bool isLightOn = false;
 };
