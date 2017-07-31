@@ -10,7 +10,7 @@ ACdActor::ACdActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<UStaticMesh> cd(TEXT("StaticMesh'/Game/Meshes/Cd.Cd'"));
+	static ConstructorHelpers::FObjectFinder<UStaticMesh> cd(TEXT("StaticMesh'/Game/Meshes/Props/CD/CD.CD'"));
 	StaticMeshComponent = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Cd"));
 	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetStaticMesh(cd.Object);
