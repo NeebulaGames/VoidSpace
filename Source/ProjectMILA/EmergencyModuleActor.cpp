@@ -41,7 +41,7 @@ void AEmergencyModuleActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if(ELightState::LIGHT_EMERGENCY == StationManager->LightsState)
+	if(ELedState::LED_EMERGENCY == StationManager->LedsState)
 	{
 		SpotlightComponent->SetVisibility(true);
 		SpotlightComponent->SetRelativeRotation(FRotator(pitchRotation, 0.f, 0.f));
