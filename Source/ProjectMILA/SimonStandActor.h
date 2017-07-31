@@ -41,4 +41,5 @@ private:
 	class UStaticMeshComponent* SimonStandMesh;
 
 	bool bSimonCompleted = false;
+	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
 };
