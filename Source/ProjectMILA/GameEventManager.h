@@ -53,7 +53,7 @@ public:
 	float GetTime() const { return Time; }
 
 	UFUNCTION(BlueprintCallable, Category = StateManagement)
-	bool IsCounting() const { return bCountDown; }
+	bool IsCounting() const { return bCountDown || bDead; }
 
 	UFUNCTION(BlueprintCallable, Category = StateManagement)
 	FString& GetCurrentEventName() const { return CurrentEvent->Name; }
@@ -75,6 +75,7 @@ private:
 	bool bIsFading = false;
 	bool bCountDown = false;
 	bool bStartMachine = false;
+	bool bDead = false;
 
 	FEvent* FirstEvent = nullptr;
 	FEvent* CurrentEvent = nullptr;
