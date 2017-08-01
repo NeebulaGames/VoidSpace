@@ -36,6 +36,9 @@ APcActor::APcActor()
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> cdSound(TEXT("SoundWave'/Game/Sounds/SFX/disk.disk'"));
 	InsertCDSound = cdSound.Object;
+
+	static ConstructorHelpers::FObjectFinder<UMaterial> cdInserted(TEXT("Material'/Game/Materials/Props/PC/M_CDInserted.M_CDInserted'"));
+	M_CDInserted = cdInserted.Object;
 }
 
 // Called when the game starts or when spawned
@@ -79,9 +82,9 @@ void APcActor::OnDisablePc()
 {
 	if (bPcIsActive)
 	{
-		ScreenMaterial->SetScalarParameterValue("Display", 0.f);
+		//ScreenMaterial->SetScalarParameterValue("Display", 0.f);
+		PcMeshComponent->SetMaterial(0, M_CDInserted);
 		BoxComponent->bGenerateOverlapEvents = false;
 		bPcIsActive = false;
 	}
 }
-
