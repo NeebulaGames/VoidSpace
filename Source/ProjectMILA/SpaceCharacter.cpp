@@ -197,7 +197,6 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Forward VAL %f"), Val);
 	if (CameraBobbing)
 		playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? 2 : 1));
 
@@ -241,8 +240,6 @@ void ASpaceCharacter::MoveForward(float Val)
 
 void ASpaceCharacter::MoveHorizontal(float Val)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Horizontal VAL %f"), Val);
-
 	if (CameraBobbing)
 		playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? 2 : 1));
 
