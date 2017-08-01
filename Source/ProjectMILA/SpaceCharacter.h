@@ -43,6 +43,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
 	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects)
+	TSubclassOf<UCameraShake> CameraBobbing;
+
 protected:
 
 	FVector offset = FVector(0.f, 0.f, 50.f);
@@ -133,5 +136,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;
+
+	APlayerController* playerController;
 
 };

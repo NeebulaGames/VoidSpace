@@ -63,6 +63,8 @@ void ASpaceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	playerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
 	AudioComponent->bIsUISound = true;
 	AudioComponent->SetSound(EVASound);
 
@@ -90,7 +92,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
 		const FVector End = Start + dir_camera * 130;
 
-		APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
+		APawn* pawn = playerController->GetPawn();
 
 		physics_handle->SetTargetLocationAndRotation(End, pawn->GetControlRotation());
 	}
@@ -195,6 +197,10 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Forward VAL %f"), Val);
+	if (CameraBobbing)
+		playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? 2 : 1));
+
 	if (Controller != nullptr)
 	{
 		if(Val != 0.0f)
@@ -235,6 +241,11 @@ void ASpaceCharacter::MoveForward(float Val)
 
 void ASpaceCharacter::MoveHorizontal(float Val)
 {
+	UE_LOG(LogTemp, Warning, TEXT("Horizontal VAL %f"), Val);
+
+	if (CameraBobbing)
+		playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? 2 : 1));
+
 	if (Controller != nullptr && Val != 0.0f)
 	{
 		// find out which way is right
