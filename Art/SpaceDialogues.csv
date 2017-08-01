@@ -1,0 +1,13 @@
+---,DialogueName,DialogueWave,Trigger,NextDialogue,NextDialogueDelay
+Assistant_001,"Assistant_001","/Game/Sounds/Dialogues/Assistant_001/Cue_Assistant_001.Cue_Assistant_001","True","","0.000000"
+Assistant_002,"Assistant_002","/Game/Sounds/Dialogues/Assistant_002/Cue_Assistant_002.Cue_Assistant_002","False","","0.000000"
+Assistant_003,"Assistant_003","/Game/Sounds/Dialogues/Assistant_003/Cue_Assistant_003.Cue_Assistant_003","False","","0.000000"
+Assistant_004,"Assistant_004","/Game/Sounds/Dialogues/Assistant_004/Cue_Assistant_004.Cue_Assistant_004","False","","0.000000"
+Assistant_005,"Assistant_005","/Game/Sounds/Dialogues/Assistant_005/Cue_Assistant_005.Cue_Assistant_005","False","","0.000000"
+Assistant_012_013,"Assistant_012_013","/Game/Sounds/Dialogues/Assistant_012_013/Cue_Assistant_012_013.Cue_Assistant_012_013","True","","0.000000"
+Assistant_014,"Assistant_014","/Game/Sounds/Dialogues/Assistant_014/Cue_Assistant_014.Cue_Assistant_014","False","","0.000000"
+Assistant_015,"Assistant_015","/Game/Sounds/Dialogues/Assistant_015/Cue_Assistant_015.Cue_Assistant_015","False","","0.000000"
+Assistant_016,"Assistant_016","/Game/Sounds/Dialogues/Assistant_016/Cue_Assistant_016.Cue_Assistant_016","False","","0.000000"
+Assistant_017,"Assistant_017","/Game/Sounds/Dialogues/Assistant_017/Cue_Assistant_017.Cue_Assistant_017","False","","0.000000"
+Assistant_018_019,"Assistant_018_019","/Game/Sounds/Dialogues/Assistant_018_019/Cue_Assistant_018_019.Cue_Assistant_018_019","False","","0.000000"
+Assistant_020,"Assistant_020","/Game/Sounds/Dialogues/Assistant_020/Cue_Assistant_020.Cue_Assistant_020","True","","0.000000"
