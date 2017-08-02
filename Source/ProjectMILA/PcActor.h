@@ -30,9 +30,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = BoxTrigger, meta = (AllowPrivateAccess = "true"))
 	class UBoxComponent* BoxComponent;
 
-	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
-	class UMaterial* M_CDInserted;
-
 	bool bPcIsActive = false;
 	UMaterialInstanceDynamic* ScreenMaterial = nullptr;
 
