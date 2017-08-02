@@ -197,13 +197,13 @@ void ASpaceCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 void ASpaceCharacter::MoveForward(float Val)
 {
-	if (CameraBobbing)
-		playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? 2 : 1), ECameraAnimPlaySpace::CameraLocal);
-
 	if (Controller != nullptr)
 	{
 		if(Val != 0.0f)
 		{
+			if (CameraBobbing && playerController)
+				playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
+
 			// find out which way is forward
 			FRotator Rotation = Controller->GetControlRotation();
 			// Limit pitch when walking or falling
@@ -234,17 +234,18 @@ void ASpaceCharacter::MoveForward(float Val)
 		{
 			LeftJetpackSmokeComponent->Deactivate();
 			RightJetpackSmokeComponent->Deactivate();
+			playerController->ClientStopCameraShake(CameraBobbing, false);
 		}
 	}
 }
 
 void ASpaceCharacter::MoveHorizontal(float Val)
 {
-	if (CameraBobbing)
-		playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? 2 : 1), ECameraAnimPlaySpace::CameraLocal);
-
 	if (Controller != nullptr && Val != 0.0f)
 	{
+		if (CameraBobbing && playerController)
+			playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
+
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);

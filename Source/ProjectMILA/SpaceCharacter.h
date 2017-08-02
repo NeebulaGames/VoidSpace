@@ -43,7 +43,7 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
 	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Effects)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraBobbing)
 	TSubclassOf<UCameraShake> CameraBobbing;
 
 protected:
@@ -111,6 +111,12 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float MaxStamina = 100;
+
+	UPROPERTY(EditAnywhere, Category = CameraBobbing)
+	float RunScale = 2;
+
+	UPROPERTY(EditAnywhere, Category = CameraBobbing)
+	float WalkScale = 1;
 
 	class UHighlightComponent* LookedObject = nullptr;
 
