@@ -82,7 +82,6 @@ void APcActor::OnDisablePc()
 {
 	if (bPcIsActive)
 	{
-		//ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 		PcMeshComponent->SetMaterial(0, M_CDInserted);
 		BoxComponent->bGenerateOverlapEvents = false;
 		bPcIsActive = false;
