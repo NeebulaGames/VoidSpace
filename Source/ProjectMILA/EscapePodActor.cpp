@@ -17,7 +17,6 @@ AEscapePodActor::AEscapePodActor()
 	RootComponent = EscapePodMeshComponent;
 	EscapePodMeshComponent->SetSkeletalMesh(escapePod.Object);
 	EscapePodMeshComponent->SetCollisionProfileName(FName("BlockAll"));
-	EscapePodMeshComponent->SetRelativeRotation(FRotator(0, 90.f, 0));
 
 	static ConstructorHelpers::FObjectFinder<UClass> escapePodBlueprint(TEXT("Class'/Game/Animations/EscapePod/EscapePodBlueprint.EscapePodBlueprint_C'"));
 	EscapePodMeshComponent->SetAnimInstanceClass(escapePodBlueprint.Object);
@@ -26,15 +25,15 @@ AEscapePodActor::AEscapePodActor()
 	InteractableOpenComponent->SetupAttachment(RootComponent);
 	InteractableOpenComponent->bRequireUseButton = false;
 	InteractableOpenComponent->bHighlight = false;
-	InteractableOpenComponent->BoxComponent->SetBoxExtent(FVector(200.f, 200.f, 120.f));
-	InteractableOpenComponent->BoxComponent->SetRelativeLocation(FVector(-65.f, 50.f, -35.f));
+	InteractableOpenComponent->BoxComponent->SetBoxExtent(FVector(200.f, 200.f, 200.f));
+	InteractableOpenComponent->BoxComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 
 	InteractableCloseComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableToClose"));
 	InteractableCloseComponent->SetupAttachment(RootComponent);
 	InteractableCloseComponent->bRequireUseButton = false;
 	InteractableCloseComponent->bHighlight = false;
-	//InteractableCloseComponent->BoxComponent->SetBoxExtent(FVector(200.f, 200.f, 120.f));
-	//InteractableCloseComponent->BoxComponent->SetRelativeLocation(FVector(-65.f, 50.f, -35.f));
+	InteractableCloseComponent->BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
+	InteractableCloseComponent->BoxComponent->SetRelativeLocation(FVector(-50.f, -90.f, -60.f));
 
 }
 
