@@ -63,6 +63,8 @@ void ASpaceCharacter::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	playerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
+
 	AudioComponent->bIsUISound = true;
 	AudioComponent->SetSound(EVASound);
 
@@ -90,7 +92,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 		const FVector dir_camera = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->GetActorForwardVector();
 		const FVector End = Start + dir_camera * 130;
 
-		APawn* pawn = UGameplayStatics::GetPlayerController(GetWorld(), 0)->GetPawn();
+		APawn* pawn = playerController->GetPawn();
 
 		physics_handle->SetTargetLocationAndRotation(End, pawn->GetControlRotation());
 	}
@@ -199,6 +201,9 @@ void ASpaceCharacter::MoveForward(float Val)
 	{
 		if(Val != 0.0f)
 		{
+			if (CameraBobbing && playerController)
+				playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
+
 			// find out which way is forward
 			FRotator Rotation = Controller->GetControlRotation();
 			// Limit pitch when walking or falling
@@ -229,6 +234,7 @@ void ASpaceCharacter::MoveForward(float Val)
 		{
 			LeftJetpackSmokeComponent->Deactivate();
 			RightJetpackSmokeComponent->Deactivate();
+			playerController->ClientStopCameraShake(CameraBobbing, false);
 		}
 	}
 }
@@ -237,6 +243,9 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 {
 	if (Controller != nullptr && Val != 0.0f)
 	{
+		if (CameraBobbing && playerController)
+			playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
+
 		// find out which way is right
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FVector Direction = FRotationMatrix(Rotation).GetScaledAxis(EAxis::Y);
