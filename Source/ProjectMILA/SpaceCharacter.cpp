@@ -80,7 +80,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	
-	if (GetCharacterMovement()->GetCurrentAcceleration().GetAbsMax() > 0.0f)
+	if (GetCharacterMovement()->GetCurrentAcceleration().GetAbsMax() > 0.0f && !bPressedJump && !bWasJumping)
 	{
 		AudioComponent->SetActive(true);
 	}
@@ -434,6 +434,7 @@ void ASpaceCharacter::OnStartSprint()
 	{
 		bIsSprinting = true;
 		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+		FootstepsCue->PitchMultiplier = 1.6f;
 	}
 }
 
@@ -441,6 +442,7 @@ void ASpaceCharacter::OnStopSprint()
 {
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	FootstepsCue->PitchMultiplier = 1.f;
 }
 
 void ASpaceCharacter::OnFire()
