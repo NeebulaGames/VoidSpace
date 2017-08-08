@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "InteractableComponent.h"
 #include "EscapePodActor.generated.h"
 
 UCLASS()
@@ -19,15 +19,23 @@ protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
+
+public:
+
+	void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditAnywhere, Category = ElevatorInteractable)
+	AActor* TeleportPosition;
+
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* EscapePodMeshComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableOpenComponent;
+	UPROPERTY(VisibleAnywhere, Category = InteractableOpen, meta = (AllowPrivateAccess = "true"))
+	UInteractableComponent* InteractableOpenComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = Interactable, meta = (AllowPrivateAccess = "true"))
-	class UInteractableComponent* InteractableCloseComponent;
+	UPROPERTY(VisibleAnywhere, Category = InteractableClose, meta = (AllowPrivateAccess = "true"))
+	UInteractableComponent* InteractableCloseComponent;
 
 	UPROPERTY(VisibleAnywhere)
 	class UEscapePodAnimInstance* EscapePodAnimInstance;
@@ -37,5 +45,10 @@ private:
 	
 	UFUNCTION()
 	void OnEscapePodEnter();
+
+	UFUNCTION()
+	void OnFadeOutFinish();
+
+	bool bWasClosing = false;
 
 };
