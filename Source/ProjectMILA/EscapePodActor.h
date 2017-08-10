@@ -3,7 +3,6 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
-#include "InteractableComponent.h"
 #include "EscapePodActor.generated.h"
 
 UCLASS()
@@ -31,20 +30,20 @@ private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* EscapePodMeshComponent;
 
-	UPROPERTY(VisibleAnywhere, Category = InteractableOpen, meta = (AllowPrivateAccess = "true"))
-	UInteractableComponent* InteractableOpenComponent;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* BoxComponentToOpenPod;
 
-	UPROPERTY(VisibleAnywhere, Category = InteractableClose, meta = (AllowPrivateAccess = "true"))
-	UInteractableComponent* InteractableCloseComponent;
+	UPROPERTY(VisibleAnywhere)
+	class UBoxComponent* BoxComponentToClosePod;
 
 	UPROPERTY(VisibleAnywhere)
 	class UEscapePodAnimInstance* EscapePodAnimInstance;
 
 	UFUNCTION()
-	void OnControlRoomEnter();
+	void OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	
 	UFUNCTION()
-	void OnEscapePodEnter();
+	void OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
 	UFUNCTION()
 	void OnFadeOutFinish();

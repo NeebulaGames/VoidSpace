@@ -2,7 +2,6 @@
 
 #include "ProjectMILA.h"
 #include "EscapePodActor.h"
-#include "InteractableComponent.h"
 #include "EscapePodAnimInstance.h"
 #include "SpaceGameStateBase.h"
 #include "SpaceCharacter.h"
@@ -23,20 +22,17 @@ AEscapePodActor::AEscapePodActor()
 	static ConstructorHelpers::FObjectFinder<UClass> escapePodBlueprint(TEXT("Class'/Game/Animations/EscapePod/EscapePodBlueprint.EscapePodBlueprint_C'"));
 	EscapePodMeshComponent->SetAnimInstanceClass(escapePodBlueprint.Object);
 
-	InteractableOpenComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableToOpen"));
-	InteractableOpenComponent->SetupAttachment(RootComponent);
-	InteractableOpenComponent->bRequireUseButton = false;
-	InteractableOpenComponent->bHighlight = false;
-	InteractableOpenComponent->BoxComponent->SetBoxExtent(FVector(200.f, 250.f, 200.f));
-	InteractableOpenComponent->BoxComponent->SetRelativeLocation(FVector(0.f, 230.f, 150.f));
+	BoxComponentToOpenPod = CreateDefaultSubobject<UBoxComponent>("TriggerBoxToOpenPod");
+	BoxComponentToOpenPod->SetupAttachment(RootComponent);
+	BoxComponentToOpenPod->InitBoxExtent(FVector(200.f, 250.f, 200.f));
+	BoxComponentToOpenPod->SetRelativeLocation(FVector(0.f, 230.f, 150.f));
+	BoxComponentToOpenPod->bSelectable = false;
 
-	InteractableCloseComponent = CreateDefaultSubobject<UInteractableComponent>(TEXT("InteractableToClose"));
-	InteractableCloseComponent->SetupAttachment(RootComponent);
-	InteractableCloseComponent->bRequireUseButton = false;
-	InteractableCloseComponent->bHighlight = false;
-	InteractableCloseComponent->BoxComponent->SetBoxExtent(FVector(50.f, 50.f, 50.f));
-	InteractableCloseComponent->BoxComponent->SetRelativeLocation(FVector(0.f, 0.f, 170.f));
-
+	BoxComponentToClosePod = CreateDefaultSubobject<UBoxComponent>("TriggerBoxToClosePod");
+	BoxComponentToClosePod->SetupAttachment(RootComponent);
+	BoxComponentToClosePod->InitBoxExtent(FVector(50.f, 50.f, 50.f));
+	BoxComponentToClosePod->SetRelativeLocation(FVector(0.f, 0.f, 170.f));
+	BoxComponentToClosePod->bSelectable = false;
 }
 
 // Called when the game starts or when spawned
@@ -44,8 +40,8 @@ void AEscapePodActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	InteractableOpenComponent->OnTriggerEnter.AddDynamic(this, &AEscapePodActor::OnControlRoomEnter);
-	InteractableCloseComponent->OnTriggerEnter.AddDynamic(this, &AEscapePodActor::OnEscapePodEnter);
+	BoxComponentToOpenPod->OnComponentBeginOverlap.AddDynamic(this, &AEscapePodActor::OnControlRoomEnter);
+	BoxComponentToClosePod->OnComponentBeginOverlap.AddDynamic(this, &AEscapePodActor::OnEscapePodEnter);
 
 	EscapePodAnimInstance = Cast<UEscapePodAnimInstance>(EscapePodMeshComponent->GetAnimInstance());
 }
@@ -70,17 +66,23 @@ void AEscapePodActor::Tick(float DeltaTime)
 }
 
 
-void AEscapePodActor::OnControlRoomEnter()
+void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	EscapePodAnimInstance->bIsOpening = true;
-	InteractableOpenComponent->OnTriggerEnter.RemoveDynamic(this, &AEscapePodActor::OnControlRoomEnter);
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherActor->IsA(ASpaceCharacter::StaticClass()))
+	{
+		EscapePodAnimInstance->bIsOpening = true;
+		BoxComponentToOpenPod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnControlRoomEnter);
+	}
 }
 
-void AEscapePodActor::OnEscapePodEnter()
+void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	EscapePodAnimInstance->bIsClosing = true;
-	bWasClosing = true;
-	InteractableCloseComponent->OnTriggerEnter.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
+	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherActor->IsA(ASpaceCharacter::StaticClass()))
+	{
+		EscapePodAnimInstance->bIsClosing = true;
+		bWasClosing = true;
+		BoxComponentToClosePod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
+	}
 }
 
 void AEscapePodActor::OnFadeOutFinish()
