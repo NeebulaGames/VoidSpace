@@ -45,7 +45,7 @@ void AEscapePodActor::BeginPlay()
 	Super::BeginPlay();
 
 	InteractableOpenComponent->OnTriggerEnter.AddDynamic(this, &AEscapePodActor::OnControlRoomEnter);
-	//InteractableCloseComponent->OnTriggerEnter.AddDynamic(this, &AEscapePodActor::OnEscapePodEnter);
+	InteractableCloseComponent->OnTriggerEnter.AddDynamic(this, &AEscapePodActor::OnEscapePodEnter);
 
 	EscapePodAnimInstance = Cast<UEscapePodAnimInstance>(EscapePodMeshComponent->GetAnimInstance());
 }
@@ -80,7 +80,7 @@ void AEscapePodActor::OnEscapePodEnter()
 {
 	EscapePodAnimInstance->bIsClosing = true;
 	bWasClosing = true;
-	//InteractableCloseComponent->OnTriggerEnter.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
+	InteractableCloseComponent->OnTriggerEnter.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
 }
 
 void AEscapePodActor::OnFadeOutFinish()
