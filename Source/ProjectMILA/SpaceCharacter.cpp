@@ -56,6 +56,9 @@ ASpaceCharacter::ASpaceCharacter()
 
 	ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
 	ChokeDeathSequence = ChokeSequence.Object;
+
+	ConstructorHelpers::FObjectFinder<USoundCue> footsteps(TEXT("SoundCue'/Game/Sounds/SFX/Footsteps/SC_Footstep.SC_Footstep'"));
+	FootstepsCue = footsteps.Object;
 }
 
 // Called when the game starts or when spawned
@@ -66,7 +69,7 @@ void ASpaceCharacter::BeginPlay()
 	playerController = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 
 	AudioComponent->bIsUISound = true;
-	AudioComponent->SetSound(EVASound);
+	AudioComponent->SetSound(FootstepsCue);
 
 	AudioComponent->SetActive(false);
 }
@@ -77,7 +80,7 @@ void ASpaceCharacter::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 	
-	if (WearsSpaceSuit() && !bGravityEnabled && GetCharacterMovement()->GetCurrentAcceleration().GetAbsMax() > 0.0f)
+	if (GetCharacterMovement()->GetCurrentAcceleration().GetAbsMax() > 0.0f && !bPressedJump && !bWasJumping)
 	{
 		AudioComponent->SetActive(true);
 	}
@@ -150,9 +153,15 @@ void ASpaceCharacter::ToggleGravity()
 		characterMovement->MovementMode = characterMovement->DefaultLandMovementMode = bGravityEnabled ? MOVE_Walking : MOVE_Flying;
 
 		if (bGravityEnabled)
+		{
 			EquippedSuit->StopConsumingOxygen();
+			AudioComponent->SetSound(FootstepsCue);
+		}
 		else
+		{
 			EquippedSuit->StartConsumingOxygen();
+			AudioComponent->SetSound(EVASound);
+		}
 	}
 }
 
@@ -425,6 +434,7 @@ void ASpaceCharacter::OnStartSprint()
 	{
 		bIsSprinting = true;
 		GetCharacterMovement()->MaxWalkSpeed = RunSpeed;
+		FootstepsCue->PitchMultiplier = 1.6f;
 	}
 }
 
@@ -432,6 +442,7 @@ void ASpaceCharacter::OnStopSprint()
 {
 	bIsSprinting = false;
 	GetCharacterMovement()->MaxWalkSpeed = WalkSpeed;
+	FootstepsCue->PitchMultiplier = 1.f;
 }
 
 void ASpaceCharacter::OnFire()

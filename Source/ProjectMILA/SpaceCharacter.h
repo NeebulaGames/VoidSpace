@@ -143,6 +143,9 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;
 
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	class USoundCue* FootstepsCue;
+
 	APlayerController* playerController;
 
 };
