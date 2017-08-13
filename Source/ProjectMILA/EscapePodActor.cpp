@@ -13,7 +13,7 @@ AEscapePodActor::AEscapePodActor()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
-	static ConstructorHelpers::FObjectFinder<USkeletalMesh> escapePod(TEXT("SkeletalMesh'/Game/Meshes/EscapePod/EscapePod.EscapePod'"));
+	static ConstructorHelpers::FObjectFinder<USkeletalMesh> escapePod(TEXT("SkeletalMesh'/Game/Meshes/Props/EscapePod/EscapePod.EscapePod'"));
 	EscapePodMeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Escape Pod"));
 	RootComponent = EscapePodMeshComponent;
 	EscapePodMeshComponent->SetSkeletalMesh(escapePod.Object);
