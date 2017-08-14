@@ -43,6 +43,9 @@ public:
 	UPROPERTY(VisibleAnywhere, Category = "PlayerCamera")
 	class UCameraComponent* FirstPersonCameraComponent = nullptr;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = CameraBobbing)
+	TSubclassOf<UCameraShake> CameraBobbing;
+
 protected:
 
 	FVector offset = FVector(0.f, 0.f, 50.f);
@@ -109,6 +112,12 @@ private:
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
 	float MaxStamina = 100;
 
+	UPROPERTY(EditAnywhere, Category = CameraBobbing)
+	float RunScale = 2;
+
+	UPROPERTY(EditAnywhere, Category = CameraBobbing)
+	float WalkScale = 1;
+
 	class UHighlightComponent* LookedObject = nullptr;
 
 	UPROPERTY(BlueprintReadWrite, EditAnywhere, Category = Spacesuit, meta = (AllowPrivateAccess = "true"))
@@ -133,5 +142,10 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;
+
+	UPROPERTY(VisibleAnywhere, Category = Audio)
+	class USoundCue* FootstepsCue;
+
+	APlayerController* playerController;
 
 };

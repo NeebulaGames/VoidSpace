@@ -34,12 +34,14 @@ void ASimonStandActor::BeginPlay()
 	manager->OnEventFinished.AddDynamic(this, &ASimonStandActor::EventFinished);
 
 	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASimonStandActor::SimonCompleted);
+	ScreenMaterial = SimonStandMesh->CreateAndSetMaterialInstanceDynamic(1);
 }
 
 void ASimonStandActor::SimonCompleted()
 {
 	bSimonCompleted = true;
 	InteractableComponent->DestroyComponent();
+	ScreenMaterial->SetScalarParameterValue("Display", 1.f);
 	OnSimonCompleted.Broadcast();
 }
 

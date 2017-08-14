@@ -44,7 +44,7 @@ void APcActor::BeginPlay()
 	Super::BeginPlay();
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventStarted.AddDynamic(this, &APcActor::OnActivePc);
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
-	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(6);
+	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(0);
 	ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 }
 
@@ -69,7 +69,7 @@ void APcActor::OnActivePc()
 {
 	if(ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->GetCurrentEvent()->Name.Equals(FString("The Meteor")))
 	{
-		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
+		ScreenMaterial->SetScalarParameterValue("Display", 0.f);
 		BoxComponent->bGenerateOverlapEvents = true;
 		bPcIsActive = true;
 	}
@@ -79,9 +79,8 @@ void APcActor::OnDisablePc()
 {
 	if (bPcIsActive)
 	{
-		ScreenMaterial->SetScalarParameterValue("Display", 0.f);
+		ScreenMaterial->SetScalarParameterValue("Display", 1.f);
 		BoxComponent->bGenerateOverlapEvents = false;
 		bPcIsActive = false;
 	}
 }
-
