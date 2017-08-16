@@ -5,6 +5,9 @@
 #include "EscapePodAnimInstance.h"
 #include "SpaceGameStateBase.h"
 #include "SpaceCharacter.h"
+#include "LevelSequence.h"
+#include "MovieSceneSequencePlayer.h"
+#include "LevelSequencePlayer.h"
 
 
 // Sets default values
@@ -31,8 +34,11 @@ AEscapePodActor::AEscapePodActor()
 	BoxComponentToClosePod = CreateDefaultSubobject<UBoxComponent>("TriggerBoxToClosePod");
 	BoxComponentToClosePod->SetupAttachment(RootComponent);
 	BoxComponentToClosePod->InitBoxExtent(FVector(50.f, 50.f, 50.f));
-	BoxComponentToClosePod->SetRelativeLocation(FVector(0.f, 0.f, 170.f));
+	BoxComponentToClosePod->SetRelativeLocation(FVector(0.f, 145.f, 170.f));
 	BoxComponentToClosePod->bSelectable = false;
+
+	ConstructorHelpers::FObjectFinder<ULevelSequence> EndSequence1(TEXT("LevelSequence'/Game/Sequences/EscapeSequence.EscapeSequence'"));
+	EndSequenceP1 = EndSequence1.Object;
 }
 
 // Called when the game starts or when spawned
@@ -63,8 +69,18 @@ void AEscapePodActor::Tick(float DeltaTime)
 		static FTimerHandle unusedHandle;
 		GetWorldTimerManager().SetTimer(unusedHandle, this, &AEscapePodActor::OnFadeOutFinish, delay);
 	}
+
+	if (bClose)
+	{
+		EscapePodAnimInstance->bIsClosing = true;
+		bClose = false;
+	}
 }
 
+void AEscapePodActor::ClosePod()
+{
+	EscapePodAnimInstance->bIsClosing = true;
+}
 
 void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
@@ -77,12 +93,19 @@ void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AA
 
 void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherActor->IsA(ASpaceCharacter::StaticClass()))
+	/*if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherActor->IsA(ASpaceCharacter::StaticClass()))
 	{
 		EscapePodAnimInstance->bIsClosing = true;
 		bWasClosing = true;
 		BoxComponentToClosePod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
-	}
+	}*/
+
+	ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = false;
+	ASpaceGameStateBase::Instance(GetWorld())->DisablePlayerInput();
+
+	FMovieSceneSequencePlaybackSettings settings;
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequenceP1, settings);
+	player->Play();
 }
 
 void AEscapePodActor::OnFadeOutFinish()
