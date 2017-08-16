@@ -210,7 +210,7 @@ void ASpaceCharacter::MoveForward(float Val)
 	{
 		if(Val != 0.0f)
 		{
-			if (CameraBobbing && playerController)
+			if (CameraBobbing && playerController && bGravityEnabled)
 				playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
 
 			// find out which way is forward
@@ -252,7 +252,7 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 {
 	if (Controller != nullptr && Val != 0.0f)
 	{
-		if (CameraBobbing && playerController)
+		if (CameraBobbing && playerController && bGravityEnabled)
 			playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
 
 		// find out which way is right
