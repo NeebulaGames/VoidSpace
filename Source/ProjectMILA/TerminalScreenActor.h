@@ -36,13 +36,16 @@ private:
 	UTextRenderComponent* TextComponent;
 
 	UPROPERTY(Interp, EditAnywhere, Category = ScreenText)
-	int MaxLineWidth = 30;
+	int MaxLineWidth = 39;
 
 	UPROPERTY(Interp, EditAnywhere, Category = ScreenText)
 	float BlinkRatio = 0.5f;
 
 	UPROPERTY(Interp, EditAnywhere, Category = ScreenText)
 	FString Text;
+
+	UPROPERTY(Interp, EditAnywhere, Category = ScreenText)
+	int DisplayLength = 0;
 
 	bool DisplaySlash = true;
 	float NextBlinkTime = BlinkRatio;

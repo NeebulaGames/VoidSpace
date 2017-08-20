@@ -26,7 +26,7 @@ ATerminalScreenActor::ATerminalScreenActor()
 
 	TextComponent = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Text"));
 	TextComponent->SetRelativeRotation(FRotator(0.f, 90.f, 0.f));
-	TextComponent->SetWorldSize(7.f);
+	TextComponent->SetWorldSize(6.f);
 	TextComponent->SetVerticalAlignment(EVRTA_TextTop);
 	TextComponent->SetRelativeLocation(FVector(-47.f, 0.f, 24.f));
 	TextComponent->SetTextMaterial(fontMaterial.Object);
@@ -37,7 +37,7 @@ ATerminalScreenActor::ATerminalScreenActor()
 void ATerminalScreenActor::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
 }
 
 // Called every frame
@@ -45,8 +45,8 @@ void ATerminalScreenActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	FString displayText = Text;
-	
+	FString displayText = Text.Left(DisplayLength);
+
 	if (NextBlinkTime <= 0.f)
 	{
 		NextBlinkTime = BlinkRatio;
@@ -70,27 +70,38 @@ void ATerminalScreenActor::BreakText(FString& text)
 {
 	if (text.Len() > MaxLineWidth)
 	{
-		int lines = text.Len() / MaxLineWidth;
+		text.ReplaceInline(TEXT("<br>"), TEXT("\n"));
+		int pos = 0, relativePos = 0, space = 0;
 
-		for (int i = 1; i <= lines; ++i)
+		while (pos < text.Len())
 		{
-			int space = 0;
+			TCHAR current = text[pos];
 
-			for (int j = MaxLineWidth * i; j > MaxLineWidth * (i - 1) && j < text.Len() && space == 0; --j)
+			if (current == '\n')
 			{
-				if (text[j] == ' ')
-					space = j;
+				relativePos = -1;
+				space = 0;
+			}
+			else if (current == ' ')
+				space = pos;
+
+			if (relativePos == MaxLineWidth)
+			{
+				if (space == 0)
+				{
+					text.InsertAt(pos, '\n');
+				}
+				else
+				{
+					text[space] = '\n';
+				}
+
+				relativePos = -1;
+				space = 0;
 			}
 
-			if (space != 0)
-			{
-				text[space] = '\n';
-				lines = i + (text.Len() - MaxLineWidth * i) / MaxLineWidth;
-
-			}
-			else
-				text.InsertAt(MaxLineWidth * i, '\n');
+			++relativePos;
+			++pos;
 		}
 	}
 }
-
