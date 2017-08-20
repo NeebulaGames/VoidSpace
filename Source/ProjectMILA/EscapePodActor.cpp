@@ -70,7 +70,7 @@ void AEscapePodActor::Tick(float DeltaTime)
 		GetWorldTimerManager().SetTimer(unusedHandle, this, &AEscapePodActor::OnFadeOutFinish, delay);
 	}
 
-	if (bClose)
+	if (bClose && EscapePodAnimInstance->bIsOpened)
 	{
 		EscapePodAnimInstance->bIsClosing = true;
 		bClose = false;
