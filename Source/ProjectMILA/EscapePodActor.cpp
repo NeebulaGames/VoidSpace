@@ -75,6 +75,22 @@ void AEscapePodActor::Tick(float DeltaTime)
 		EscapePodAnimInstance->bIsClosing = true;
 		bClose = false;
 	}
+
+	if (PlayerCamera)
+	{
+		Movement += DeltaTime;
+		PlayerCamera->SetWorldLocation(FMath::Lerp<FVector>(CameraOriginalPosition, FVector(0.f, 137.576401f, 211.f), FVector(Movement)));
+		//PlayerCamera->SetWorldRotation(FMath::Lerp(CameraOriginalRotation, FRotator(0.f, 0.f, -90.f), Movement));
+
+		if (Movement >= 1.f)
+		{
+			PlayerCamera = nullptr;
+			
+			FMovieSceneSequencePlaybackSettings settings;
+			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequenceP1, settings);
+			player->Play();
+		}
+	}
 }
 
 void AEscapePodActor::ClosePod()
@@ -100,12 +116,21 @@ void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AAct
 		BoxComponentToClosePod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
 	}*/
 
-	ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = false;
-	ASpaceGameStateBase::Instance(GetWorld())->DisablePlayerInput();
+	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
-	FMovieSceneSequencePlaybackSettings settings;
+	PlayerCamera = character->FirstPersonCameraComponent;
+	CameraOriginalPosition = PlayerCamera->GetComponentLocation();
+	CameraOriginalRotation = PlayerCamera->GetComponentRotation();
+	PlayerCamera->bUsePawnControlRotation = false;
+
+	ASpaceGameStateBase* gameState = ASpaceGameStateBase::Instance(GetWorld());
+
+	gameState->bEnableHUD = false;
+	gameState->DisablePlayerInput();
+
+	/*FMovieSceneSequencePlaybackSettings settings;
 	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequenceP1, settings);
-	player->Play();
+	player->Play();*/
 }
 
 void AEscapePodActor::OnFadeOutFinish()

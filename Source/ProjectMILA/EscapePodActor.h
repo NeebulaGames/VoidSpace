@@ -59,4 +59,10 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = EndingCinematics)
 	class ULevelSequence* EndSequenceP1 = nullptr;
 
+	UCameraComponent* PlayerCamera = nullptr;
+
+	FVector CameraOriginalPosition;
+	FRotator CameraOriginalRotation;
+
+	float Movement = 0.f;
 };
