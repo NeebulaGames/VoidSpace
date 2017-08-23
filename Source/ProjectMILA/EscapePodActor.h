@@ -26,9 +26,6 @@ public:
 	UPROPERTY(EditAnywhere, Category = ElevatorInteractable)
 	AActor* TeleportPosition;
 
-	UFUNCTION(BlueprintCallable)
-	void ClosePod();
-
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* EscapePodMeshComponent;

@@ -99,11 +99,6 @@ void AEscapePodActor::Tick(float DeltaTime)
 	}
 }
 
-void AEscapePodActor::ClosePod()
-{
-	EscapePodAnimInstance->bIsClosing = true;
-}
-
 void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherActor->IsA(ASpaceCharacter::StaticClass()))
