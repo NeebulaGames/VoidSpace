@@ -11,7 +11,7 @@ ATerminalScreenActor::ATerminalScreenActor()
 	PrimaryActorTick.bCanEverTick = true;
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> plane(TEXT("StaticMesh'/Engine/BasicShapes/Plane.Plane'"));
-	ConstructorHelpers::FObjectFinder<UMaterial> screenMaterial(TEXT("Material'/Game/Materials/Props/TerminalScreen.TerminalScreen'"));
+	ConstructorHelpers::FObjectFinder<UMaterial> screenMaterial(TEXT("Material'/Game/Materials/Props/M_TerminalScreen.M_TerminalScreen'"));
 	ConstructorHelpers::FObjectFinder<UMaterial> fontMaterial(TEXT("Material'/Game/Fonts/M_Roboto.M_Roboto'"));
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
