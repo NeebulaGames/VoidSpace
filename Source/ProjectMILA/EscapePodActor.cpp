@@ -55,6 +55,8 @@ void AEscapePodActor::BeginPlay()
 
 void AEscapePodActor::Tick(float DeltaTime)
 {
+	ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
+
 	if (bWasClosing && EscapePodAnimInstance->bIsClosing == false)
 	{
 		bWasClosing = false;
@@ -62,7 +64,6 @@ void AEscapePodActor::Tick(float DeltaTime)
 		float delay = 1.0f;
 		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraFade(0.f, 1.f, delay, FLinearColor::Black, false, true);
 
-		ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
 		state->DisablePlayerInput();
 		state->bInteractionAllowed = false;
 
@@ -89,6 +90,11 @@ void AEscapePodActor::Tick(float DeltaTime)
 			FMovieSceneSequencePlaybackSettings settings;
 			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequenceP1, settings);
 			player->Play();
+
+			FTimerHandle unused;
+			FTimerDelegate callback;
+			callback.BindLambda([this, state]() -> void {state->EndGame(); });
+			GetWorldTimerManager().SetTimer(unused, callback, player->GetLength(), false);
 		}
 	}
 }
