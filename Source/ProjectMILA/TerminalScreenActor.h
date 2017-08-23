@@ -49,4 +49,7 @@ private:
 
 	bool DisplaySlash = true;
 	float NextBlinkTime = BlinkRatio;
+
+	FString PlayTime;
+	int Retries = 0;
 };

@@ -2,6 +2,7 @@
 
 #include "ProjectMILA.h"
 #include "TerminalScreenActor.h"
+#include "SpaceGameInstance.h"
 
 
 // Sets default values
@@ -38,6 +39,13 @@ void ATerminalScreenActor::BeginPlay()
 {
 	Super::BeginPlay();
 
+	USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
+
+	if (gameInstance)
+	{
+		PlayTime = (FDateTime::Now() - gameInstance->BeginPlayTime).ToString();
+		Retries = gameInstance->Retries;
+	}
 }
 
 // Called every frame
@@ -56,6 +64,9 @@ void ATerminalScreenActor::Tick(float DeltaTime)
 
 	if (DisplaySlash)
 		displayText.Append("_");
+
+	displayText.ReplaceInline(TEXT("$totaltime"), *PlayTime);
+	displayText.ReplaceInline(TEXT("$deaths"), *FString::FromInt(Retries));
 
 	BreakText(displayText);
 	TextComponent->SetText(FText::FromString(displayText));

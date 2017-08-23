@@ -63,3 +63,9 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 void USpaceGameInstance::EndLoadingScreen(UWorld* LoadedWorld)
 {
 }
+
+void USpaceGameInstance::ResetStats()
+{
+	LastDeathReason = EDeathReason::None;
+	Retries = 0.f;
+}
