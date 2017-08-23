@@ -110,13 +110,6 @@ void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AA
 
 void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	/*if ((OtherActor != nullptr) && (OtherActor != this) && (OtherComp != nullptr) && OtherActor->IsA(ASpaceCharacter::StaticClass()))
-	{
-		EscapePodAnimInstance->bIsClosing = true;
-		bWasClosing = true;
-		BoxComponentToClosePod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnEscapePodEnter);
-	}*/
-
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	PlayerCamera = character->FirstPersonCameraComponent;
@@ -128,10 +121,6 @@ void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AAct
 
 	gameState->bEnableHUD = false;
 	gameState->DisablePlayerInput();
-
-	/*FMovieSceneSequencePlaybackSettings settings;
-	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequenceP1, settings);
-	player->Play();*/
 }
 
 void AEscapePodActor::OnFadeOutFinish()
