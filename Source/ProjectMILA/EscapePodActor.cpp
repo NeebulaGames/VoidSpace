@@ -13,7 +13,7 @@
 // Sets default values
 AEscapePodActor::AEscapePodActor()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
+	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
 	static ConstructorHelpers::FObjectFinder<USkeletalMesh> escapePod(TEXT("SkeletalMesh'/Game/Meshes/Props/EscapePod/EscapePod.EscapePod'"));
@@ -38,7 +38,7 @@ AEscapePodActor::AEscapePodActor()
 	BoxComponentToClosePod->bSelectable = false;
 
 	ConstructorHelpers::FObjectFinder<ULevelSequence> EndSequence1(TEXT("LevelSequence'/Game/Sequences/EscapeSequence.EscapeSequence'"));
-	EndSequenceP1 = EndSequence1.Object;
+	EndSequence = EndSequence1.Object;
 }
 
 // Called when the game starts or when spawned
@@ -81,14 +81,14 @@ void AEscapePodActor::Tick(float DeltaTime)
 	{
 		Movement += DeltaTime;
 		PlayerCamera->SetWorldLocation(FMath::Lerp<FVector>(CameraOriginalPosition, FVector(0.f, 137.576401f, 211.f), FVector(Movement)));
-		//PlayerCamera->SetWorldRotation(FMath::Lerp(CameraOriginalRotation, FRotator(0.f, 0.f, -90.f), Movement));
 
 		if (Movement >= 1.f)
 		{
 			PlayerCamera = nullptr;
 			
 			FMovieSceneSequencePlaybackSettings settings;
-			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequenceP1, settings);
+			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequence, settings);
+			player->SetPlaybackPosition(0.f);
 			player->Play();
 
 			FTimerHandle unused;
@@ -105,6 +105,8 @@ void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AA
 	{
 		EscapePodAnimInstance->bIsOpening = true;
 		BoxComponentToOpenPod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnControlRoomEnter);
+
+		bClose = false;
 	}
 }
 

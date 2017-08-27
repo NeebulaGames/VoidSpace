@@ -26,6 +26,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = ElevatorInteractable)
 	AActor* TeleportPosition;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = EndingCinematics)
+	class ULevelSequence* EndSequence = nullptr;
+
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* EscapePodMeshComponent;
@@ -52,9 +55,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Interp)
 	bool bClose = false;
-
-	UPROPERTY(VisibleAnywhere, Category = EndingCinematics)
-	class ULevelSequence* EndSequenceP1 = nullptr;
 
 	UCameraComponent* PlayerCamera = nullptr;
 
