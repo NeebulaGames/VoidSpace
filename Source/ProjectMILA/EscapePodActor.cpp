@@ -57,20 +57,6 @@ void AEscapePodActor::Tick(float DeltaTime)
 {
 	ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
 
-	if (bWasClosing && EscapePodAnimInstance->bIsClosing == false)
-	{
-		bWasClosing = false;
-
-		float delay = 1.0f;
-		UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraFade(0.f, 1.f, delay, FLinearColor::Black, false, true);
-
-		state->DisablePlayerInput();
-		state->bInteractionAllowed = false;
-
-		static FTimerHandle unusedHandle;
-		GetWorldTimerManager().SetTimer(unusedHandle, this, &AEscapePodActor::OnFadeOutFinish, delay);
-	}
-
 	if (bClose && EscapePodAnimInstance->bIsOpened)
 	{
 		EscapePodAnimInstance->bIsClosing = true;
@@ -124,29 +110,3 @@ void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AAct
 	gameState->bEnableHUD = false;
 	gameState->DisablePlayerInput();
 }
-
-void AEscapePodActor::OnFadeOutFinish()
-{
-	if (TeleportPosition != nullptr)
-	{
-		ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-
-		AActor* parent = character->GetParentActor();
-		FRotator characterRotation = GetActorRotation() - TeleportPosition->GetActorRotation() + character->GetActorRotation();
-		FVector characterPosition = TeleportPosition->GetActorLocation() + FVector(0.f, 0.f, 150.f);
-		character->TeleportTo(characterPosition, TeleportPosition->GetActorRotation(), false, true);
-		character->SetActorRotation(characterRotation);
-		RootComponent->SetWorldLocationAndRotation(TeleportPosition->GetActorLocation(), TeleportPosition->GetActorRotation());
-	}
-
-	float delay = 1.0f;
-	UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0)->StartCameraFade(1.f, 0.f, delay, FLinearColor::Black, false, true);
-
-	ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
-	state->EnablePlayerInput();
-	state->bInteractionAllowed = true;
-
-	EscapePodAnimInstance->bIsOpening = true;
-}
-
-
