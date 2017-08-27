@@ -31,13 +31,13 @@ public:
 	UPROPERTY(BlueprintAssignable, Category = HoleEvents)
 	FOnHoleClosed OnHoleClosed;
 
+	UPROPERTY(VisibleAnywhere, Category = HoleDebug)
+	bool bRepaired = false;
+
 private:
 
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* HoleMeshComponent = nullptr;
-
-	UPROPERTY(VisibleAnywhere, Category = HoleDebug)
-	bool bRepaired = false;
 
 	UPROPERTY(VisibleAnywhere, Category = HoleDebug)
 	bool bRepairing = false;

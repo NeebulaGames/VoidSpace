@@ -132,6 +132,19 @@ void ASpaceCharacter::ReleaseObject()
 	physics_handle->ReleaseComponent();
 }
 
+void ASpaceCharacter::UnequipObject()
+{
+	if (EquippedObject)
+	{
+		EquippedObject->EndFire();
+		EquippedObject->Unequiped();
+
+		EquippedObject->GetOwner()->AttachToActor(nullptr, FAttachmentTransformRules::KeepWorldTransform);
+
+		EquippedObject = nullptr;
+	}
+}
+
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
