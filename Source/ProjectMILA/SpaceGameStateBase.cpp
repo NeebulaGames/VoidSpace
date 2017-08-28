@@ -27,6 +27,13 @@ void ASpaceGameStateBase::PostInitializeComponents()
 	
 	if (managerItr)
 		SpacestationManager = *managerItr;
+
+	USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
+
+	if (gameInstance->LastDeathReason == EDeathReason::None)
+	{
+		gameInstance->BeginPlayTime = FDateTime::Now();
+	}
 }
 
 void ASpaceGameStateBase::StartEventSM()
@@ -75,7 +82,9 @@ void ASpaceGameStateBase::Die(EDeathReason reason)
 			character->GetEquippedSuit()->StartConsumingOxygen();
 		else
 		{
-			static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
+			USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
+			gameInstance->LastDeathReason = reason;
+			++gameInstance->Retries;
 
 			float length = character->KillPlayer(reason);
 
@@ -96,8 +105,9 @@ void ASpaceGameStateBase::Die(EDeathReason reason)
 
 void ASpaceGameStateBase::EndGame()
 {
+	static_cast<USpaceGameInstance*>(GetGameInstance())->ResetStats();
+
 	// TODO: Transition to credits?
-	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = EDeathReason::None;
 	UGameplayStatics::OpenLevel(this, TEXT("MainMenu"), false);
 }
 

@@ -79,11 +79,29 @@ void AWelderActor::Tick(float DeltaTime)
 				{
 					if (Hole)
 					{
-						Hole->StopClose();
-					}
 
-					Hole = actor;
-					Hole->BeginClose();
+						if (Hole != actor)
+						{
+							Hole->StopClose();
+
+							Hole = actor;
+							Hole->BeginClose();
+						}
+
+						if (Hole->bRepaired)
+						{
+							Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->UnequipObject();
+
+							WelderMeshComponent->SetEnableGravity(false);
+							EquipableComponent->SetActive(false);
+							EquipableComponent->bHighlight = false;
+						}
+					}
+					else
+					{
+						Hole = actor;
+						Hole->BeginClose();
+					}
 				}
 				else if (Hole)
 				{
@@ -91,8 +109,6 @@ void AWelderActor::Tick(float DeltaTime)
 
 					Hole = nullptr;
 				}
-
-				// TODO: Detect hole
 			}
 		}
 	}
