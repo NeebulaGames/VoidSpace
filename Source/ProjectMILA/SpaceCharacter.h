@@ -140,6 +140,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
 	class ULevelSequence* ChokeDeathSequence = nullptr;
+	
+	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
+	class ULevelSequence* SpaceChokeDeathSequence = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;
