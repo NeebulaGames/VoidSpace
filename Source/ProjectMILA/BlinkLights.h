@@ -26,6 +26,8 @@ public:
 
 private:
 
+	float CurrentColor = 1.f;
+
 	void BlinkLights();
 	void ChangeLighting(ELightState lightState);
 

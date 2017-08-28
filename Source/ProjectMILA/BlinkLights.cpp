@@ -87,32 +87,18 @@ void ABlinkLights::BlinkLights()
 		CorridorCentralLight->SetIntensity(LightIntensity);
 	}
 
-	float current;
-
-	MaterialInstanceLeft->GetScalarParameterValue("Color", current);
-
-	if (current != 0.f)
+	if (CurrentColor != 0.f)
 	{
 		MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
 		MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
+
+		CurrentColor = 0.f;
 	}
 	else
 	{
-		float color;
+		ChangeLighting(StationManager->LightsState);
 
-		switch (StationManager->LightsState)
-		{
-		case ELightState::LIGHT_EMERGENCY:
-			color = 2.f;
-			break;
-		case ELightState::LIGHT_ON:
-		default:
-			color = 1.f;
-			break;
-		}
-
-		MaterialInstanceLeft->SetScalarParameterValue("Color", color);
-		MaterialInstanceRight->SetScalarParameterValue("Color", color);
+		CurrentState == ELightState::LIGHT_EMERGENCY ? CurrentColor = 2.f : CurrentColor = 1.f;
 	}	
 }
 
