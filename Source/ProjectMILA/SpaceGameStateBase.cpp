@@ -30,7 +30,7 @@ void ASpaceGameStateBase::PostInitializeComponents()
 
 	USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
 
-	if (gameInstance != nullptr && gameInstance->LastDeathReason == EDeathReason::None)
+	if (gameInstance->LastDeathReason == EDeathReason::None)
 	{
 		gameInstance->BeginPlayTime = FDateTime::Now();
 	}
