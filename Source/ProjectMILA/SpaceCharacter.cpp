@@ -333,6 +333,7 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 		sequence = ChokeDeathSequence;
 		break;
 	case EDeathReason::ChokeSpacesuit:
+		ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = true;
 		sequence = SpaceChokeDeathSequence;
 		break;
 	default:
