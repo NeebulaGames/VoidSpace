@@ -37,6 +37,8 @@ void ABlinkLights::BeginPlay()
 {
 	Super::BeginPlay();
 
+	CurrentBlinkState = EBlinkLightState::BLINK_TURNING_ON;
+
 	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
 
 	LightIntensity = CorridorCentralLight->Intensity;
@@ -56,24 +58,48 @@ void ABlinkLights::BeginPlay()
 void ABlinkLights::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	if (CurrentState != StationManager->LightsState && MaterialInstanceLeft && MaterialInstanceRight)
-	{
-		ChangeLighting(StationManager->LightsState);
-	}
 
-	// No blink when light off.
-	if (CurrentState != ELightState::LIGHT_OFF && Counter >= Frequency)
+	if (CurrentState != ELightState::LIGHT_OFF)
 	{
-		Counter = DeltaTime;
-		Frequency = FMath::RandRange(0.2f, 0.6f) + DeltaTime;
-		BlinkLights();
+		switch (CurrentBlinkState)
+		{
+		case EBlinkLightState::BLINK_OFF:
+
+			CorridorCentralLight->SetIntensity(0.f);
+			MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
+			MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
+			CurrentColor = 0.f;
+
+			if (Counter >= DelayOFF)
+			{
+				Counter = DeltaTime;
+				DelayOFF = FMath::RandRange(1.3f, 2.5f) + DeltaTime;
+				CurrentBlinkState = EBlinkLightState::BLINK_TURNING_ON;
+			}
+			else
+			{
+				Counter += DeltaTime;
+			}
+
+			break;
+		case EBlinkLightState::BLINK_TURNING_ON:
+
+			BlinkLights();
+
+			if (Counter >= DelayON)
+			{
+				Counter = DeltaTime;
+				DelayON = FMath::RandRange(0.1f, 0.5f) + DeltaTime;
+				CurrentBlinkState = EBlinkLightState::BLINK_OFF;
+			}
+			else
+			{
+				Counter += DeltaTime;
+			}
+			
+			break;
+		}
 	}
-	else
-	{
-		Counter += DeltaTime;
-	}
-	
 }
 
 void ABlinkLights::BlinkLights()

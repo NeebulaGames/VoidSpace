@@ -7,6 +7,14 @@
 #include "SpaceStatics.h"
 #include "BlinkLights.generated.h"
 
+
+UENUM(BlueprintType)
+enum class EBlinkLightState : uint8
+{
+	BLINK_OFF,
+	BLINK_TURNING_ON
+};
+
 UCLASS()
 class PROJECTMILA_API ABlinkLights : public AActor
 {
@@ -26,6 +34,8 @@ public:
 
 private:
 
+	EBlinkLightState CurrentBlinkState;
+
 	float CurrentColor = 1.f;
 
 	void BlinkLights();
@@ -34,7 +44,8 @@ private:
 	ELightState CurrentState;
 
 	float Counter = 0.f;
-	float Frequency = 0.f;
+	float DelayON = 0.f;
+	float DelayOFF = 0.f;
 
 	class ASpacestationManagementActor* StationManager;
 
