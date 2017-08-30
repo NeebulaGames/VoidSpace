@@ -25,7 +25,7 @@ ALockerActor::ALockerActor()
 	InteractableComponent->SetupAttachment(RootComponent);
 	InteractableComponent->bRequirePlayerNear = false;
 	InteractableComponent->BoxComponent->SetBoxExtent(FVector(30.f, 30.f, 90.f));
-	InteractableComponent->SetRelativeLocation(FVector(0.f, 0.f, 100.f));
+	InteractableComponent->SetRelativeLocation(FVector(0.f, 0.f, 0.f));
 	InteractableComponent->SetActive(true);
 }
 
