@@ -36,6 +36,21 @@ public:
 
 private:
 
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* OxygenLeak;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* Sparks1;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* Sparks2;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* Sparks3;
+
+	UPROPERTY(VisibleAnywhere)
+	class UParticleSystemComponent* Sparks4;
+
 	UPROPERTY(EditAnywhere)
 	class UStaticMeshComponent* HoleMeshComponent = nullptr;
 
