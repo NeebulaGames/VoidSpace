@@ -139,6 +139,9 @@ private:
 	class UAudioComponent* AudioComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
+	class ULevelSequence* MeteorDeathSequence = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
 	class ULevelSequence* ChokeDeathSequence = nullptr;
 	
 	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)

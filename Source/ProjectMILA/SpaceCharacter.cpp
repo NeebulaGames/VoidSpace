@@ -54,10 +54,13 @@ ASpaceCharacter::ASpaceCharacter()
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
 
-	ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
+	static ConstructorHelpers::FObjectFinder<ULevelSequence> MeteorSequence(TEXT("LevelSequence'/Game/Sequences/MeteorDeath.MeteorDeath'"));
+	MeteorDeathSequence = MeteorSequence.Object;
+
+	static ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
 	ChokeDeathSequence = ChokeSequence.Object;
 
-	ConstructorHelpers::FObjectFinder<ULevelSequence> SpaceChokeSequence(TEXT("LevelSequence'/Game/Sequences/SpaceChokeDeath.SpaceChokeDeath'"));
+	static ConstructorHelpers::FObjectFinder<ULevelSequence> SpaceChokeSequence(TEXT("LevelSequence'/Game/Sequences/SpaceChokeDeath.SpaceChokeDeath'"));
 	SpaceChokeDeathSequence = SpaceChokeSequence.Object;
 
 	ConstructorHelpers::FObjectFinder<USoundCue> footsteps(TEXT("SoundCue'/Game/Sounds/SFX/Footsteps/SC_Footstep.SC_Footstep'"));
@@ -327,8 +330,8 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 	switch (mode)
 	{
 	case EDeathReason::Meteor:
-		// TODO
-		return -1;
+		sequence = MeteorDeathSequence;
+		break;
 	case EDeathReason::Choke:
 		sequence = ChokeDeathSequence;
 		break;
