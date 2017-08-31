@@ -33,9 +33,8 @@ private:
 
 	ELightState CurrentLightState;
 
-	float Counter = 0.f;
-	float DelayON = 0.f;
-	float DelayOFF = 0.f;
+	float StateCounter = 0.f;
+	int BlinkCounter = 0;
 
 	class ASpacestationManagementActor* StationManager;
 
@@ -54,11 +53,10 @@ private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* CorridorRightLight;
 
-	void BlinkLights();
+	//void BlinkLights();
 	void ChangeLighting(ELightState lightState);
 	void SwitchState(EBlinkLightState newState);
 
 	void BlinkOff();
 	void BlinkTurningOn();
-	void SetBlinkDisabled();
 };

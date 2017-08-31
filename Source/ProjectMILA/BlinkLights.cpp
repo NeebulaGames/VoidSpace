@@ -37,8 +37,6 @@ void ABlinkLights::BeginPlay()
 {
 	Super::BeginPlay();
 
-	SwitchState(EBlinkLightState::BLINK_OFF);
-
 	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
 
 	LightIntensity = CorridorCentralLight->Intensity;
@@ -50,7 +48,7 @@ void ABlinkLights::BeginPlay()
 	index = CorridorRightLight->GetMaterialIndex("M_Light");
 	MaterialInstanceRight = CorridorRightLight->CreateAndSetMaterialInstanceDynamic(index);
 
-	ChangeLighting(StationManager->LightsState);
+	SwitchState(EBlinkLightState::BLINK_OFF);
 	
 }
 
@@ -62,31 +60,15 @@ void ABlinkLights::Tick(float DeltaTime)
 	switch (CurrentBlinkState)
 	{
 		case EBlinkLightState::BLINK_OFF:
+			StateCounter -= DeltaTime;
 			BlinkOff();
 			break;
 		case EBlinkLightState::BLINK_TURNING_ON:
+			StateCounter -= DeltaTime;
 			BlinkTurningOn();
 			break;
 		case EBlinkLightState::BLINK_DISABLED:
 			break;
-	}
-}
-
-void ABlinkLights::BlinkLights()
-{
-	// Light [Central] && LEDs [sides]
-	if (CorridorCentralLight->Intensity != 0.f && CurrentColor != 0.f)
-	{
-		CorridorCentralLight->SetIntensity(0.f);
-
-		MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
-		MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
-
-		CurrentColor = 0.f;
-	}
-	else
-	{
-		ChangeLighting(StationManager->LightsState);
 	}
 }
 
@@ -122,15 +104,18 @@ void ABlinkLights::SwitchState(EBlinkLightState newState)
 	switch (newState)
 	{
 		case EBlinkLightState::BLINK_OFF:
-			SetBlinkDisabled();
+			StateCounter = FMath::RandRange(2.f, 2.8f);
+			ChangeLighting(ELightState::LIGHT_OFF);
 			break;
 
 		case EBlinkLightState::BLINK_TURNING_ON:
+			BlinkCounter = FMath::RandRange(1, 3);
+			StateCounter = FMath::RandRange(0.2f, 0.4f);
 			ChangeLighting(StationManager->LightsState);
 			break;
 
 		case EBlinkLightState::BLINK_DISABLED:
-			SetBlinkDisabled();
+			ChangeLighting(ELightState::LIGHT_OFF);
 			break;
 	}
 
@@ -139,15 +124,15 @@ void ABlinkLights::SwitchState(EBlinkLightState newState)
 
 void ABlinkLights::BlinkOff()
 {
-	if(StationManager->LightsState == ELightState::LIGHT_OFF)
+	if (StationManager->LightsState == ELightState::LIGHT_OFF)
 	{
 		SwitchState(EBlinkLightState::BLINK_DISABLED);
 	}
 
-	//TODO: wait some random time
-
-	SwitchState(EBlinkLightState::BLINK_TURNING_ON);
-
+	if (StateCounter <= 0.f)
+	{
+		SwitchState(EBlinkLightState::BLINK_TURNING_ON);
+	}
 }
 
 void ABlinkLights::BlinkTurningOn()
@@ -157,17 +142,25 @@ void ABlinkLights::BlinkTurningOn()
 		SwitchState(EBlinkLightState::BLINK_DISABLED);
 	}
 
-	//TODO: do blinking stuff (between 1-3 blinks (random time between them) )
+	if (BlinkCounter == 0)
+	{
+		SwitchState(EBlinkLightState::BLINK_OFF);
+	}
+	else
+	{
+		if (StateCounter <= 0.f)
+		{
 
-	SwitchState(EBlinkLightState::BLINK_OFF);
-}
-
-void ABlinkLights::SetBlinkDisabled()
-{
-	CorridorCentralLight->SetIntensity(0.f);
-
-	MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
-	MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
-
-	CurrentColor = 0.f;
+			if (CurrentLightState == ELightState::LIGHT_OFF)
+			{
+				ChangeLighting(StationManager->LightsState);
+				StateCounter = FMath::RandRange(0.2f, 0.4f);
+			}
+			else {
+				ChangeLighting(ELightState::LIGHT_OFF);
+				StateCounter = FMath::RandRange(0.1f, 0.2f);
+				--BlinkCounter;
+			}
+		}
+	}
 }
