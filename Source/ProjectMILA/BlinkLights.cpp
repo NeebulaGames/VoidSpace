@@ -37,7 +37,7 @@ void ABlinkLights::BeginPlay()
 {
 	Super::BeginPlay();
 
-	CurrentBlinkState = EBlinkLightState::BLINK_TURNING_ON;
+	SwitchState(EBlinkLightState::BLINK_OFF);
 
 	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
 
@@ -59,62 +59,26 @@ void ABlinkLights::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (CurrentState != ELightState::LIGHT_OFF)
+	switch (CurrentBlinkState)
 	{
-		switch (CurrentBlinkState)
-		{
 		case EBlinkLightState::BLINK_OFF:
-
-			CorridorCentralLight->SetIntensity(0.f);
-			MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
-			MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
-			CurrentColor = 0.f;
-
-			if (Counter >= DelayOFF)
-			{
-				Counter = DeltaTime;
-				DelayOFF = FMath::RandRange(1.3f, 2.5f) + DeltaTime;
-				CurrentBlinkState = EBlinkLightState::BLINK_TURNING_ON;
-			}
-			else
-			{
-				Counter += DeltaTime;
-			}
-
+			BlinkOff();
 			break;
 		case EBlinkLightState::BLINK_TURNING_ON:
-
-			BlinkLights();
-
-			if (Counter >= DelayON)
-			{
-				Counter = DeltaTime;
-				DelayON = FMath::RandRange(0.1f, 0.5f) + DeltaTime;
-				CurrentBlinkState = EBlinkLightState::BLINK_OFF;
-			}
-			else
-			{
-				Counter += DeltaTime;
-			}
-			
+			BlinkTurningOn();
 			break;
-		}
+		case EBlinkLightState::BLINK_DISABLED:
+			break;
 	}
 }
 
 void ABlinkLights::BlinkLights()
 {
-	if (CorridorCentralLight->Intensity != 0.f)
+	// Light [Central] && LEDs [sides]
+	if (CorridorCentralLight->Intensity != 0.f && CurrentColor != 0.f)
 	{
 		CorridorCentralLight->SetIntensity(0.f);
-	}
-	else
-	{
-		CorridorCentralLight->SetIntensity(LightIntensity);
-	}
 
-	if (CurrentColor != 0.f)
-	{
 		MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
 		MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
 
@@ -123,37 +87,87 @@ void ABlinkLights::BlinkLights()
 	else
 	{
 		ChangeLighting(StationManager->LightsState);
-
-		CurrentState == ELightState::LIGHT_EMERGENCY ? CurrentColor = 2.f : CurrentColor = 1.f;
-	}	
+	}
 }
 
 void ABlinkLights::ChangeLighting(ELightState lightState)
 {
-	float color;
-
 	switch (lightState)
 	{
 	case ELightState::LIGHT_ON:
 		CorridorCentralLight->SetLightColor(LightColor);
 		CorridorCentralLight->SetIntensity(LightIntensity);
-		color = 1.f;
+		CurrentColor = 1.f;
 		break;
 	case ELightState::LIGHT_OFF:
 		CorridorCentralLight->SetLightColor(LightColor);
 		CorridorCentralLight->SetIntensity(0.f);
-		color = 0.f;
+		CurrentColor = 0.f;
 		break;
 	case ELightState::LIGHT_EMERGENCY:
 		CorridorCentralLight->SetLightColor(FLinearColor(FColor::Red));
 		CorridorCentralLight->SetIntensity(LightIntensity);
-		color = 2.f;
+		CurrentColor = 2.f;
 		break;
 	}
 
-	MaterialInstanceLeft->SetScalarParameterValue("Color", color);
-	MaterialInstanceRight->SetScalarParameterValue("Color", color);
+	MaterialInstanceLeft->SetScalarParameterValue("Color", CurrentColor);
+	MaterialInstanceRight->SetScalarParameterValue("Color", CurrentColor);
 
-	CurrentState = lightState;
+	CurrentLightState = lightState;
 }
 
+void ABlinkLights::SwitchState(EBlinkLightState newState)
+{
+	switch (newState)
+	{
+		case EBlinkLightState::BLINK_OFF:
+			SetBlinkDisabled();
+			break;
+
+		case EBlinkLightState::BLINK_TURNING_ON:
+			ChangeLighting(StationManager->LightsState);
+			break;
+
+		case EBlinkLightState::BLINK_DISABLED:
+			SetBlinkDisabled();
+			break;
+	}
+
+	CurrentBlinkState = newState;
+}
+
+void ABlinkLights::BlinkOff()
+{
+	if(StationManager->LightsState == ELightState::LIGHT_OFF)
+	{
+		SwitchState(EBlinkLightState::BLINK_DISABLED);
+	}
+
+	//TODO: wait some random time
+
+	SwitchState(EBlinkLightState::BLINK_TURNING_ON);
+
+}
+
+void ABlinkLights::BlinkTurningOn()
+{
+	if (StationManager->LightsState == ELightState::LIGHT_OFF)
+	{
+		SwitchState(EBlinkLightState::BLINK_DISABLED);
+	}
+
+	//TODO: do blinking stuff (between 1-3 blinks (random time between them) )
+
+	SwitchState(EBlinkLightState::BLINK_OFF);
+}
+
+void ABlinkLights::SetBlinkDisabled()
+{
+	CorridorCentralLight->SetIntensity(0.f);
+
+	MaterialInstanceLeft->SetScalarParameterValue("Color", 0.f);
+	MaterialInstanceRight->SetScalarParameterValue("Color", 0.f);
+
+	CurrentColor = 0.f;
+}

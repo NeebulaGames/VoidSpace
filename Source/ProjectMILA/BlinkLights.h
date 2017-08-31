@@ -8,13 +8,6 @@
 #include "BlinkLights.generated.h"
 
 
-UENUM(BlueprintType)
-enum class EBlinkLightState : uint8
-{
-	BLINK_OFF,
-	BLINK_TURNING_ON
-};
-
 UCLASS()
 class PROJECTMILA_API ABlinkLights : public AActor
 {
@@ -38,10 +31,7 @@ private:
 
 	float CurrentColor = 1.f;
 
-	void BlinkLights();
-	void ChangeLighting(ELightState lightState);
-
-	ELightState CurrentState;
+	ELightState CurrentLightState;
 
 	float Counter = 0.f;
 	float DelayON = 0.f;
@@ -63,4 +53,12 @@ private:
 
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* CorridorRightLight;
+
+	void BlinkLights();
+	void ChangeLighting(ELightState lightState);
+	void SwitchState(EBlinkLightState newState);
+
+	void BlinkOff();
+	void BlinkTurningOn();
+	void SetBlinkDisabled();
 };
