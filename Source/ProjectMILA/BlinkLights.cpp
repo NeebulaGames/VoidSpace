@@ -104,13 +104,13 @@ void ABlinkLights::SwitchState(EBlinkLightState newState)
 	switch (newState)
 	{
 		case EBlinkLightState::BLINK_OFF:
-			StateCounter = FMath::RandRange(2.f, 2.8f);
+			StateCounter = FMath::RandRange(1.5f, 2.f);
 			ChangeLighting(ELightState::LIGHT_OFF);
 			break;
 
 		case EBlinkLightState::BLINK_TURNING_ON:
 			BlinkCounter = FMath::RandRange(1, 3);
-			StateCounter = FMath::RandRange(0.2f, 0.4f);
+			StateCounter = FMath::RandRange(0.2f, 0.3f);
 			ChangeLighting(StationManager->LightsState);
 			break;
 
@@ -154,11 +154,11 @@ void ABlinkLights::BlinkTurningOn()
 			if (CurrentLightState == ELightState::LIGHT_OFF)
 			{
 				ChangeLighting(StationManager->LightsState);
-				StateCounter = FMath::RandRange(0.2f, 0.4f);
+				StateCounter = FMath::RandRange(0.2f, 0.3f);
 			}
 			else {
 				ChangeLighting(ELightState::LIGHT_OFF);
-				StateCounter = FMath::RandRange(0.1f, 0.2f);
+				StateCounter = FMath::RandRange(0.05f, 0.2f);
 				--BlinkCounter;
 			}
 		}
