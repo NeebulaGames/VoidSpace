@@ -57,6 +57,9 @@ ASpaceCharacter::ASpaceCharacter()
 	ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
 	ChokeDeathSequence = ChokeSequence.Object;
 
+	ConstructorHelpers::FObjectFinder<ULevelSequence> SpaceChokeSequence(TEXT("LevelSequence'/Game/Sequences/SpaceChokeDeath.SpaceChokeDeath'"));
+	SpaceChokeDeathSequence = SpaceChokeSequence.Object;
+
 	ConstructorHelpers::FObjectFinder<USoundCue> footsteps(TEXT("SoundCue'/Game/Sounds/SFX/Footsteps/SC_Footstep.SC_Footstep'"));
 	FootstepsCue = footsteps.Object;
 }
@@ -328,6 +331,10 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 		return -1;
 	case EDeathReason::Choke:
 		sequence = ChokeDeathSequence;
+		break;
+	case EDeathReason::ChokeSpacesuit:
+		ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = true;
+		sequence = SpaceChokeDeathSequence;
 		break;
 	default:
 		return -1;
