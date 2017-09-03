@@ -81,7 +81,7 @@ void APcActor::Tick(float DeltaSeconds)
 		PCMaterial->SetScalarParameterValue("Emergency", 1.f);
 	}
 
-	if (StationManager->LightsState != ELightState::LIGHT_EMERGENCY && bEmergencyKeyboard)
+	else if (StationManager->LightsState != ELightState::LIGHT_EMERGENCY && bEmergencyKeyboard)
 	{
 		bEmergencyKeyboard = false;
 		PCMaterial->SetScalarParameterValue("Emergency", 0.f);
