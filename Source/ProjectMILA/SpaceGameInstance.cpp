@@ -5,7 +5,6 @@
 #include "MoviePlayer.h"
 
 #include "SMainLoadingScreen.h"
-#include "SDeathLoadingScreen.h"
 
 
 void USpaceGameInstance::Init()
@@ -42,9 +41,8 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 		//DeathLoadingScreen
 		else if (CurrentMapName == MapName && MapName == "/Game/Maps/SpaceStation")
 		{
-			// replace this with a new dead Slate in the future.
-			LoadingScreen.bWaitForManualStop = true;
-			LoadingScreen.WidgetLoadingScreen = SNew(SDeathLoadingScreen).DeathReason(LastDeathReason);
+			LoadingScreen.bWaitForManualStop = false;
+			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 		}
 		//MenuLoadingScreen
 		else

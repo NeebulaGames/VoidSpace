@@ -19,14 +19,9 @@ void UGameEventManager::Tick(float DeltaTime)
 	else if (bCountDown)
 	{
 		Time -= DeltaTime;
-		if (GEngine)
-			GEngine->AddOnScreenDebugMessage(1, 1, FColor::Red, FString("Time remaining ").Append(FString::FromInt(Time)).Append("s"));
 
-		if (!bIsFading && Time <= 5.f)
-		{
-			bIsFading = true;
-			UGameplayStatics::GetPlayerCameraManager(this, 0)->StartCameraFade(0.f, 1.f, Time, FColor::White, true, false);
-		}
+		/*if (GEngine)
+			GEngine->AddOnScreenDebugMessage(1, 1, FColor::Red, FString("Time remaining ").Append(FString::FromInt(Time)).Append("s"));*/
 	}
 
 	if (bStartMachine) 
@@ -134,12 +129,6 @@ void UGameEventManager::FinishCurrentEvent()
 	UGameplayStatics::UnloadStreamLevel(this, FName(*CurrentEvent->LevelName), info);
 
 	UE_LOG(EventSM, Log, TEXT("Finish event %s"), *CurrentEvent->Name);
-
-	if (bIsFading)
-	{
-		UGameplayStatics::GetPlayerCameraManager(this, 0)->StopCameraFade();
-		bIsFading = true;
-	}
 
 	if (CurrentEvent->bKillAtEnd)
 	{
