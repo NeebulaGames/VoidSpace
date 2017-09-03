@@ -31,6 +31,9 @@ public:
 	bool WearsSpaceSuit() const;
 
 	UFUNCTION(BlueprintCallable, Category = Spacesuit)
+	bool IsGravityEnabled() const;
+
+	UFUNCTION(BlueprintCallable, Category = Spacesuit)
 	ASpaceSuitActor* GetEquippedSuit() const;
 	
 	UFUNCTION(Exec, Category = ExecFunctions)

@@ -198,6 +198,11 @@ bool ASpaceCharacter::WearsSpaceSuit() const
 	return EquippedSuit != nullptr;
 }
 
+bool ASpaceCharacter::IsGravityEnabled() const
+{
+	return bGravityEnabled;
+}
+
 ASpaceSuitActor* ASpaceCharacter::GetEquippedSuit() const
 {
 	return EquippedSuit;
