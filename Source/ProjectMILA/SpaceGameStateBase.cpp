@@ -86,6 +86,9 @@ void ASpaceGameStateBase::Die(EDeathReason reason)
 			gameInstance->LastDeathReason = reason;
 			++gameInstance->Retries;
 
+			if (reason == EDeathReason::Choke && !character->IsGravityEnabled())
+				reason = EDeathReason::ChokeSpacesuit;
+
 			float length = character->KillPlayer(reason);
 
 			if (length > 0)
