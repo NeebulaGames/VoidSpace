@@ -184,6 +184,26 @@ void ASpaceCharacter::ToggleGravity()
 	}
 }
 
+bool ASpaceCharacter::ToggleOxygen(bool consumeOxygen) const
+{
+	if (EquippedSuit)
+	{
+		ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+
+		state->SpacestationManager->bReduceLifeTime = consumeOxygen;
+		state->SpacestationManager->LifeTime = state->GameEventManager->GetTime();
+
+		if (consumeOxygen)
+			EquippedSuit->StartConsumingOxygen();
+		else
+			EquippedSuit->StopConsumingOxygen();
+
+		return true;
+	}
+
+	return false;
+}
+
 void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 {
 	EquippedSuit = spaceSuit;
