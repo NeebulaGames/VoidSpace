@@ -25,6 +25,7 @@ public:
 	void ReleaseObject();
 	void UnequipObject();
 	void ToggleGravity();
+	bool ToggleOxygen(bool consumeOxygen) const;
 	void ToggleSpaceSuit(ASpaceSuitActor* spaceSuit);
 
 	UFUNCTION(BlueprintCallable, Category = Spacesuit)

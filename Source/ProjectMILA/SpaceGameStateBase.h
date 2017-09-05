@@ -32,7 +32,7 @@ public:
 	void ToggleSpaceSuit(bool activate) const;
 
 	UFUNCTION(Exec)
-	void Die(EDeathReason reason);
+	bool Die(EDeathReason reason);
 
 	void EndGame();
 

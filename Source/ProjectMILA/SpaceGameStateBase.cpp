@@ -72,14 +72,17 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 	}
 }
 
-void ASpaceGameStateBase::Die(EDeathReason reason)
+bool ASpaceGameStateBase::Die(EDeathReason reason)
 {
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	if (character)
 	{
 		if (reason == EDeathReason::Choke && character->WearsSpaceSuit() && !character->GetEquippedSuit()->IsConsumingOxygen())
-			character->GetEquippedSuit()->StartConsumingOxygen();
+		{
+			character->ToggleOxygen(true);
+			return false;
+		}
 		else
 		{
 			USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
@@ -104,6 +107,8 @@ void ASpaceGameStateBase::Die(EDeathReason reason)
 			}
 		}
 	}
+
+	return true;
 }
 
 void ASpaceGameStateBase::EndGame()
