@@ -40,7 +40,7 @@ void AOrtoHoleActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HoleMaterial = HoleMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
+	HoleMaterial = HoleMeshComponent->CreateAndSetMaterialInstanceDynamic(0);
 
 	OxygenLeak->SetActive(true);
 	Sparks1->SetActive(true);
