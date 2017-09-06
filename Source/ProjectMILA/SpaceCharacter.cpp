@@ -426,12 +426,11 @@ void ASpaceCharacter::Use()
 
 void ASpaceCharacter::SprintControl(float DeltaTime)
 {
-	//TODO: Control by time not by ticks.
 	if (bIsSprinting)
 	{
 		if (StaminaDuration > 0)
 		{
-			StaminaDuration -= StaminaConsumition;
+			StaminaDuration -= StaminaConsumition * DeltaTime;
 		}
 		else if (StaminaDuration <= 0)
 		{
@@ -443,7 +442,7 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 
 	if (bIsRecovering)
 	{
-		StaminaDuration += StaminaRecovery;
+		StaminaDuration += StaminaRecovery * DeltaTime;
 
 		if (StaminaDuration >= MaxStamina)
 		{
@@ -454,7 +453,7 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 
 	if ((!bIsSprinting && !bIsRecovering) && StaminaDuration<MaxStamina)
 	{
-		StaminaDuration += StaminaRecovery;
+		StaminaDuration += StaminaRecovery * DeltaTime;
 
 		if (StaminaDuration >= MaxStamina)
 		{

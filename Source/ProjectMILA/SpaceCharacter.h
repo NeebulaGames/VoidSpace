@@ -106,16 +106,16 @@ private:
 	float EVASpeed = 200;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float StaminaDuration = 100;
+	float StaminaDuration = 15;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float StaminaRecovery = 0.3f;
+	float StaminaRecovery = 3.f;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float StaminaConsumition = 0.6f;
+	float StaminaConsumition = 6.f;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float MaxStamina = 100;
+	float MaxStamina = 15;
 
 	UPROPERTY(EditAnywhere, Category = CameraBobbing)
 	float RunScale = 2;
