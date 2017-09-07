@@ -28,13 +28,14 @@ void AOutsideLightActor::BeginPlay()
 
 	GameEventManager = ASpaceGameStateBase::Instance(GetWorld())->GameEventManager;
 	GameEventManager->OnEventStarted.AddDynamic(this, &AOutsideLightActor::OnEventStarted);
+	
+	MaterialInstance->SetScalarParameterValue("Blink", 1.f);
 }
 
 void AOutsideLightActor::OnEventStarted()
 {
 	if (GameEventManager->GetCurrentEvent()->Name.Equals(FString("Breathless")))
 	{
-		MaterialInstance->SetScalarParameterValue("Blink", 0.f);
 		bBlinkLight = false;
 
 		if (!bIsBreachSide)
@@ -42,7 +43,6 @@ void AOutsideLightActor::OnEventStarted()
 	}
 	else if (bBlinkLight == false)
 	{
-		MaterialInstance->SetScalarParameterValue("Blink", 1.f);
 		bBlinkLight = true;
 
 		if(!bIsBreachSide)
