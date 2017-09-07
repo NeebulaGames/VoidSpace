@@ -40,15 +40,12 @@ void AOutsideLightActor::OnEventStarted()
 		if (!bIsBreachSide)
 			MaterialInstance->SetScalarParameterValue("Active", 0.f);
 	}
-	else
+	else if (bBlinkLight == false)
 	{
-		if(bBlinkLight == false)
-		{
-			MaterialInstance->SetScalarParameterValue("Blink", 1.f);
-			bBlinkLight = true;
+		MaterialInstance->SetScalarParameterValue("Blink", 1.f);
+		bBlinkLight = true;
 
-			if(!bIsBreachSide)
-				MaterialInstance->SetScalarParameterValue("Active", 1.f);
-		}
+		if(!bIsBreachSide)
+			MaterialInstance->SetScalarParameterValue("Active", 1.f);
 	}
 }
