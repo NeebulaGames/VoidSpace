@@ -27,10 +27,10 @@ void AOutsideLightActor::BeginPlay()
 	MaterialInstance = StaticMeshComponent->CreateAndSetMaterialInstanceDynamic(index);
 
 	GameEventManager = ASpaceGameStateBase::Instance(GetWorld())->GameEventManager;
-	GameEventManager->OnEventStarted.AddDynamic(this, &AOutsideLightActor::OnBreathlessEvent);
+	GameEventManager->OnEventStarted.AddDynamic(this, &AOutsideLightActor::OnEventStarted);
 }
 
-void AOutsideLightActor::OnBreathlessEvent()
+void AOutsideLightActor::OnEventStarted()
 {
 	if (GameEventManager->GetCurrentEvent()->Name.Equals(FString("Breathless")))
 	{

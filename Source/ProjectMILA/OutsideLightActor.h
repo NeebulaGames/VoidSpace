@@ -35,5 +35,5 @@ private:
 	bool bBlinkLight = true;
 
 	UFUNCTION()
-	void OnBreathlessEvent();
+	void OnEventStarted();
 };
