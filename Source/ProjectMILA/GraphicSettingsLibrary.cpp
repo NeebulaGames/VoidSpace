@@ -164,6 +164,36 @@ bool UGraphicSettingsLibrary::IsDirty(bool& IsDirty)
 	return true;
 }
 
+bool UGraphicSettingsLibrary::SaveVideoModeAndQuality()
+{
+	UGameUserSettings* userSettings = GetGameUserSettings();
+	
+	if (!userSettings)
+	{
+		return false;
+	}
+
+	userSettings->ConfirmVideoMode();
+	userSettings->ApplyNonResolutionSettings();
+	userSettings->ApplySettings(false);
+	return true;
+}
+
+bool UGraphicSettingsLibrary::RevertVideoModeAndQuality()
+{
+	UGameUserSettings* userSettings = GetGameUserSettings();
+
+	if (!userSettings)
+	{
+		return false;
+	}
+
+	userSettings->RevertVideoMode();
+	userSettings->ResetToCurrentSettings();
+
+	return SaveVideoModeAndQuality();
+}
+
 UGameUserSettings* UGraphicSettingsLibrary::GetGameUserSettings()
 {
 	if (GEngine)

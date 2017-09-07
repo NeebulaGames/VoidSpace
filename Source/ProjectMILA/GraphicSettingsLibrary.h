@@ -51,7 +51,13 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Video Settings")
 	static bool IsDirty(bool& IsDirty);
 
+	// Saves and applies the settings to disk
+	UFUNCTION(BlueprintCallable, Category = "Video Settings")
+	static bool SaveVideoModeAndQuality();
 
+	// Reverts the settings from disk
+	UFUNCTION(BlueprintCallable, Category = "Video Settings")
+	static bool RevertVideoModeAndQuality();
 	
 private:
 	// Try to get the GameUserSettings object from the engine
