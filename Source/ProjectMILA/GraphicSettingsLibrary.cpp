@@ -144,8 +144,12 @@ bool UGraphicSettingsLibrary::SetVideoQualitySettings(int32 AntiAliasing, int32 
 	}
 
 	userSettings->ScalabilityQuality.AntiAliasingQuality = AntiAliasing;
+	userSettings->ScalabilityQuality.EffectsQuality = Effects;
 	userSettings->ScalabilityQuality.PostProcessQuality = PostProcess;
+	userSettings->ScalabilityQuality.ResolutionQuality = Resolution;
 	userSettings->ScalabilityQuality.ShadowQuality = Shadow;
+	userSettings->ScalabilityQuality.TextureQuality = Texture;
+	userSettings->ScalabilityQuality.ViewDistanceQuality = ViewDistance;
 
 	return true;
 }
