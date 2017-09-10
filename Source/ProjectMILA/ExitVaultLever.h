@@ -20,7 +20,7 @@ public:
 	UPROPERTY(EditAnywhere)
 	bool bCanBTriggered = true;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool IsTriggering();
 
 	UFUNCTION()
