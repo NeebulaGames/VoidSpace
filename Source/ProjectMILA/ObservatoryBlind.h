@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "SimonStandActor.h"
 #include "ObservatoryBlind.generated.h"
 
 UCLASS()
@@ -14,18 +15,17 @@ public:
 	// Sets default values for this actor's properties
 	AObservatoryBlind();
 
+	UPROPERTY(EditAnywhere, Category = SimonStand)
+	class ASimonStandActor* SimonStand;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
 	UPROPERTY(VisibleAnywhere, Category = BlindMesh, meta = (AllowPrivateAccess = "true"))
-	class USkeletalMeshComponent* BlindMeshComponent;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
-	class ASimonStandActor* SimonStandActor;
-
-	//TODO: move to sequence instead of matinee
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = BlindMesh)
-	class ULevelSequence* MeteorStorm;	
+	class USkeletalMeshComponent* BlindMeshComponent;	
+	
+	UFUNCTION()
+	void OnSimonCompleted();
 };

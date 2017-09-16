@@ -25,11 +25,12 @@ AObservatoryBlind::AObservatoryBlind()
 // Called when the game starts or when spawned
 void AObservatoryBlind::BeginPlay()
 {
-	Super::BeginPlay();
-	
-	if(Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance()) != nullptr)
-	{
-		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->SetSimonStandToInstance(SimonStandActor);
-		Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->MeteorStorm = MeteorStorm;
-	}	
+	Super::BeginPlay();	
+
+	SimonStand->OnSimonCompleted.AddDynamic(this, &AObservatoryBlind::OnSimonCompleted);
+}
+
+void AObservatoryBlind::OnSimonCompleted()
+{
+	Cast<UBlindAnimInstance>(BlindMeshComponent->GetAnimInstance())->bIsOpening = true;
 }

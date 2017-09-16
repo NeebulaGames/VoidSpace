@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "LevelSequencePlayer.h"
 #include "SimonStandActor.generated.h"
 
 UCLASS()
@@ -27,6 +28,9 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
+
+	UPROPERTY(EditAnywhere, Category = BlindMesh)
+	class ULevelSequence* MeteorStorm;
 
 	UFUNCTION()
 	void SimonCompleted();
