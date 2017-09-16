@@ -22,19 +22,21 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 		FLoadingScreenAttributes LoadingScreen;
 
 		LoadingScreen.bAutoCompleteWhenLoadingCompletes = true;
+
 		if (MapName == "/Game/Maps/MainMenu")
 		{
-			// TODO: Add movie
 			// Play initial movie
 			if (CurrentMapName == "")
 			{
-				LoadingScreen.bWaitForManualStop = false;
-				LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+				LoadingScreen.MoviePaths.Add(TEXT("UE4_Moving_Logo_720"));
+				// TODO: Add our movie
+				LoadingScreen.bMoviesAreSkippable = false;
+				LoadingScreen.bAllowInEarlyStartup = true;
+				LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
 			}
 			// Standard menu loading
 			else
 			{
-				LoadingScreen.bWaitForManualStop = false;
 				LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 			}
 		}
@@ -44,7 +46,7 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 			LoadingScreen.bWaitForManualStop = false;
 			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 		}
-		//MenuLoadingScreen
+		// MenuLoadingScreen
 		else
 		{
 			LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;
@@ -55,6 +57,7 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 		CurrentMapName = MapName;
 	
 		GetMoviePlayer()->SetupLoadingScreen(LoadingScreen);
+		GetMoviePlayer()->PlayMovie();
 	}
 }
 
