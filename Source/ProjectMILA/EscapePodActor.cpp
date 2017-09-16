@@ -73,8 +73,7 @@ void AEscapePodActor::Tick(float DeltaTime)
 			PlayerCamera = nullptr;
 			
 			FMovieSceneSequencePlaybackSettings settings;
-			ALevelSequenceActor* playerActor;
-			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequence, settings, playerActor);
+			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequence, settings);
 			player->SetPlaybackPosition(0.f);
 			player->Play();
 
