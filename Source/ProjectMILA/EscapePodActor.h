@@ -26,6 +26,9 @@ public:
 	UPROPERTY(EditAnywhere, Category = ElevatorInteractable)
 	AActor* TeleportPosition;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadonly, Category = EndingCinematics)
+	class ULevelSequence* EndSequence = nullptr;
+
 private:
 	UPROPERTY(VisibleAnywhere, meta = (AllowPrivateAccess = "true"))
 	class USkeletalMeshComponent* EscapePodMeshComponent;
@@ -45,9 +48,13 @@ private:
 	UFUNCTION()
 	void OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
-	UFUNCTION()
-	void OnFadeOutFinish();
+	UPROPERTY(EditAnywhere, Interp)
+	bool bClose = false;
 
-	bool bWasClosing = false;
+	UCameraComponent* PlayerCamera = nullptr;
 
+	FVector CameraOriginalPosition;
+	FRotator CameraOriginalRotation;
+
+	float Movement = 0.f;
 };

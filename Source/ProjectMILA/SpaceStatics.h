@@ -27,6 +27,14 @@ enum class ELedState : uint8
 	LED_EMERGENCY
 };
 
+UENUM(BlueprintType)
+enum class EBlinkLightState : uint8
+{
+	BLINK_OFF,
+	BLINK_TURNING_ON,
+	BLINK_DISABLED
+};
+
 
 /**
  * 

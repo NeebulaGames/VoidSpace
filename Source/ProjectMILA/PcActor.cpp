@@ -8,6 +8,7 @@
 #include "SpaceGameStateBase.h"
 #include "GameEventManager.h"
 #include "CdActor.h"
+#include "SpacestationManagementActor.h"
 
 
 // Sets default values
@@ -46,6 +47,13 @@ void APcActor::BeginPlay()
 	ASpaceGameStateBase::Instance(GetWorld())->GameEventManager->OnEventFinished.AddDynamic(this, &APcActor::OnDisablePc);
 	ScreenMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(0);
 	ScreenMaterial->SetScalarParameterValue("Display", 0.f);
+
+	PCMaterial = PcMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
+	PCMaterial->SetScalarParameterValue("Emergency", 0.f);
+
+	StationManager = ASpaceGameStateBase::Instance(GetWorld())->SpacestationManager;
+
+	bEmergencyKeyboard = false;
 }
 
 void APcActor::NotifyActorBeginOverlap(AActor* OtherActor)
@@ -62,6 +70,21 @@ void APcActor::NotifyActorBeginOverlap(AActor* OtherActor)
 			character->ReleaseObject();
 		}
 		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
+	}
+}
+
+void APcActor::Tick(float DeltaSeconds)
+{
+	if (StationManager->LightsState == ELightState::LIGHT_EMERGENCY && !bEmergencyKeyboard)
+	{
+		bEmergencyKeyboard = true;
+		PCMaterial->SetScalarParameterValue("Emergency", 1.f);
+	}
+
+	else if (StationManager->LightsState != ELightState::LIGHT_EMERGENCY && bEmergencyKeyboard)
+	{
+		bEmergencyKeyboard = false;
+		PCMaterial->SetScalarParameterValue("Emergency", 0.f);
 	}
 }
 

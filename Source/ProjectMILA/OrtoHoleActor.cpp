@@ -16,6 +16,23 @@ AOrtoHoleActor::AOrtoHoleActor()
 	RootComponent = HoleMeshComponent;
 	HoleMeshComponent->SetStaticMesh(holeMesh.Object);
 	HoleMeshComponent->SetCollisionProfileName(FName("BlockAll"));
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> oxygenLeak(TEXT("ParticleSystem'/Game/Particles/P_Distortion.P_Distortion'"));
+	OxygenLeak = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("DepressuringSystem"));
+	OxygenLeak->SetTemplate(oxygenLeak.Object);
+
+	static ConstructorHelpers::FObjectFinder<UParticleSystem> spark(TEXT("ParticleSystem'/Game/Particles/P_spark_burst.P_spark_burst'"));
+	Sparks1 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Sparks1"));
+	Sparks1->SetTemplate(spark.Object);
+
+	Sparks2 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Sparks2"));
+	Sparks2->SetTemplate(spark.Object);
+
+	Sparks3 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Sparks3"));
+	Sparks3->SetTemplate(spark.Object);
+
+	Sparks4 = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("Sparks4"));
+	Sparks4->SetTemplate(spark.Object);
 }
 
 // Called when the game starts or when spawned
@@ -23,7 +40,13 @@ void AOrtoHoleActor::BeginPlay()
 {
 	Super::BeginPlay();
 
-	HoleMaterial = HoleMeshComponent->CreateAndSetMaterialInstanceDynamic(1);
+	HoleMaterial = HoleMeshComponent->CreateAndSetMaterialInstanceDynamic(0);
+
+	OxygenLeak->SetActive(true);
+	Sparks1->SetActive(true);
+	Sparks2->SetActive(true);
+	Sparks3->SetActive(true);
+	Sparks4->SetActive(true);
 }
 
 void AOrtoHoleActor::Tick(float DeltaSeconds)
@@ -41,6 +64,12 @@ void AOrtoHoleActor::Tick(float DeltaSeconds)
 		{
 			bRepairing = false;
 			bRepaired = true;
+
+			OxygenLeak->SetActive(false);
+			Sparks1->SetActive(false);
+			Sparks2->SetActive(false);
+			Sparks3->SetActive(false);
+			Sparks4->SetActive(false);
 
 			OnHoleClosed.Broadcast();
 		}

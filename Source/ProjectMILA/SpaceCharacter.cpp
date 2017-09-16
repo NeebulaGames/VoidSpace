@@ -54,8 +54,14 @@ ASpaceCharacter::ASpaceCharacter()
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
 
-	ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
+	static ConstructorHelpers::FObjectFinder<ULevelSequence> MeteorSequence(TEXT("LevelSequence'/Game/Sequences/MeteorDeath.MeteorDeath'"));
+	MeteorDeathSequence = MeteorSequence.Object;
+
+	static ConstructorHelpers::FObjectFinder<ULevelSequence> ChokeSequence(TEXT("LevelSequence'/Game/Sequences/ChokeDeath.ChokeDeath'"));
 	ChokeDeathSequence = ChokeSequence.Object;
+
+	static ConstructorHelpers::FObjectFinder<ULevelSequence> SpaceChokeSequence(TEXT("LevelSequence'/Game/Sequences/SpaceChokeDeath.SpaceChokeDeath'"));
+	SpaceChokeDeathSequence = SpaceChokeSequence.Object;
 
 	ConstructorHelpers::FObjectFinder<USoundCue> footsteps(TEXT("SoundCue'/Game/Sounds/SFX/Footsteps/SC_Footstep.SC_Footstep'"));
 	FootstepsCue = footsteps.Object;
@@ -132,6 +138,19 @@ void ASpaceCharacter::ReleaseObject()
 	physics_handle->ReleaseComponent();
 }
 
+void ASpaceCharacter::UnequipObject()
+{
+	if (EquippedObject)
+	{
+		EquippedObject->EndFire();
+		EquippedObject->Unequiped();
+
+		EquippedObject->GetOwner()->AttachToActor(nullptr, FAttachmentTransformRules::KeepWorldTransform);
+
+		EquippedObject = nullptr;
+	}
+}
+
 // Enables and disables player's gravity
 void ASpaceCharacter::ToggleGravity()
 {
@@ -165,6 +184,26 @@ void ASpaceCharacter::ToggleGravity()
 	}
 }
 
+bool ASpaceCharacter::ToggleOxygen(bool consumeOxygen) const
+{
+	if (EquippedSuit)
+	{
+		ASpaceGameStateBase* state = Cast<ASpaceGameStateBase>(UGameplayStatics::GetGameState(GetWorld()));
+
+		state->SpacestationManager->bReduceLifeTime = consumeOxygen;
+		state->SpacestationManager->LifeTime = state->GameEventManager->GetTime();
+
+		if (consumeOxygen)
+			EquippedSuit->StartConsumingOxygen();
+		else
+			EquippedSuit->StopConsumingOxygen();
+
+		return true;
+	}
+
+	return false;
+}
+
 void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 {
 	EquippedSuit = spaceSuit;
@@ -177,6 +216,11 @@ void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 bool ASpaceCharacter::WearsSpaceSuit() const
 {
 	return EquippedSuit != nullptr;
+}
+
+bool ASpaceCharacter::IsGravityEnabled() const
+{
+	return bGravityEnabled;
 }
 
 ASpaceSuitActor* ASpaceCharacter::GetEquippedSuit() const
@@ -210,7 +254,7 @@ void ASpaceCharacter::MoveForward(float Val)
 	{
 		if(Val != 0.0f)
 		{
-			if (CameraBobbing && playerController)
+			if (CameraBobbing && playerController && bGravityEnabled)
 				playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
 
 			// find out which way is forward
@@ -252,7 +296,7 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 {
 	if (Controller != nullptr && Val != 0.0f)
 	{
-		if (CameraBobbing && playerController)
+		if (CameraBobbing && playerController && bGravityEnabled)
 			playerController->ClientPlayCameraShake(CameraBobbing, FMath::Abs(Val) * (bIsSprinting ? RunScale : WalkScale), ECameraAnimPlaySpace::CameraLocal);
 
 		// find out which way is right
@@ -311,10 +355,14 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 	switch (mode)
 	{
 	case EDeathReason::Meteor:
-		// TODO
-		return -1;
+		sequence = MeteorDeathSequence;
+		break;
 	case EDeathReason::Choke:
 		sequence = ChokeDeathSequence;
+		break;
+	case EDeathReason::ChokeSpacesuit:
+		ASpaceGameStateBase::Instance(GetWorld())->bEnableHUD = true;
+		sequence = SpaceChokeDeathSequence;
 		break;
 	default:
 		return -1;
@@ -378,12 +426,11 @@ void ASpaceCharacter::Use()
 
 void ASpaceCharacter::SprintControl(float DeltaTime)
 {
-	//TODO: Control by time not by ticks.
 	if (bIsSprinting)
 	{
 		if (StaminaDuration > 0)
 		{
-			StaminaDuration -= StaminaConsumition;
+			StaminaDuration -= StaminaConsumition * DeltaTime;
 		}
 		else if (StaminaDuration <= 0)
 		{
@@ -395,7 +442,7 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 
 	if (bIsRecovering)
 	{
-		StaminaDuration += StaminaRecovery;
+		StaminaDuration += StaminaRecovery * DeltaTime;
 
 		if (StaminaDuration >= MaxStamina)
 		{
@@ -406,7 +453,7 @@ void ASpaceCharacter::SprintControl(float DeltaTime)
 
 	if ((!bIsSprinting && !bIsRecovering) && StaminaDuration<MaxStamina)
 	{
-		StaminaDuration += StaminaRecovery;
+		StaminaDuration += StaminaRecovery * DeltaTime;
 
 		if (StaminaDuration >= MaxStamina)
 		{

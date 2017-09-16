@@ -23,11 +23,16 @@ public:
 	virtual void Tick(float DeltaSeconds) override;
 
 	void ReleaseObject();
+	void UnequipObject();
 	void ToggleGravity();
+	bool ToggleOxygen(bool consumeOxygen) const;
 	void ToggleSpaceSuit(ASpaceSuitActor* spaceSuit);
 
 	UFUNCTION(BlueprintCallable, Category = Spacesuit)
 	bool WearsSpaceSuit() const;
+
+	UFUNCTION(BlueprintCallable, Category = Spacesuit)
+	bool IsGravityEnabled() const;
 
 	UFUNCTION(BlueprintCallable, Category = Spacesuit)
 	ASpaceSuitActor* GetEquippedSuit() const;
@@ -101,16 +106,16 @@ private:
 	float EVASpeed = 200;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float StaminaDuration = 100;
+	float StaminaDuration = 15;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float StaminaRecovery = 0.3f;
+	float StaminaRecovery = 3.f;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float StaminaConsumition = 0.6f;
+	float StaminaConsumition = 6.f;
 
 	UPROPERTY(EditAnywhere, Category = "WalkAndRun")
-	float MaxStamina = 100;
+	float MaxStamina = 15;
 
 	UPROPERTY(EditAnywhere, Category = CameraBobbing)
 	float RunScale = 2;
@@ -138,7 +143,13 @@ private:
 	class UAudioComponent* AudioComponent;
 
 	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
+	class ULevelSequence* MeteorDeathSequence = nullptr;
+
+	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
 	class ULevelSequence* ChokeDeathSequence = nullptr;
+	
+	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
+	class ULevelSequence* SpaceChokeDeathSequence = nullptr;
 
 	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundWave* EVASound;

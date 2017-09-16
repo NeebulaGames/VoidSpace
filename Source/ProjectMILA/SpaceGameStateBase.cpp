@@ -27,6 +27,13 @@ void ASpaceGameStateBase::PostInitializeComponents()
 	
 	if (managerItr)
 		SpacestationManager = *managerItr;
+
+	USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
+
+	if (gameInstance->LastDeathReason == EDeathReason::None)
+	{
+		gameInstance->BeginPlayTime = FDateTime::Now();
+	}
 }
 
 void ASpaceGameStateBase::StartEventSM()
@@ -65,17 +72,25 @@ void ASpaceGameStateBase::ToggleSpaceSuit(bool activate) const
 	}
 }
 
-void ASpaceGameStateBase::Die(EDeathReason reason)
+bool ASpaceGameStateBase::Die(EDeathReason reason)
 {
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
 	if (character)
 	{
 		if (reason == EDeathReason::Choke && character->WearsSpaceSuit() && !character->GetEquippedSuit()->IsConsumingOxygen())
-			character->GetEquippedSuit()->StartConsumingOxygen();
+		{
+			character->ToggleOxygen(true);
+			return false;
+		}
 		else
 		{
-			static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = reason;
+			USpaceGameInstance* gameInstance = static_cast<USpaceGameInstance*>(GetGameInstance());
+			gameInstance->LastDeathReason = reason;
+			++gameInstance->Retries;
+
+			if (reason == EDeathReason::Choke && !character->IsGravityEnabled())
+				reason = EDeathReason::ChokeSpacesuit;
 
 			float length = character->KillPlayer(reason);
 
@@ -92,12 +107,15 @@ void ASpaceGameStateBase::Die(EDeathReason reason)
 			}
 		}
 	}
+
+	return true;
 }
 
 void ASpaceGameStateBase::EndGame()
 {
+	static_cast<USpaceGameInstance*>(GetGameInstance())->ResetStats();
+
 	// TODO: Transition to credits?
-	static_cast<USpaceGameInstance*>(GetGameInstance())->LastDeathReason = EDeathReason::None;
 	UGameplayStatics::OpenLevel(this, TEXT("MainMenu"), false);
 }
 
