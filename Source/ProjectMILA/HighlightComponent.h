@@ -4,7 +4,16 @@
 
 #include "CoreMinimal.h"
 #include "Components/SceneComponent.h"
+#include "ProjectMILA.h"
 #include "HighlightComponent.generated.h"
+
+UENUM()
+enum class EHighlightColor : uint32
+{
+	NONE = 0,
+	Orange = 254,
+	Blue = 255
+};
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
@@ -19,6 +28,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = HighlightConfig)
 	bool bHighlight = true;
+
+	UPROPERTY(EditAnywhere, Category = HighlightConfig)
+	EHighlightColor HighlightColor = EHighlightColor::Orange;
 
 protected:
 	// Called when the game starts

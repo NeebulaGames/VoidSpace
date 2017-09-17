@@ -20,7 +20,8 @@ void UPickableComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	ParentMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
+	if (bIgnorePlayerCollision)
+		ParentMesh->SetCollisionResponseToChannel(ECollisionChannel::ECC_Pawn, ECollisionResponse::ECR_Ignore);
 
 	// ...
 	
