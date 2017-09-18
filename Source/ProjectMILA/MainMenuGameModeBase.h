@@ -15,8 +15,7 @@ class PROJECTMILA_API AMainMenuGameModeBase : public AVoidSpaceGameModeBase
 
 public:
 	AMainMenuGameModeBase(const FObjectInitializer& ObjectInitializer);
-	
-	
-	
-	
+
+	UFUNCTION(BlueprintPure)
+	class UUserWidget* GetCurrentMenuWidget() const;
 };

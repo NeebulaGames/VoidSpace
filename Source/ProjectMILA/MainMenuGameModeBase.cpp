@@ -18,3 +18,8 @@ AMainMenuGameModeBase::AMainMenuGameModeBase(const FObjectInitializer& ObjectIni
 	static ConstructorHelpers::FObjectFinder<UClass> startingWidget(TEXT("Class'/Game/Blueprints/MainMenu.MainMenu_C'"));
 	StartingWidgetClass = startingWidget.Object;
 }
+
+UUserWidget* AMainMenuGameModeBase::GetCurrentMenuWidget() const
+{
+	return CurrentWidget;
+}
