@@ -38,9 +38,6 @@ private:
 	UFUNCTION()
 	void EventStarted();
 
-	UFUNCTION()
-	void EventFinished();
-
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
 
