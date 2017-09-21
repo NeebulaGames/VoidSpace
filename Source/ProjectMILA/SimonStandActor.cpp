@@ -34,7 +34,6 @@ void ASimonStandActor::BeginPlay()
 
 	UGameEventManager* manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
 	manager->OnEventStarted.AddDynamic(this, &ASimonStandActor::EventStarted);
-	manager->OnEventFinished.AddDynamic(this, &ASimonStandActor::EventFinished);
 
 	InteractableComponent->OnTriggerAction.AddDynamic(this, &ASimonStandActor::SimonCompleted);
 	ScreenMaterial = SimonStandMesh->CreateAndSetMaterialInstanceDynamic(1);
@@ -57,24 +56,18 @@ void ASimonStandActor::SimonCompleted()
 		ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), MeteorStorm, settings);
 		player->SetPlaybackPosition(0.f);
 		player->Play();
-
+		
 		FTimerHandle unused;
 		FTimerDelegate callback;
 		callback.BindLambda([this, state]() -> void {state->FinishEvent(); });
 		GetWorldTimerManager().SetTimer(unused, callback, player->GetLength(), false);
-
-		bSimonCompleted = true;
 	}
+
+	bSimonCompleted = true;
 }
 
 void ASimonStandActor::EventStarted()
 {
 	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name != "Beginning" && !bSimonCompleted)
-		SimonCompleted();
-}
-
-void ASimonStandActor::EventFinished()
-{
-	if (ASpaceGameStateBase::Instance(this)->GameEventManager->GetCurrentEvent()->Name == "Beginning" && !bSimonCompleted)
 		SimonCompleted();
 }
