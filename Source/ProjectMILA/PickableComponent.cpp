@@ -36,3 +36,7 @@ void UPickableComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAc
 	// ...
 }
 
+void UPickableComponent::PickedUp()
+{
+}
+

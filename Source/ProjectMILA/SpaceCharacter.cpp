@@ -410,6 +410,7 @@ void ASpaceCharacter::Use()
 				{
 					UPrimitiveComponent* component = pickable->GetOwner()->FindComponentByClass<UPrimitiveComponent>();
 					//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
+					pickable->PickedUp();
 					physics_handle->GrabComponentAtLocationWithRotation(
 						component, 
 						"None", 
