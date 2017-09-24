@@ -142,6 +142,8 @@ private:
 	UPROPERTY(EditAnywhere, Category = Audio)
 	class UAudioComponent* AudioComponent;
 
+	UActorComponent* MainAudioComponent;
+
 	UPROPERTY(VisibleAnywhere, Category = DeathCinematics)
 	class ULevelSequence* MeteorDeathSequence = nullptr;
 

@@ -81,6 +81,15 @@ void ASpaceCharacter::BeginPlay()
 	AudioComponent->SetSound(FootstepsCue);
 
 	AudioComponent->SetActive(false);
+
+	for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		AActor *actor = *ActorItr;
+		if (actor->GetName() == "AudioManager")
+		{
+			MainAudioComponent = actor->FindComponentByClass(UAudioComponent::StaticClass());
+		}
+	}
 }
 
 // Called every frame
@@ -375,6 +384,12 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 
 	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
 	player->Play();
+
+	if (MainAudioComponent)
+	{
+		static_cast<UAudioComponent*>(MainAudioComponent)->FadeOut(1.0f, 0.0f);
+	}
+
 	return player->GetLength();
 }
 
