@@ -50,6 +50,9 @@ ASpaceCharacter::ASpaceCharacter()
 	static ConstructorHelpers::FObjectFinder<USoundWave> evaSound(TEXT("SoundWave'/Game/Sounds/SFX/eva.eva'"));
 	EVASound = evaSound.Object;
 
+	static ConstructorHelpers::FObjectFinder<USoundWave> deathSound(TEXT("SoundWave'/Game/Sounds/SFX/02_PITIDO_MORT.02_PITIDO_MORT'"));
+	DeathSound = deathSound.Object;
+
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
@@ -351,7 +354,9 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 	DisableInput(Cast<APlayerController>(GetController()));
 	FMovieSceneSequencePlaybackSettings settings;
 	ULevelSequence* sequence;
-	
+
+	UGameplayStatics::PlaySound2D(GetWorld(), DeathSound, 0.35f);
+		
 	switch (mode)
 	{
 	case EDeathReason::Meteor:

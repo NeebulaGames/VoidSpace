@@ -155,6 +155,9 @@ private:
 	class USoundWave* EVASound;
 
 	UPROPERTY(VisibleAnywhere, Category = Audio)
+	class USoundWave* DeathSound;
+
+	UPROPERTY(VisibleAnywhere, Category = Audio)
 	class USoundCue* FootstepsCue;
 
 	APlayerController* playerController;
