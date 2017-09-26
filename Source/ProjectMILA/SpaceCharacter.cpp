@@ -382,7 +382,8 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 		return -1;
 	}
 
-	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
+	ALevelSequenceActor* playerActor;
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings, playerActor);
 	player->Play();
 
 	if (MainAudioComponent)

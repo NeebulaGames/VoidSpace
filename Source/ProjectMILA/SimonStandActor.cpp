@@ -53,7 +53,8 @@ void ASimonStandActor::SimonCompleted()
 		ASpaceGameStateBase* state = ASpaceGameStateBase::Instance(GetWorld());
 
 		FMovieSceneSequencePlaybackSettings settings;
-		ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), MeteorStorm, settings);
+		ALevelSequenceActor* playerActor;
+		ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), MeteorStorm, settings, playerActor);
 		player->SetPlaybackPosition(0.f);
 		player->Play();
 		
