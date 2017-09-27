@@ -19,14 +19,25 @@ public:
 
 	void Construct(const FArguments& InArgs);
 
+private:
+
+	FIntPoint ConvertSize(const UTexture2D* texture, float factor) const;
+
 	EVisibility GetLoadIndicatorVisibility() const;
 	EVisibility GetMessageIndicatorVisibility() const;
 
 	UTexture2D* BackgroundImage;
-	UTexture2D* GamepadImage;
-	UTexture2D* KeyboardWASD;
-	UTexture2D* KeyboardSpace;
-	UTexture2D* KeyboardShift;
-	UTexture2D* KeyboardLeftControlSpace;
+
+	float ScaleFactor = 0.0f;
+
+	FSlateDynamicImageBrush* GamepadBrush;
+	FSlateDynamicImageBrush* KeyboardWASDBrush;
+	FSlateDynamicImageBrush* KeyboardShiftBrush;
+	FSlateDynamicImageBrush* KeyboardLeftControlSpaceBrush;
+	FSlateDynamicImageBrush* KeyboardSpaceBrush;
+	FSlateDynamicImageBrush* KeyboardEBrush;
+	FSlateDynamicImageBrush* Mouse;
+	FSlateDynamicImageBrush* MouseClick;
+
 	UFont* Font;
 };
