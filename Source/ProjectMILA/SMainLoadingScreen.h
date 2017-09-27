@@ -22,6 +22,9 @@ public:
 	EVisibility GetLoadIndicatorVisibility() const;
 	EVisibility GetMessageIndicatorVisibility() const;
 
-	UTexture2D* ScreenImage;
+	UTexture2D* BackgroundImage;
+	UTexture2D* GamepadImage;
+	UTexture2D* KeyboardWASD;
+	UTexture2D* KeyboardSpace;
 	UFont* Font;
 };
