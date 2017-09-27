@@ -15,6 +15,8 @@ SMainLoadingScreen::SMainLoadingScreen()
 	GamepadImage = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Textures/Menus/ControlsScreen/ControlsGamepadWithText.ControlsGamepadWithText'")));
 	KeyboardWASD = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Textures/Menus/ControlsScreen/ControlsKeyboardAWSD.ControlsKeyboardAWSD'")));
 	KeyboardSpace = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Textures/Menus/ControlsScreen/ControlsKeyboardSpacebar.ControlsKeyboardSpacebar'")));
+	KeyboardShift = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Textures/Menus/ControlsScreen/ControlsKeyboardShift.ControlsKeyboardShift'")));
+	KeyboardLeftControlSpace = Cast<UTexture2D>(StaticLoadObject(UTexture2D::StaticClass(), nullptr, TEXT("Texture2D'/Game/Textures/Menus/ControlsScreen/ControlsKeyboardLeftCtrlAndSpacebar.ControlsKeyboardLeftCtrlAndSpacebar'")));
 	Font = Cast<UFont>(StaticLoadObject(UFont::StaticClass(), NULL, TEXT("Font'/Game/Fonts/Proxima_Nova_Alt_Regular_Font.Proxima_Nova_Alt_Regular_Font'")));
 }
 
@@ -69,14 +71,14 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 								SNew(SVerticalBox)
 								+ SVerticalBox::Slot()
 									.AutoHeight()
-									.HAlign(HAlign_Left)
+									.HAlign(HAlign_Center)
 									.Padding(20.f, 0.f)
 								[
 									SNew(SHorizontalBox)
 									+ SHorizontalBox::Slot()
 										.AutoWidth()
 									[
-										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardWASD, FVector2D(180.f, 135.f), FName("WASD")))
+										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardWASD, KeyboardWASD->GetImportedSize(), FName("WASD")))
 									]
 									+ SHorizontalBox::Slot()
 										.VAlign(VAlign_Center)
@@ -84,6 +86,46 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 									[
 										SNew(STextBlock)
 											.Text(LOCTEXT("WASD", "Movement"))
+											.Font(FSlateFontInfo(Font, 20))
+									]
+								]
+								+ SVerticalBox::Slot()
+									.AutoHeight()
+									.HAlign(HAlign_Center)
+									.Padding(20.f, 0.f)
+								[
+									SNew(SHorizontalBox)
+									+ SHorizontalBox::Slot()
+										.AutoWidth()
+									[
+										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardShift, KeyboardShift->GetImportedSize(), FName("Shift")))
+									]
+									+ SHorizontalBox::Slot()
+										.VAlign(VAlign_Center)
+										.Padding(10.f, 0.f)
+									[
+										SNew(STextBlock)
+											.Text(LOCTEXT("Shift", "Sprint"))
+											.Font(FSlateFontInfo(Font, 20))
+									]
+								]
+								+ SVerticalBox::Slot()
+									.AutoHeight()
+									.HAlign(HAlign_Center)
+									.Padding(20.f, 0.f)
+								[
+									SNew(SHorizontalBox)
+									+ SHorizontalBox::Slot()
+										.AutoWidth()
+									[
+										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardLeftControlSpace, KeyboardLeftControlSpace->GetImportedSize(), FName("LeftControlSpace")))
+									]
+									+ SHorizontalBox::Slot()
+										.VAlign(VAlign_Center)
+										.Padding(10.f, 0.f)
+									[
+										SNew(STextBlock)
+											.Text(LOCTEXT("LeftControlSpace", "Go up and\ndown in the space"))
 											.Font(FSlateFontInfo(Font, 20))
 									]
 								]
@@ -103,13 +145,32 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 									+ SHorizontalBox::Slot()
 										.AutoWidth()
 									[
-										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardSpace, FVector2D(180.f, 90.f), FName("WASD")))
+										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardSpace, KeyboardSpace->GetImportedSize(), FName("WASD")))
 									]
 									+ SHorizontalBox::Slot()
 										.VAlign(VAlign_Center)
 									[
 										SNew(STextBlock)
 											.Text(LOCTEXT("Space", "Jump"))
+											.Font(FSlateFontInfo(Font, 20))
+									]
+								]
+								+ SVerticalBox::Slot()
+									.AutoHeight()
+									.HAlign(HAlign_Left)
+									.Padding(20.f, 20.f)
+								[
+									SNew(SHorizontalBox)
+									+ SHorizontalBox::Slot()
+										.AutoWidth()
+									[
+										SNew(SImage).Image(new FSlateDynamicImageBrush(KeyboardSpace, KeyboardSpace->GetImportedSize(), FName("WASD")))
+									]
+									+ SHorizontalBox::Slot()
+										.VAlign(VAlign_Center)
+									[
+										SNew(STextBlock)
+											.Text(LOCTEXT("E", "Use"))
 											.Font(FSlateFontInfo(Font, 20))
 									]
 								]
@@ -135,7 +196,7 @@ void SMainLoadingScreen::Construct(const FArguments& InArgs)
 							.VAlign(VAlign_Fill)
 							.AutoHeight()
 						[
-							SNew(SImage).Image(new FSlateDynamicImageBrush(GamepadImage, FVector2D(939.f, 527.f) / 1.5f, FName("Gamepad")))
+							SNew(SImage).Image(new FSlateDynamicImageBrush(GamepadImage, GamepadImage->GetImportedSize() / 1.5f, FName("Gamepad")))
 						]
 					]
 				]

@@ -26,5 +26,7 @@ public:
 	UTexture2D* GamepadImage;
 	UTexture2D* KeyboardWASD;
 	UTexture2D* KeyboardSpace;
+	UTexture2D* KeyboardShift;
+	UTexture2D* KeyboardLeftControlSpace;
 	UFont* Font;
 };
