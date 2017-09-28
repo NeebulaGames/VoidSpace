@@ -13,6 +13,7 @@ UCLASS()
 class PROJECTMILA_API ASpaceGameStateBase : public AGameStateBase
 {
 	GENERATED_BODY()
+	DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnPlayerDead);
 
 protected:
 
@@ -72,4 +73,6 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = SpacestationManagement)
 	class ASpacestationManagementActor* SpacestationManager;
+
+	FOnPlayerDead OnPlayerDead;
 };
