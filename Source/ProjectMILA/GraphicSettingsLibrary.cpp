@@ -3,28 +3,21 @@
 #include "ProjectMILA.h"
 #include "GraphicSettingsLibrary.h"
 
-bool UGraphicSettingsLibrary::GetSupportedScreenResolutions(TArray<FText>& resolutions, int& currentResolutionPos)
+bool UGraphicSettingsLibrary::GetSupportedScreenResolutions(TArray<FText>& resolutions, FString& currentResolution)
 {
 	FScreenResolutionArray resolutionsArray;
 	UGameUserSettings* userSettings = GetGameUserSettings();
-	int resolutionPos = currentResolutionPos = 0;
 	if (userSettings && RHIGetAvailableResolutions(resolutionsArray, true))
 	{
-		FIntPoint currentResolution = userSettings->GetScreenResolution();
+		FIntPoint currentResolutionInt = userSettings->GetScreenResolution();
 		for (const FScreenResolutionRHI& resolution : resolutionsArray)
 		{
 			const FString strW = FString::FromInt(resolution.Width);
 			const FString strH = FString::FromInt(resolution.Height);
-
-			if (currentResolution.X == resolution.Width && currentResolution.Y == resolution.Height)
-			{
-				currentResolutionPos = resolutionPos;
-			}
-
-			++resolutionPos;
 			resolutions.Add(FText::FromString(strW + "x" + strH));
 		}
 
+		currentResolution = FString::Printf(TEXT("%dx%d"), currentResolutionInt.X, currentResolutionInt.Y);
 		return true;
 	}
 

@@ -17,7 +17,7 @@ class PROJECTMILA_API UGraphicSettingsLibrary : public UBlueprintFunctionLibrary
 public:
 	// Get a list of screen resolutions supported on this machine
 	UFUNCTION(BlueprintPure, Category = "Video Settings")
-	static bool GetSupportedScreenResolutions(TArray<FText>& resolutions, int& currentResolutionPos);
+	static bool GetSupportedScreenResolutions(TArray<FText>& resolutions, FString& currentResolution);
 
 	// Changes the screen resolution to the desired size
 	UFUNCTION(BlueprintCallable, Category = "Video Settings")
