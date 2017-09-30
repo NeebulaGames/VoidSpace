@@ -50,7 +50,7 @@ void ASpacestationManagementActor::Tick(float DeltaSeconds)
 	}
 	else
 	{
-		if (current->DeathReason == EDeathReason::Meteor)
+		if (current && current->DeathReason == EDeathReason::Meteor)
 			ScreensState = EScreenState::SCREEN_NOSIGNAL;
 		else
 			ScreensState = EScreenState::SCREEN_OK;
