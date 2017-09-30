@@ -25,7 +25,11 @@ void UMiniShakesComponent::BeginPlay()
 	if (playerController)
 		GetOwner()->OnActorBeginOverlap.AddDynamic(this, &UMiniShakesComponent::OnOverlap);
 
-	UGameEventManager* manager = ASpaceGameStateBase::Instance(this)->GameEventManager;
+	ASpaceGameStateBase* gameState = ASpaceGameStateBase::Instance(this);
+
+	gameState->OnPlayerDead.AddDynamic(this, &UMiniShakesComponent::StopMiniShakes);
+
+	UGameEventManager* manager = gameState->GameEventManager;
 	manager->OnEventStarted.AddDynamic(this, &UMiniShakesComponent::StartMiniShakes);
 }
 
@@ -81,5 +85,12 @@ void UMiniShakesComponent::StartMiniShakes()
 	{
 		bIsPlayingMiniShakes = false;
 	}
+}
+
+void UMiniShakesComponent::StopMiniShakes()
+{
+	GetWorld()->GetTimerManager().ClearTimer(MiniShakeTimerHandle);
+
+	bIsPlayingMiniShakes = false;
 }
 

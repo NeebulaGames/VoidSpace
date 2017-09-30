@@ -42,6 +42,9 @@ private:
 	UFUNCTION()
 	void StartMiniShakes();
 
+	UFUNCTION()
+	void StopMiniShakes();
+
 	FTimerHandle MiniShakeTimerHandle;
 
 	APlayerController* playerController;
