@@ -38,7 +38,11 @@ void ASpaceSuitActor::Tick(float DeltaSeconds)
 		TimeRemaining -= DeltaSeconds;
 
 		if (TimeRemaining <= 0.f && GameEventManager->GetCurrentEvent()->DeathReason != EDeathReason::Choke)
+		{
+			bCountingDown = false;
+			GameEventManager->SetTime(0.f, false); // Stop counter for safety
 			ASpaceGameStateBase::Instance(GetWorld())->Die(GameEventManager->GetCurrentEvent()->DeathReason);
+		}
 	}
 }
 
