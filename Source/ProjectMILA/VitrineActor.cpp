@@ -55,8 +55,15 @@ void AVitrineActor::NotifyActorBeginOverlap(AActor* OtherActor)
 
 		if(character)
 		{
-			character->pickedObject->Destroy();
-			character->ReleaseObject();
+			if (character->pickedObject)
+			{
+				character->pickedObject->Destroy();
+				character->ReleaseObject();
+			}
+			else
+			{
+				OtherActor->Destroy();
+			}
 		}
 		
 		if(SpaceSuitActor)
