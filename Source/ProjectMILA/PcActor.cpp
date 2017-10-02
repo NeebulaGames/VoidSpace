@@ -66,9 +66,12 @@ void APcActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		if(character)
 		{
 			UGameplayStatics::PlaySoundAtLocation(GetWorld(), InsertCDSound, GetActorLocation());
-			character->pickedObject->Destroy();
-			character->ReleaseObject();
+			if (character->pickedObject)
+			{
+				character->ReleaseObject();
+			}
 		}
+		OtherActor->Destroy();
 		ASpaceGameStateBase::Instance(GetWorld())->FinishEvent();
 	}
 }
