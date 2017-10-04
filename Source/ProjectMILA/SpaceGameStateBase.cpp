@@ -108,6 +108,7 @@ bool ASpaceGameStateBase::Die(EDeathReason reason)
 		}
 	}
 
+	OnPlayerDead.Broadcast();
 	return true;
 }
 

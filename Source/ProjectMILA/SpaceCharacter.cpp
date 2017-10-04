@@ -50,6 +50,9 @@ ASpaceCharacter::ASpaceCharacter()
 	static ConstructorHelpers::FObjectFinder<USoundWave> evaSound(TEXT("SoundWave'/Game/Sounds/SFX/eva.eva'"));
 	EVASound = evaSound.Object;
 
+	static ConstructorHelpers::FObjectFinder<USoundWave> deathSound(TEXT("SoundWave'/Game/Sounds/SFX/02_PITIDO_MORT.02_PITIDO_MORT'"));
+	DeathSound = deathSound.Object;
+
 	AudioComponent = CreateDefaultSubobject<UAudioComponent>(TEXT("Audio"));
 	AudioComponent->SetupAttachment(RootComponent);
 	AudioComponent->bAutoActivate = false;
@@ -78,6 +81,15 @@ void ASpaceCharacter::BeginPlay()
 	AudioComponent->SetSound(FootstepsCue);
 
 	AudioComponent->SetActive(false);
+
+	for (TActorIterator<AActor> ActorItr(GetWorld()); ActorItr; ++ActorItr)
+	{
+		AActor *actor = *ActorItr;
+		if (actor->GetName() == "AudioManager")
+		{
+			MainAudioComponent = actor->FindComponentByClass(UAudioComponent::StaticClass());
+		}
+	}
 }
 
 // Called every frame
@@ -209,7 +221,7 @@ void ASpaceCharacter::ToggleSpaceSuit(ASpaceSuitActor* spaceSuit)
 	EquippedSuit = spaceSuit;
 	
 	bool set = spaceSuit != nullptr;
-	FirstPersonCameraComponent->PostProcessSettings.BloomDirtMaskIntensity = set ? 8.f : 0.f;
+	FirstPersonCameraComponent->PostProcessSettings.BloomDirtMaskIntensity = set ? 20.f : 0.f;
 	FirstPersonCameraComponent->PostProcessSettings.bOverride_BloomDirtMaskIntensity = set;
 }
 
@@ -351,7 +363,9 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 	DisableInput(Cast<APlayerController>(GetController()));
 	FMovieSceneSequencePlaybackSettings settings;
 	ULevelSequence* sequence;
-	
+
+	UGameplayStatics::PlaySound2D(GetWorld(), DeathSound, 0.35f);
+		
 	switch (mode)
 	{
 	case EDeathReason::Meteor:
@@ -370,6 +384,12 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 
 	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
 	player->Play();
+
+	if (MainAudioComponent)
+	{
+		static_cast<UAudioComponent*>(MainAudioComponent)->FadeOut(1.0f, 0.0f);
+	}
+
 	return player->GetLength();
 }
 
@@ -410,6 +430,7 @@ void ASpaceCharacter::Use()
 				{
 					UPrimitiveComponent* component = pickable->GetOwner()->FindComponentByClass<UPrimitiveComponent>();
 					//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 5.f, 0, 2.f);
+					pickable->PickedUp();
 					physics_handle->GrabComponentAtLocationWithRotation(
 						component, 
 						"None", 

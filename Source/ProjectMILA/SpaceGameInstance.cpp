@@ -29,7 +29,7 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 			if (CurrentMapName == "")
 			{
 				LoadingScreen.MoviePaths.Add(TEXT("UE4_Moving_Logo_720"));
-				// TODO: Add our movie
+				LoadingScreen.MoviePaths.Add(TEXT("IntroGame720"));
 				LoadingScreen.bMoviesAreSkippable = false;
 				LoadingScreen.bAllowInEarlyStartup = true;
 				LoadingScreen.bAutoCompleteWhenLoadingCompletes = false;

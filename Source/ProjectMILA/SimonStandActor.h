@@ -3,6 +3,7 @@
 #pragma once
 
 #include "GameFramework/Actor.h"
+#include "LevelSequencePlayer.h"
 #include "SimonStandActor.generated.h"
 
 UCLASS()
@@ -28,14 +29,14 @@ protected:
 
 private:
 
+	UPROPERTY(EditAnywhere, Category = BlindMesh)
+	class ULevelSequence* MeteorStorm;
+
 	UFUNCTION()
 	void SimonCompleted();
 
 	UFUNCTION()
 	void EventStarted();
-
-	UFUNCTION()
-	void EventFinished();
 
 	UPROPERTY(VisibleAnywhere, Category = SimonStand, meta = (AllowPrivateAccess = "true"))
 	class UStaticMeshComponent* SimonStandMesh;
