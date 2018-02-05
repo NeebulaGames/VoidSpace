@@ -62,7 +62,7 @@ void UGameEventManager::LoadEventsFromFile(FString& fileName)
 {
 	UE_LOG(EventSM, Log, TEXT("Loading events from file %s"), *fileName);
 
-	const FString path = FPaths::Combine(FPaths::Combine(*FPaths::GameContentDir(), *FString("Data")), *fileName);
+	const FString path = FPaths::Combine(FPaths::Combine(*FPaths::ProjectContentDir(), *FString("Data")), *fileName);
 	UE_LOG(EventSM, Log, TEXT("Loading events from %s"), *path);
 	FString jsonContent;
 
