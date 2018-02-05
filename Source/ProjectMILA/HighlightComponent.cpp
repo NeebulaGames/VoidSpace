@@ -33,7 +33,7 @@ void UHighlightComponent::OnBeginLooking()
 	if (bHighlight && ParentMesh)
 	{
 		ParentMesh->SetRenderCustomDepth(true);
-		ParentMesh->CustomDepthStencilValue = static_cast<int>(HighlightColor);
+		ParentMesh->SetCustomDepthStencilValue(static_cast<int>(HighlightColor));
 	}
 }
 
@@ -42,7 +42,7 @@ void UHighlightComponent::OnStopLooking()
 	if (bHighlight && ParentMesh)
 	{
 		ParentMesh->SetRenderCustomDepth(false);
-		ParentMesh->CustomDepthStencilValue = 0;
+		ParentMesh->SetCustomDepthStencilValue(0);
 	}
 }
 

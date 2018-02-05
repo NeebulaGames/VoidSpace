@@ -382,7 +382,8 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 		return -1;
 	}
 
-	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
+	ALevelSequenceActor* outActor;
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings, outActor);
 	player->Play();
 
 	if (MainAudioComponent)
@@ -439,6 +440,8 @@ void ASpaceCharacter::Use()
 
 					pickedObject = LookedObject->GetOwner();
 				}
+
+				LookedObject = nullptr;
 			}
 
 		}

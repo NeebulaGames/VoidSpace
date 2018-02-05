@@ -13,16 +13,16 @@ class PROJECTMILA_API UBlindAnimInstance : public UAnimInstance
 	
 public:
 
-	UPROPERTY(EditAnywhere, Category = BlindStates)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	bool bIsOpening;
 
-	UPROPERTY(EditAnywhere, Category = BlindStates)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	bool bIsClosing;
 
-	UPROPERTY(EditAnywhere, Category = BlindStates)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	bool bIsOpened;
 
-	UPROPERTY(EditAnywhere, Category = BlindStates)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = BlindStates)
 	bool bIsClosed;
 
 	UFUNCTION(BlueprintCallable, Category = EventSystem)
