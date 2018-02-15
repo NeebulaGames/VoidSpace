@@ -157,7 +157,7 @@ void ASpaceCharacter::UnequipObject()
 		EquippedObject->EndFire();
 		EquippedObject->Unequiped();
 
-		EquippedObject->GetOwner()->AttachToActor(nullptr, FAttachmentTransformRules::KeepWorldTransform);
+		EquippedObject->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		EquippedObject = nullptr;
 	}
