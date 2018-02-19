@@ -39,6 +39,9 @@ AEscapePodActor::AEscapePodActor()
 
 	ConstructorHelpers::FObjectFinder<ULevelSequence> EndSequence1(TEXT("LevelSequence'/Game/Sequences/EscapeSequence.EscapeSequence'"));
 	EndSequence = EndSequence1.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> vitrineSound(TEXT("SoundWave'/Game/Sounds/SFX/vitrine.vitrine'"));
+	DoorOpenSound = vitrineSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -92,6 +95,8 @@ void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AA
 	{
 		EscapePodAnimInstance->bIsOpening = true;
 		BoxComponentToOpenPod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnControlRoomEnter);
+
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorOpenSound, GetActorLocation());
 
 		bClose = false;
 	}
