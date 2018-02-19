@@ -59,11 +59,24 @@ void AWelderActor::BeginPlay()
 void AWelderActor::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	ASpaceCharacter* character = static_cast<ASpaceCharacter*>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
-	if (bUsingWelder)
+	if (character)
 	{
-		ASpaceCharacter* character = static_cast<ASpaceCharacter*>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
-		if (character)
+		if (nullptr != Hole && Hole->bRepaired)
+		{
+			character->UnequipObject();
+
+			WelderMeshComponent->SetEnableGravity(false);
+			EquipableComponent->SetActive(false);
+			EquipableComponent->bHighlight = false;
+
+			SetActorLocation(GetActorLocation() + (character->GetActorForwardVector() * 90.0f));
+
+			Hole->StopClose();
+			Hole = nullptr;
+		}
+		else if (bUsingWelder)
 		{
 			const FVector Start = character->FirstPersonCameraComponent->GetComponentLocation();
 			const FVector dir_camera = character->FirstPersonCameraComponent->GetForwardVector();
@@ -75,41 +88,32 @@ void AWelderActor::Tick(float DeltaTime)
 			{
 				AOrtoHoleActor* actor = Cast<AOrtoHoleActor>(hitData.GetActor());
 
-				if (actor)
+				if (nullptr != actor)
 				{
-					if (Hole)
+					if (Hole != actor)
 					{
-
-						if (Hole != actor)
+						if (nullptr != Hole)
 						{
 							Hole->StopClose();
-
-							Hole = actor;
-							Hole->BeginClose();
 						}
 
-						if (Hole->bRepaired)
-						{
-							Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0))->UnequipObject();
-
-							WelderMeshComponent->SetEnableGravity(false);
-							EquipableComponent->SetActive(false);
-							EquipableComponent->bHighlight = false;
-						}
-					}
-					else
-					{
 						Hole = actor;
 						Hole->BeginClose();
 					}
 				}
-				else if (Hole)
+				else if (nullptr != Hole)
 				{
 					Hole->StopClose();
 
 					Hole = nullptr;
 				}
 			}
+		}
+		else if (nullptr != Hole)
+		{
+			Hole->StopClose();
+
+			Hole = nullptr;
 		}
 	}
 }
