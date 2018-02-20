@@ -71,9 +71,9 @@ void USpaceGameInstance::ResetStats()
 	Retries = 0.f;
 }
 
-void USpaceGameInstance::SwapYAxis()
+void USpaceGameInstance::SwapCameraYAxis()
 {
-	InvertYAxis = !InvertYAxis;
+	InvertCameraYAxis = !InvertCameraYAxis;
 }
 
 void USpaceGameInstance::SaveConfig()

@@ -535,7 +535,7 @@ void ASpaceCharacter::OnEndFire()
 
 void ASpaceCharacter::AddControllerPitchInput(float Val)
 {
-	bool invert = static_cast<USpaceGameInstance*>(GetGameInstance())->InvertYAxis;
+	bool invert = static_cast<USpaceGameInstance*>(GetGameInstance())->InvertCameraYAxis;
 
 	if (true == invert)
 	{

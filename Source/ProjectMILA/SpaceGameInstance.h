@@ -28,7 +28,7 @@ public:
 	void ResetStats();
 
 	UFUNCTION(Exec)
-	void SwapYAxis();
+	void SwapCameraYAxis();
 
 	UFUNCTION(BlueprintCallable)
 	void SaveConfig();
@@ -45,5 +45,5 @@ public:
 	int Retries = 0;
 
 	UPROPERTY(Config, BlueprintReadWrite)
-	bool InvertYAxis = false;
+	bool InvertCameraYAxis = false;
 };
