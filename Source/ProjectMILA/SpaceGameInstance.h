@@ -11,7 +11,7 @@ enum class EDeathReason : uint8;
 /**
  * 
  */
-UCLASS()
+UCLASS(config=Game)
 class PROJECTMILA_API USpaceGameInstance : public UGameInstance
 {
 	GENERATED_BODY()
@@ -27,6 +27,12 @@ public:
 
 	void ResetStats();
 
+	UFUNCTION(BlueprintCallable)
+	void SaveConfig();
+
+	UFUNCTION(BlueprintCallable)
+	void LoadConfig();
+
 	EDeathReason LastDeathReason = EDeathReason::None;
 	
 	FString CurrentMapName = "";
@@ -34,4 +40,7 @@ public:
 	FDateTime BeginPlayTime;
 
 	int Retries = 0;
+
+	UPROPERTY(Config, BlueprintReadWrite)
+	bool InvertYAxis = false;
 };

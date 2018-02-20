@@ -70,3 +70,13 @@ void USpaceGameInstance::ResetStats()
 	LastDeathReason = EDeathReason::None;
 	Retries = 0.f;
 }
+
+void USpaceGameInstance::SaveConfig()
+{
+	Super::SaveConfig();
+}
+
+void USpaceGameInstance::LoadConfig()
+{
+	Super::LoadConfig();
+}
