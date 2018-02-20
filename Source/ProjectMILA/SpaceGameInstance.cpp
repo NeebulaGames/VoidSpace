@@ -71,6 +71,11 @@ void USpaceGameInstance::ResetStats()
 	Retries = 0.f;
 }
 
+void USpaceGameInstance::SwapYAxis()
+{
+	InvertYAxis = !InvertYAxis;
+}
+
 void USpaceGameInstance::SaveConfig()
 {
 	Super::SaveConfig();

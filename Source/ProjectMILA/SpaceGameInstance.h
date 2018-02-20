@@ -27,6 +27,9 @@ public:
 
 	void ResetStats();
 
+	UFUNCTION(Exec)
+	void SwapYAxis();
+
 	UFUNCTION(BlueprintCallable)
 	void SaveConfig();
 
