@@ -13,6 +13,7 @@
 #include "LevelSequence.h"
 #include "MovieScene.h"
 #include "LevelSequencePlayer.h"
+#include "SpaceGameInstance.h"
 
 
 // Sets default values
@@ -530,4 +531,16 @@ void ASpaceCharacter::OnEndFire()
 	{
 		EquippedObject->EndFire();
 	}
+}
+
+void ASpaceCharacter::AddControllerPitchInput(float Val)
+{
+	bool invert = static_cast<USpaceGameInstance*>(GetGameInstance())->InvertCameraYAxis;
+
+	if (true == invert)
+	{
+		Val = -Val;
+	}
+
+	Super::AddControllerPitchInput(Val);
 }

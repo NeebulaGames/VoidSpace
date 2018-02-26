@@ -70,3 +70,18 @@ void USpaceGameInstance::ResetStats()
 	LastDeathReason = EDeathReason::None;
 	Retries = 0.f;
 }
+
+void USpaceGameInstance::SwapCameraYAxis()
+{
+	InvertCameraYAxis = !InvertCameraYAxis;
+}
+
+void USpaceGameInstance::SaveConfig()
+{
+	Super::SaveConfig();
+}
+
+void USpaceGameInstance::LoadConfig()
+{
+	Super::LoadConfig();
+}
