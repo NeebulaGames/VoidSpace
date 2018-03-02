@@ -7,6 +7,7 @@
 #include "SpaceGameInstance.h"
 #include "SpacestationManagementActor.h"
 #include "SpaceSuitActor.h"
+#include "DialogueManager.h"
 
 static TAutoConsoleVariable<int32> CVarSkipCinematics(
 	TEXT("d.SkipCinematics"),
@@ -116,8 +117,7 @@ void ASpaceGameStateBase::EndGame()
 {
 	static_cast<USpaceGameInstance*>(GetGameInstance())->ResetStats();
 
-	// TODO: Transition to credits?
-	UGameplayStatics::OpenLevel(this, TEXT("MainMenu"), false);
+	UGameplayStatics::OpenLevel(this, TEXT("Credits"), false);
 }
 
 void ASpaceGameStateBase::FinishEvent()
