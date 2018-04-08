@@ -106,6 +106,9 @@ void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AAct
 {
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 
+	character->ReleaseObject();
+	character->UnequipObject();
+
 	PlayerCamera = character->FirstPersonCameraComponent;
 	CameraOriginalPosition = PlayerCamera->GetComponentLocation();
 	CameraOriginalRotation = PlayerCamera->GetComponentRotation();
