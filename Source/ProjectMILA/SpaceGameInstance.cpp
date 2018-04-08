@@ -40,8 +40,14 @@ void USpaceGameInstance::BeginLoadingScreen(const FString& MapName)
 				LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
 			}
 		}
-		//DeathLoadingScreen
+		// DeathLoadingScreen
 		else if (CurrentMapName == MapName && MapName == "/Game/Maps/SpaceStation")
+		{
+			LoadingScreen.bWaitForManualStop = false;
+			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();
+		}
+		// Credits
+		else if (MapName == "/Game/Maps/Credits")
 		{
 			LoadingScreen.bWaitForManualStop = false;
 			LoadingScreen.WidgetLoadingScreen = FLoadingScreenAttributes::NewTestLoadingScreenWidget();

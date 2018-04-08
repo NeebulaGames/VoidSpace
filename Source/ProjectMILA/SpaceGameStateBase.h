@@ -35,6 +35,7 @@ public:
 	UFUNCTION(Exec)
 	bool Die(EDeathReason reason);
 
+	UFUNCTION(Exec)
 	void EndGame();
 
 	// TODO: Remove me! Only for testing purposes
