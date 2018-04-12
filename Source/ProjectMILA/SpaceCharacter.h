@@ -86,6 +86,9 @@ protected:
 	UFUNCTION()
 	void OnEndFire();
 
+	UFUNCTION()
+	void AddControllerPitchInput(float Val) override;
+
 private:
 	void Use();
 

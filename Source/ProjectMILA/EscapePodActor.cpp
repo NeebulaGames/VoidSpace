@@ -39,6 +39,9 @@ AEscapePodActor::AEscapePodActor()
 
 	ConstructorHelpers::FObjectFinder<ULevelSequence> EndSequence1(TEXT("LevelSequence'/Game/Sequences/EscapeSequence.EscapeSequence'"));
 	EndSequence = EndSequence1.Object;
+
+	static ConstructorHelpers::FObjectFinder<USoundWave> vitrineSound(TEXT("SoundWave'/Game/Sounds/SFX/vitrine.vitrine'"));
+	DoorOpenSound = vitrineSound.Object;
 }
 
 // Called when the game starts or when spawned
@@ -73,7 +76,8 @@ void AEscapePodActor::Tick(float DeltaTime)
 			PlayerCamera = nullptr;
 			
 			FMovieSceneSequencePlaybackSettings settings;
-			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequence, settings);
+			ALevelSequenceActor* outActor;
+			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequence, settings, outActor);
 			player->SetPlaybackPosition(0.f);
 			player->Play();
 
@@ -92,6 +96,8 @@ void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AA
 		EscapePodAnimInstance->bIsOpening = true;
 		BoxComponentToOpenPod->OnComponentBeginOverlap.RemoveDynamic(this, &AEscapePodActor::OnControlRoomEnter);
 
+		UGameplayStatics::PlaySoundAtLocation(GetWorld(), DoorOpenSound, GetActorLocation());
+
 		bClose = false;
 	}
 }
@@ -99,6 +105,9 @@ void AEscapePodActor::OnControlRoomEnter(UPrimitiveComponent* OverlappedComp, AA
 void AEscapePodActor::OnEscapePodEnter(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ASpaceCharacter* character = Cast<ASpaceCharacter>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+
+	character->ReleaseObject();
+	character->UnequipObject();
 
 	PlayerCamera = character->FirstPersonCameraComponent;
 	CameraOriginalPosition = PlayerCamera->GetComponentLocation();

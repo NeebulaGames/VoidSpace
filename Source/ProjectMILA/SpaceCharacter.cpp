@@ -13,6 +13,7 @@
 #include "LevelSequence.h"
 #include "MovieScene.h"
 #include "LevelSequencePlayer.h"
+#include "SpaceGameInstance.h"
 
 
 // Sets default values
@@ -157,7 +158,7 @@ void ASpaceCharacter::UnequipObject()
 		EquippedObject->EndFire();
 		EquippedObject->Unequiped();
 
-		EquippedObject->GetOwner()->AttachToActor(nullptr, FAttachmentTransformRules::KeepWorldTransform);
+		EquippedObject->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 
 		EquippedObject = nullptr;
 	}
@@ -382,7 +383,8 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 		return -1;
 	}
 
-	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings);
+	ALevelSequenceActor* outActor;
+	ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), sequence, settings, outActor);
 	player->Play();
 
 	if (MainAudioComponent)
@@ -439,6 +441,8 @@ void ASpaceCharacter::Use()
 
 					pickedObject = LookedObject->GetOwner();
 				}
+
+				LookedObject = nullptr;
 			}
 
 		}
@@ -527,4 +531,16 @@ void ASpaceCharacter::OnEndFire()
 	{
 		EquippedObject->EndFire();
 	}
+}
+
+void ASpaceCharacter::AddControllerPitchInput(float Val)
+{
+	bool invert = static_cast<USpaceGameInstance*>(GetGameInstance())->InvertCameraYAxis;
+
+	if (true == invert)
+	{
+		Val = -Val;
+	}
+
+	Super::AddControllerPitchInput(Val);
 }

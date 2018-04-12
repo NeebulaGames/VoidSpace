@@ -57,4 +57,6 @@ private:
 	FRotator CameraOriginalRotation;
 
 	float Movement = 0.f;
+
+	class USoundWave* DoorOpenSound = nullptr;
 };
