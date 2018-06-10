@@ -3,6 +3,7 @@
 #pragma once
 
 #include "Components/ActorComponent.h"
+#include "MeteoritesActor.h"
 #include "MiniShakesComponent.generated.h"
 
 
