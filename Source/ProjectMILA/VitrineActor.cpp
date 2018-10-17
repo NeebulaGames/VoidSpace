@@ -28,7 +28,7 @@ AVitrineActor::AVitrineActor()
 	BoxComponent->SetupAttachment(VitrineMeshComponent);
 	BoxComponent->SetRelativeLocation(FVector(-65.f, 50.f, -35.f));
 	BoxComponent->SetBoxExtent(FVector(20.f, 19.f, 14.f));
-	BoxComponent->bGenerateOverlapEvents = true;
+	BoxComponent->SetGenerateOverlapEvents(true);
 
 	static ConstructorHelpers::FObjectFinder<USoundWave> vitrineSound(TEXT("SoundWave'/Game/Sounds/SFX/vitrine.vitrine'"));
 	OpenVitrineSound = vitrineSound.Object;
