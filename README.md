@@ -6,7 +6,7 @@ This is the repo for the Master's Bachelor game project of Clara, Ennio, Joel, M
 ## About the game :rocket:
 Project M.I.L.A. is a fast-paced first-person puzzle game in which you will face several threats that will challenge you unless you use your skills in time. Welcome aboard stranger, and remember: Die. Learn. Survive.
 
-## How to play 👾:
+## How to play 👾
 ### Keyboard ⌨️:
 - **W**, **A**, **S**, **D** to move
 - **Shift** to sprint
