@@ -76,7 +76,7 @@ void AExitVault::CloseExternalDoor() const
 	Cast<UExitVaultDoorAnimInstance>(ExitExternalDoorMeshComponent->GetAnimInstance())->bIsClosing = true;
 }
 
-void AExitVault::doDepressurising() const
+void AExitVault::doDepressurising()
 {
 	FTimerHandle DoorHandler;
 	FTimerHandle GravityHandler;

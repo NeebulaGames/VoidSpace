@@ -396,7 +396,7 @@ float ASpaceCharacter::KillPlayer(EDeathReason mode)
 		static_cast<UAudioComponent*>(MainAudioComponent)->FadeOut(1.0f, 0.0f);
 	}
 
-	return player->GetLength();
+	return player->GetDuration().AsSeconds();
 }
 
 void ASpaceCharacter::Use()
