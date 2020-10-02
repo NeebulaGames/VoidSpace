@@ -78,13 +78,13 @@ void AEscapePodActor::Tick(float DeltaTime)
 			FMovieSceneSequencePlaybackSettings settings;
 			ALevelSequenceActor* outActor;
 			ULevelSequencePlayer* player = ULevelSequencePlayer::CreateLevelSequencePlayer(GetWorld(), EndSequence, settings, outActor);
-			player->SetPlaybackPosition(0.f);
+			player->PlayToFrame(FFrameTime::FromDecimal(0.0));
 			player->Play();
 
 			FTimerHandle unused;
 			FTimerDelegate callback;
 			callback.BindLambda([this, state]() -> void {state->EndGame(); });
-			GetWorldTimerManager().SetTimer(unused, callback, player->GetLength(), false);
+			GetWorldTimerManager().SetTimer(unused, callback, player->GetDuration().AsSeconds(), false);
 		}
 	}
 }

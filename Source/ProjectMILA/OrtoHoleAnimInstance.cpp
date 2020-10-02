@@ -4,6 +4,6 @@
 #include "OrtoHoleAnimInstance.h"
 
 UOrtoHoleAnimInstance::UOrtoHoleAnimInstance(const FObjectInitializer& ObjectInitializer)
-	: Super(ObjectInitializer), bIsOpened(true), bIsClosed(false), bIsClosing(false)
+	: Super(ObjectInitializer), bIsClosing(false), bIsOpened(true), bIsClosed(false)
 {
 }

@@ -60,7 +60,7 @@ public:
 	void OnLeverUse();
 
 private:
-	void doDepressurising() const;
+	void doDepressurising();
 
 	void ToogleGravity() const;
 
