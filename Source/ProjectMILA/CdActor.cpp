@@ -15,7 +15,7 @@ ACdActor::ACdActor()
 	RootComponent = StaticMeshComponent;
 	StaticMeshComponent->SetStaticMesh(cd.Object);
 	StaticMeshComponent->SetSimulatePhysics(true);
-	StaticMeshComponent->bGenerateOverlapEvents = true;
+	StaticMeshComponent->SetGenerateOverlapEvents(true);
 
 	PickableComponent = CreateDefaultSubobject<UPickableComponent>(TEXT("Pickable"));
 	PickableComponent->SetupAttachment(RootComponent);

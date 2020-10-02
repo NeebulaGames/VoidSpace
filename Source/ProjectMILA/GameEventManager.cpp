@@ -128,7 +128,7 @@ void UGameEventManager::FinishCurrentEvent()
 
 	FLatentActionInfo info;
 	info.UUID = 1;
-	UGameplayStatics::UnloadStreamLevel(this, FName(*CurrentEvent->LevelName), info);
+	UGameplayStatics::UnloadStreamLevel(this, FName(*CurrentEvent->LevelName), info, false);
 
 	UE_LOG(EventSM, Log, TEXT("Finish event %s"), *CurrentEvent->Name);
 
