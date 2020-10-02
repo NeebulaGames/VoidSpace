@@ -24,7 +24,7 @@ ASpaceCharacter::ASpaceCharacter()
 
 	FirstPersonCameraComponent = CreateDefaultSubobject<UCameraComponent>(TEXT("FirstPersonCamera"));
 	FirstPersonCameraComponent->SetupAttachment(GetCapsuleComponent());
-	FirstPersonCameraComponent->RelativeLocation = FVector(0.f, 0.f, 64.f); // Position the camera
+	FirstPersonCameraComponent->SetRelativeLocation(FVector(0.f, 0.f, 64.f)); // Position the camera
 	FirstPersonCameraComponent->bUsePawnControlRotation = true;
 
 	ConstructorHelpers::FObjectFinder<UParticleSystem> SmokeJetpack(TEXT("ParticleSystem'/Game/Particles/P_JetpackSmoke.P_JetpackSmoke'"));
@@ -32,13 +32,13 @@ ASpaceCharacter::ASpaceCharacter()
 	LeftJetpackSmokeComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke1"));
 	LeftJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
 	LeftJetpackSmokeComponent->Template = SmokeJetpack.Object;
-	LeftJetpackSmokeComponent->RelativeLocation = FVector(0.f, -50.f, 0.f);
+	LeftJetpackSmokeComponent->SetRelativeLocation(FVector(0.f, -50.f, 0.f));
 	LeftJetpackSmokeComponent->bAutoActivate = false;
 
 	RightJetpackSmokeComponent = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("JetpackSmoke2"));
 	RightJetpackSmokeComponent->SetupAttachment(GetCapsuleComponent());
 	RightJetpackSmokeComponent->Template = SmokeJetpack.Object;
-	RightJetpackSmokeComponent->RelativeLocation = FVector(0.f, 50.f, 0.f);
+	RightJetpackSmokeComponent->SetRelativeLocation(FVector(0.f, 50.f, 0.f));
 	RightJetpackSmokeComponent->bAutoActivate = false;
 
 	// Set this character to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
@@ -287,7 +287,9 @@ void ASpaceCharacter::MoveForward(float Val)
 			{
 				LeftJetpackSmokeComponent->Activate();
 				RightJetpackSmokeComponent->Activate();
-				LeftJetpackSmokeComponent->RelativeRotation  = RightJetpackSmokeComponent->RelativeRotation = FRotator(0.f, yaw, 0.f);
+				FRotator newRotation = FRotator(0.f, yaw, 0.f);
+				LeftJetpackSmokeComponent->SetRelativeRotation(newRotation);
+				RightJetpackSmokeComponent->SetRelativeRotation(newRotation);
 			}
 			else
 			{
@@ -324,7 +326,9 @@ void ASpaceCharacter::MoveHorizontal(float Val)
 		{
 			LeftJetpackSmokeComponent->Activate();
 			RightJetpackSmokeComponent->Activate();
-			LeftJetpackSmokeComponent->RelativeRotation = RightJetpackSmokeComponent->RelativeRotation = FRotator(0.f, angleYAxis, 0.f);
+			FRotator newRotation = FRotator(0.f, angleYAxis, 0.f);
+			LeftJetpackSmokeComponent->SetRelativeRotation(newRotation);
+			RightJetpackSmokeComponent->SetRelativeRotation(newRotation);
 		}
 		else
 		{
